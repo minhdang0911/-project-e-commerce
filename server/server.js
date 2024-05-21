@@ -9,12 +9,11 @@ const port = process.env.PORT || 8888;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+dbConnect();
+initRoutes(app);
 app.use('/', (req, res) => {
     res.send('Server running');
 });
-
-dbConnect();
-initRoutes(app);
 
 app.listen(port, () => {
     console.log('server running on port: ' + port);
