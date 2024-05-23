@@ -21,7 +21,46 @@ const updateBlog = asyncHandler(async (req, res) => {
     });
 });
 
+const getBlogs = asyncHandler(async (req, res) => {
+    const response = await Blog.find();
+    return res.status(200).json({
+        success: response ? true : false,
+        Blogs: response ? response : 'Cannot get blogs ',
+    });
+});
+
+const likeBlog = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { bid } = req.body;
+    if (!bid) throw new Error('Missing inputs');
+    const blog = await Blog.findById(bid);
+    const alreadyDisliked = blog?.dislikes?.find((el) => el.toString() === _id);
+    if (alreadyDisliked) {
+        const response = await Blog.findByIdAndUpdate(bid, { $pull: { dislikes: _id } }, { new: true });
+        return res.status(200).json({
+            success: response ? true : false,
+            rs: response,
+        });
+    }
+    const isLiked = blog?.likes?.find((el) => el.toString() === _id);
+    if (isLiked) {
+        const response = await Blog.findByIdAndUpdate(bid, { $pull: { likes: _id } }, { new: true });
+        return res.status(200).json({
+            success: response ? true : false,
+            rs: response,
+        });
+    } else {
+        const response = await Blog.findByIdAndUpdate(bid, { $push: { likes: _id } }, { new: true });
+        return res.status(200).json({
+            success: response ? true : false,
+            rs: response,
+        });
+    }
+});
+
 module.exports = {
     createNewBlog,
     updateBlog,
+    getBlogs,
+    likeBlog,
 };
