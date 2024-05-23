@@ -123,7 +123,7 @@ const Ratings = asyncHandler(async (req, res) => {
     const ratingCount = updatedProduct.ratings.length;
 
     const sumRatings = updatedProduct.ratings.reduce((sum, el) => {
-        return sum + +el.star; // Return the accumulated value
+        return sum + +el.star;
     }, 0);
 
     updatedProduct.totalRatings = Math.round((sumRatings * 10) / ratingCount) / 10;
