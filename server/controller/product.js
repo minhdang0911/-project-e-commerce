@@ -23,11 +23,51 @@ const getProduct = asyncHandler(async (req, res) => {
 });
 
 const getProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find();
-    return res.status(200).json({
-        success: products ? true : false,
-        productData: products ? products : `can't get new product`,
-    });
+    const queries = { ...req.query };
+
+    // Tách những trường này ra khỏi query
+    const exclude = ['limit', 'sort', 'page', 'fields'];
+    exclude.forEach((el) => delete queries[el]);
+
+    // Format các operators cho đúng cú pháp Mongoose
+    let queryString = JSON.stringify(queries);
+    queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, (matchedEl) => `$${matchedEl}`);
+    const formatedQueries = JSON.parse(queryString);
+
+    // Filtering
+    if (queries?.title) formatedQueries.title = { $regex: queries.title, $options: 'i' };
+    if (queries?.price) formatedQueries.price = Number(queries.price);
+    let queryCommand = Product.find(formatedQueries);
+
+    // Sorting
+    if (req.query.sort) {
+        const sortBy = req.query.sort.split(',').join(' ');
+        queryCommand = queryCommand.sort(sortBy);
+    }
+
+    //fields limitng
+    if (req.query.fields) {
+        const fields = +req.query.fields.split(',').join(' ');
+        queryCommand = queryCommand.select(fields);
+    }
+
+    //pagination
+    const page = +req.query.page || 1;
+    const limit = +req.query.limit || process.env.LIMIT_PRODUCT;
+    const skip = (page - 1) * limit;
+    queryCommand.skip(skip).limit(limit);
+    try {
+        // Execute query
+        const response = await queryCommand;
+        const counts = await Product.countDocuments(formatedQueries);
+        return res.status(200).json({
+            success: response.length > 0,
+            products: response,
+            counts,
+        });
+    } catch (err) {
+        return res.status(500).json({ success: false, message: err.message });
+    }
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
