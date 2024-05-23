@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const ctrls = require('../controller/productCategory');
+const ctrls = require('../controller/blogCategory');
 const { verifyAccessToken, isAdmin } = require('../middlewares/verifyToken');
 router.post('/', [verifyAccessToken, isAdmin], ctrls.createCategory);
 router.get('/', ctrls.getCategories);
