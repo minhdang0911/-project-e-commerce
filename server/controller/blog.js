@@ -31,7 +31,7 @@ const getBlogs = asyncHandler(async (req, res) => {
 
 const likeBlog = asyncHandler(async (req, res) => {
     const { _id } = req.user;
-    const { bid } = req.body;
+    const { bid } = req.params;
     if (!bid) throw new Error('Missing inputs');
     const blog = await Blog.findById(bid);
     const alreadyDisliked = blog?.dislikes?.find((el) => el.toString() === _id);
@@ -58,9 +58,39 @@ const likeBlog = asyncHandler(async (req, res) => {
     }
 });
 
+const dislikeBlog = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { bid } = req.params;
+    if (!bid) throw new Error('Missing inputs');
+    const blog = await Blog.findById(bid);
+    const alreadyliked = blog?.likes?.find((el) => el.toString() === _id);
+    if (alreadyliked) {
+        const response = await Blog.findByIdAndUpdate(bid, { $pull: { likes: _id } }, { new: true });
+        return res.status(200).json({
+            success: response ? true : false,
+            rs: response,
+        });
+    }
+    const isDisliked = blog?.dislikes?.find((el) => el.toString() === _id);
+    if (isDisliked) {
+        const response = await Blog.findByIdAndUpdate(bid, { $pull: { dislikes: _id } }, { new: true });
+        return res.status(200).json({
+            success: response ? true : false,
+            rs: response,
+        });
+    } else {
+        const response = await Blog.findByIdAndUpdate(bid, { $push: { dislikes: _id } }, { new: true });
+        return res.status(200).json({
+            success: response ? true : false,
+            rs: response,
+        });
+    }
+});
+
 module.exports = {
     createNewBlog,
     updateBlog,
     getBlogs,
     likeBlog,
+    dislikeBlog,
 };
