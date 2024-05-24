@@ -87,10 +87,32 @@ const dislikeBlog = asyncHandler(async (req, res) => {
     }
 });
 
+const getBlog = asyncHandler(async (req, res) => {
+    const { bid } = req.params;
+    const blog = await Blog.findByIdAndUpdate(bid, { $inc: { numberView: 1 } }, { new: true })
+        .populate('likes', 'firstname lastname')
+        .populate('dislikes', 'firstname lastname');
+    return res.status(200).json({
+        success: blog ? true : false,
+        rs: blog,
+    });
+});
+
+const DeleteBlog = asyncHandler(async (req, res) => {
+    const { bid } = req.params;
+    const blog = await Blog.findByIdAndDelete(bid);
+    return res.status(200).json({
+        success: blog ? true : false,
+        Deleteblog: blog || 'Something went wrong',
+    });
+});
+
 module.exports = {
     createNewBlog,
     updateBlog,
     getBlogs,
     likeBlog,
     dislikeBlog,
+    getBlog,
+    DeleteBlog,
 };
