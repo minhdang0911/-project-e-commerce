@@ -13,6 +13,7 @@ router.get('/', [verifyAccessToken, isAdmin], ctrls.getUsers);
 router.delete('/', [verifyAccessToken, isAdmin], ctrls.deleteUser);
 router.put('/current', [verifyAccessToken], ctrls.UpdateUser);
 router.put('/address', [verifyAccessToken, isAdmin], ctrls.updateUserAddress);
+router.put('/cart', verifyAccessToken, ctrls.updateCart);
 router.put('/:uid', [verifyAccessToken, isAdmin], ctrls.updateUserByAdmin);
 
 module.exports = router;
