@@ -8,23 +8,29 @@ const crypto = require('crypto');
 const register = asyncHandler(async (req, res) => {
     const { email, password, firstname, lastname } = req.body;
     console.log(req.body);
-    if (!email || !password || !lastname || !firstname)
+
+    if (!email || !password || !lastname || !firstname) {
         return res.status(400).json({
-            sucess: false,
+            success: false,
             mes: 'Missing inputs',
         });
-    const response = await User.create(req.body);
+    }
 
     const user = await User.findOne({ email });
-    if (user) throw new Error('Register is successfully. Please go login~');
-    else {
+    if (user) {
+        return res.status(400).json({
+            success: false,
+            mes: 'Email is already in use',
+        });
+    } else {
         const newUser = await User.create(req.body);
         return res.status(200).json({
-            sucess: newUser ? true : false,
-            mes: newUser ? 'Register is successfully. Please go login~' : 'Something went wrong',
+            success: true,
+            mes: 'Register is successfully. Please go login~',
         });
     }
 });
+
 // Refresh token => Cấp mới access token
 // Access token => Xác thực người dùng, quân quyên người dùng
 // const login = asyncHandler(async (req, res) => {
