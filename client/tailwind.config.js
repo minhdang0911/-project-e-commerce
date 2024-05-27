@@ -9,7 +9,7 @@ module.exports = {
             backgroundColor: {
                 main: '#ee3131',
             },
-            text: {
+            colors: {
                 main: '#ee3131',
             },
             fontFamily: {
