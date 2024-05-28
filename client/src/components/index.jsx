@@ -5,3 +5,5 @@ export { default as Navigation } from './Navigation';
 export { default as BestSeller } from './BestSeller';
 export { default as Product } from './Product';
 export { default as selectOption } from './SelectOption';
+export { default as DealDaily } from './Banner';
+export { default as Countdown } from './Countdown';

@@ -10,7 +10,6 @@ const { IoEyeSharp, IoMdMenu, FaHeart } = icons;
 
 const Product = ({ productData, isNew }) => {
     const [isShowOption, setIsShowOption] = useState(false);
-    console.log('productData', productData);
 
     const imageUrl = productData?.thumb || 'https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png';
 
