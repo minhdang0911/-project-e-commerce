@@ -5,6 +5,8 @@ import labelBlue from '../assets/labelblue.png';
 import { reanderStartFromNumber } from '../utils/helper';
 import SelectOption from './SelectOption';
 import icons from '../utils/icons';
+import { Link } from 'react-router-dom';
+import path from '../utils/path';
 
 const { IoEyeSharp, IoMdMenu, FaHeart } = icons;
 
@@ -15,7 +17,8 @@ const Product = ({ productData, isNew }) => {
 
     return (
         <div className="w-full text-base  px-[10px]">
-            <div
+            <Link
+                to={`/${path.DETAIL_PRODUCT}/${productData?._id}/${productData?.title}`}
                 className="w-full border p-[15px] flex flex-col items-center"
                 onMouseOver={(e) => {
                     e.stopPropagation();
@@ -64,14 +67,14 @@ const Product = ({ productData, isNew }) => {
                 </div>
                 <div className="flex flex-col  mt-[15px] items-start gap-1 w-full">
                     <span className="flex h-4">
-                        {reanderStartFromNumber(productData?.totalRatings)?.map((el) => (
-                            <span>{el}</span>
+                        {reanderStartFromNumber(productData?.totalRatings)?.map((el, index) => (
+                            <span key={index}>{el}</span>
                         ))}
                     </span>
                     <span className="line-clamp-1">{productData?.title}</span>
                     <span>{`${formatMoney(productData?.price)}`}</span>
                 </div>
-            </div>
+            </Link>
         </div>
     );
 };

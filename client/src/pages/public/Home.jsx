@@ -74,7 +74,9 @@ const Home = () => {
                         ))}
                 </div>
             </div>
-            <div className="w-full h-[500px]"></div>
+            <div className="my-8 w-full">
+                <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">BLOG POSTS</h3>
+            </div>
         </>
     );
 };
