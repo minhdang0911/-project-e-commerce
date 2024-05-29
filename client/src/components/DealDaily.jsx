@@ -5,7 +5,7 @@ import { reanderStartFromNumber, formatMoney } from '../utils/helper';
 import Countdown from './Countdown';
 
 const { FaStar, IoMdMenu } = icons;
-let idInterval;
+// let idInterval;
 
 const DealDaily = () => {
     const [dealDaily, setDealDaily] = useState(null);

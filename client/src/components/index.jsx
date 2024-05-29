@@ -9,3 +9,4 @@ export { default as DealDaily } from './Banner';
 export { default as Countdown } from './Countdown';
 export { default as FeatureProduct } from './FeatureProduct';
 export { default as ProductCard } from './ProductCard';
+export { default as CustomSlider } from './CustomSlider';

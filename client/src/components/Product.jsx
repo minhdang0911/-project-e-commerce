@@ -63,7 +63,11 @@ const Product = ({ productData, isNew }) => {
                     )}
                 </div>
                 <div className="flex flex-col  mt-[15px] items-start gap-1 w-full">
-                    <span className="flex h-4">{reanderStartFromNumber(productData?.totalRatings)}</span>
+                    <span className="flex h-4">
+                        {reanderStartFromNumber(productData?.totalRatings)?.map((el) => (
+                            <span>{el}</span>
+                        ))}
+                    </span>
                     <span className="line-clamp-1">{productData?.title}</span>
                     <span>{`${formatMoney(productData?.price)}`}</span>
                 </div>

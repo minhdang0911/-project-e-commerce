@@ -8,7 +8,11 @@ const ProductCard = ({ price, totalRatings, title, image }) => {
                 <img src={image} alt="product" className="w-[90px] object-contain p-4" />
                 <div className="flex flex-col mt-[15px] items-start gap-1 w-full text-xs">
                     <span className="line-clamp-1 capitalize text-sm ">{title?.toLowerCase()}</span>
-                    <span className="flex h-4">{reanderStartFromNumber(totalRatings, 14)}</span>
+                    <span className="flex h-4">
+                        {reanderStartFromNumber(totalRatings, 14)?.map((el) => (
+                            <span>{el}</span>
+                        ))}
+                    </span>
                     <span>{`${formatMoney(price)}`}</span>
                 </div>
             </div>
