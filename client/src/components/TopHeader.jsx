@@ -7,7 +7,9 @@ const TopHeader = () => {
         <div className="h-[30px] w-full bg-main flex items-center justify-center">
             <div className="w-main flex items-center justify-between text-xs text-white">
                 <span>ORDER ONLINE OR CALL US (+84)919 666 222</span>
-                <Link to={`/${path.LOGIN}`}>Sign In or Create Account</Link>
+                <Link className="hover:text-gray-800" to={`/${path.LOGIN}`}>
+                    Sign In or Create Account
+                </Link>
             </div>
         </div>
     );

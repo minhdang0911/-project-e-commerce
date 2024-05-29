@@ -12,3 +12,5 @@ export { default as ProductCard } from './ProductCard';
 export { default as CustomSlider } from './CustomSlider';
 export { default as TopHeader } from './TopHeader';
 export { default as Footer } from './Footer';
+export { default as inputField } from './inputField';
+export { default as Button } from './Button';

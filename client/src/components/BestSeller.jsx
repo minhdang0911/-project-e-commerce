@@ -23,7 +23,7 @@ const BestSeller = () => {
     const [bestSeller, setBestSeller] = useState([]);
     const [newProduct, setNewProduct] = useState([]);
     const [activeTab, setActiveTab] = useState(1);
-    const [product, setProduct] = useState(null); // Initialize product state directly with useState
+    const [product, setProduct] = useState(null);
 
     const dispatch = useDispatch();
     const { newProducts } = useSelector((state) => state.products);
