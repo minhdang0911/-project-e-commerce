@@ -1,5 +1,5 @@
 import React from 'react';
-import { Banner, Sidebar, BestSeller } from '../../components';
+import { Banner, Sidebar, BestSeller, FeatureProduct } from '../../components';
 import DealDaily from '../../components/DealDaily';
 // import { apiGetProduct } from '../../apis/product';
 
@@ -16,6 +16,9 @@ const Home = () => {
                     <Banner />
                     <BestSeller />
                 </div>
+            </div>
+            <div className="my-8">
+                <FeatureProduct />
             </div>
             <div className="w-full h-[500px]"></div>
         </>

@@ -7,3 +7,5 @@ export { default as Product } from './Product';
 export { default as selectOption } from './SelectOption';
 export { default as DealDaily } from './Banner';
 export { default as Countdown } from './Countdown';
+export { default as FeatureProduct } from './FeatureProduct';
+export { default as ProductCard } from './ProductCard';
