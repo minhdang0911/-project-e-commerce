@@ -4,32 +4,33 @@ const { generateAccessToken, generateRefreshToken } = require('../middlewares/jw
 const jwt = require('jsonwebtoken');
 const sendMail = require('../utils/sendMail');
 const crypto = require('crypto');
+const makeToken = require('uniqid');
 
-const register = asyncHandler(async (req, res) => {
-    const { email, password, firstname, lastname } = req.body;
-    console.log(req.body);
+// const register = asyncHandler(async (req, res) => {
+//     const { email, password, firstname, lastname } = req.body;
+//     console.log(req.body);
 
-    if (!email || !password || !lastname || !firstname) {
-        return res.status(400).json({
-            success: false,
-            mes: 'Missing inputs',
-        });
-    }
+//     if (!email || !password || !lastname || !firstname) {
+//         return res.status(400).json({
+//             success: false,
+//             mes: 'Missing inputs',
+//         });
+//     }
 
-    const user = await User.findOne({ email });
-    if (user) {
-        return res.status(400).json({
-            success: false,
-            mes: 'Email is already in use',
-        });
-    } else {
-        const newUser = await User.create(req.body);
-        return res.status(200).json({
-            success: true,
-            mes: 'Register is successfully. Please go login~',
-        });
-    }
-});
+//     const user = await User.findOne({ email });
+//     if (user) {
+//         return res.status(400).json({
+//             success: false,
+//             mes: 'Email is already in use',
+//         });
+//     } else {
+//         const newUser = await User.create(req.body);
+//         return res.status(200).json({
+//             success: true,
+//             mes: 'Register is successfully. Please go login~',
+//         });
+//     }
+// });
 
 // Refresh token => Cấp mới access token
 // Access token => Xác thực người dùng, quân quyên người dùng
@@ -78,6 +79,57 @@ const register = asyncHandler(async (req, res) => {
 //         throw new Error('Invalid credentials');
 //     }
 // });
+
+const register = asyncHandler(async (req, res) => {
+    const { email, password, firstname, lastname, mobile } = req.body;
+    if (!email || !password || !lastname || !firstname || !mobile) {
+        return res.status(400).json({
+            success: false,
+            mes: 'Thiếu thông tin đầu vào',
+        });
+    }
+
+    const user = await User.findOne({ email });
+    if (user) {
+        return res.status(400).json({
+            success: false,
+            mes: 'Email is already in use',
+        });
+    } else {
+        const token = makeToken();
+        res.cookie('dataregister', { ...req.body, token }, { httpOnly: true, maxAge: 15 * 60 * 1000 });
+        const html = `Xin vui lòng click vào link dưới đây để hoàn tất quá trình đăng ký. Link này sẽ hết hạn sau 15 phút kể từ bây giờ. 
+        <a href=${process.env.URL_SERVER}/api/user/finalregister/${token}>Click here</a>`;
+        await sendMail({ email, html, subject: 'Hoàn tất đăng ký tài khoản' });
+        return res.json({
+            success: true,
+            mes: 'Vui lòng kiểm tra email của bạn để kích hoạt tài khoản',
+        });
+    }
+});
+
+const finalregister = asyncHandler(async (req, res) => {
+    const cookie = req.cookies;
+    const { token } = req.params;
+    if (!cookie || cookie?.dataregister?.token !== token) {
+        res.clearCookie('dataregister');
+        return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
+    }
+
+    const newUser = await User.create({
+        email: cookie?.dataregister?.email,
+        password: cookie?.dataregister?.password,
+        firstname: cookie?.dataregister?.firstname,
+        lastname: cookie?.dataregister?.lastname,
+        mobile: cookie?.dataregister?.mobile,
+    });
+    res.clearCookie('dataregister');
+    if (newUser) {
+        return res.redirect(`${process.env.CLIENT_URL}/finalregister/success`);
+    } else {
+        return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
+    }
+});
 
 const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -182,6 +234,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const data = {
         email,
         html,
+        subject: 'Forgot password',
     };
     const rs = await sendMail(data);
     return res.status(200).json({
@@ -316,4 +369,5 @@ module.exports = {
     updateUserByAdmin,
     updateUserAddress,
     updateCart,
+    finalregister,
 };
