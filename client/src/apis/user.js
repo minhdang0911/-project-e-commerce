@@ -16,3 +16,19 @@ export const apiLogin = (data) => {
         data,
     });
 };
+
+export const apiForgotPassword = (data) => {
+    return axios({
+        url: '/user/forgotpassword',
+        method: 'post',
+        data,
+    });
+};
+
+export const apiResetPassword = (data) => {
+    return axios({
+        url: '/user/resetpassord',
+        method: 'put',
+        data,
+    });
+};

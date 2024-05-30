@@ -222,24 +222,26 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 const forgotPassword = asyncHandler(async (req, res) => {
-    const { email } = req.query;
-    if (!email) throw new Error('Missing email');
+    const { email } = req.body;
+    if (!email) throw new Error('Thiếu email');
     const user = await User.findOne({ email });
-    if (!user) throw new Error('User not found');
+    if (!user) throw new Error('Người dùng không tìm thấy');
     const resetToken = user.createPasswordChangedToken();
     await user.save();
 
-    const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. <a href=${process.env.URL_SERVER}/api/user/reset-password/${resetToken}>Click here</a>`;
+    const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn. Link này sẽ hết hạn sau 15 phút kể từ bây giờ. 
+    <a href=${process.env.CLIENT_URL}/reset-password/${resetToken}>Click here</a>`;
 
     const data = {
         email,
         html,
-        subject: 'Forgot password',
+        subject: 'Quên mật khẩu',
     };
     const rs = await sendMail(data);
     return res.status(200).json({
-        success: true,
         rs,
+        success: rs?.response?.includes('OK') ? true : false,
+        mes: rs?.response?.includes('OK') ? 'Vui lòng kiểm tra email của bạn' : 'Đã có lỗi vui lòng thử lại sau',
     });
 });
 
