@@ -20,7 +20,7 @@ const Home = () => {
     const { IoIosArrowForward } = icons;
     const { newProducts } = useSelector((state) => state.products);
     const { categories } = useSelector((state) => state.app);
-    console.log('categories', categories);
+
     return (
         <>
             <div className="w-main flex">
