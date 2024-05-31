@@ -1,13 +1,15 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import InputField from '../../components/inputField';
 import { Button } from '../../components';
 import { apiRegister, apiLogin, apiForgotPassword } from '../../apis/user';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import path from '../../utils/path';
-import { register } from '../../store/user/userSlice';
+import { login } from '../../store/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { validate } from '../../utils/helper';
+
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -20,36 +22,46 @@ const Login = () => {
     });
     const [isRegister, setIsRegister] = useState(false);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
+    const [invalidFields, setInvalidFields] = useState([]);
+
+    const restPayload = () => {
+        setPayload({
+            email: '',
+            password: '',
+            firstname: '',
+            lastname: '',
+            mobile: '',
+        });
+    };
+
+    useEffect(() => {
+        restPayload();
+    }, [isRegister]);
 
     const handleSubmit = useCallback(async () => {
         const { firstname, lastname, mobile, ...data } = payload;
-        const restPayload = () => {
-            setPayload({
-                email: '',
-                password: '',
-                firstname: '',
-                lastname: '',
-                mobile: '',
-            });
-        };
-        if (isRegister) {
-            const response = await apiRegister(payload);
 
-            if (response.success) {
-                Swal.fire('Congratulation', response?.mes, 'success').then(() => {
-                    setIsRegister(false);
-                    restPayload();
-                });
+        const invalids = isRegister ? validate(payload, setInvalidFields) : validate(data, setInvalidFields);
+        if (invalids === 0) {
+            if (isRegister) {
+                const response = await apiRegister(payload);
+
+                if (response.success) {
+                    Swal.fire('Congratulation', response?.mes, 'success').then(() => {
+                        setIsRegister(false);
+                        restPayload();
+                    });
+                } else {
+                    Swal.fire('Oops', response?.mes, 'error');
+                }
             } else {
-                Swal.fire('Oops', response?.mes, 'error');
-            }
-        } else {
-            const result = await apiLogin(data);
-            if (result.success) {
-                dispatch(register({ isLoggedIn: true, token: result.accessToken, userData: result.userData }));
-                navigate(`/${path.HOME}`);
-            } else {
-                Swal.fire('Oops', result?.mes, 'error');
+                const result = await apiLogin(data);
+                if (result.success) {
+                    dispatch(login({ isLoggedIn: true, token: result.accessToken, userData: result.userData }));
+                    navigate(`/${path.HOME}`);
+                } else {
+                    Swal.fire('Oops', result?.mes, 'error');
+                }
             }
         }
     }, [payload, isRegister]);
@@ -69,7 +81,7 @@ const Login = () => {
             {isForgotPassword && (
                 <div
                     className="animate-slide-right absolute top-0 left-0 bottom-0 right-0 bg-white
-            flex   py-8 z-50 flex-col items-center"
+            flex py-8 z-50 flex-col items-center"
                 >
                     <div className="flex flex-col gap-4">
                         <label htmlFor="email">Nhập vào email của bạn</label>
@@ -103,14 +115,47 @@ const Login = () => {
                     <h1 className="text-[28px] font-semibold text-main mb-8">{isRegister ? 'Register' : 'Login'}</h1>
                     {isRegister && (
                         <div className="flex items-center gap-2">
-                            <InputField value={payload.firstname} setValue={setPayload} nameKey="firstname" />
-                            <InputField value={payload.lastname} setValue={setPayload} nameKey="lastname" />
+                            <InputField
+                                invalidFields={invalidFields}
+                                setInvalidFields={setInvalidFields}
+                                value={payload.firstname}
+                                setValue={setPayload}
+                                nameKey="firstname"
+                            />
+                            <InputField
+                                invalidFields={invalidFields}
+                                setInvalidFields={setInvalidFields}
+                                value={payload.lastname}
+                                setValue={setPayload}
+                                nameKey="lastname"
+                            />
                         </div>
                     )}
 
-                    <InputField value={payload.email} setValue={setPayload} nameKey="email" />
-                    {isRegister && <InputField value={payload.mobile} setValue={setPayload} nameKey="mobile" />}
-                    <InputField value={payload.password} setValue={setPayload} nameKey="password" type="password" />
+                    <InputField
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
+                        value={payload.email}
+                        setValue={setPayload}
+                        nameKey="email"
+                    />
+                    {isRegister && (
+                        <InputField
+                            invalidFields={invalidFields}
+                            setInvalidFields={setInvalidFields}
+                            value={payload.mobile}
+                            setValue={setPayload}
+                            nameKey="mobile"
+                        />
+                    )}
+                    <InputField
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
+                        value={payload.password}
+                        setValue={setPayload}
+                        nameKey="password"
+                        type="password"
+                    />
                     <Button name={isRegister ? 'Register' : 'Login'} handleOnClick={handleSubmit} fw />
                     <div className="flex items-center justify-between my-2 w-full text-sm">
                         {!isRegister && (

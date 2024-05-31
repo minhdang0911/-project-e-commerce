@@ -10,7 +10,7 @@ const ProductCard = ({ price, totalRatings, title, image }) => {
                     <span className="line-clamp-1 capitalize text-sm ">{title?.toLowerCase()}</span>
                     <span className="flex h-4">
                         {reanderStartFromNumber(totalRatings, 14)?.map((el) => (
-                            <span>{el}</span>
+                            <span key={el._id}>{el}</span>
                         ))}
                     </span>
                     <span>{`${formatMoney(price)}`}</span>

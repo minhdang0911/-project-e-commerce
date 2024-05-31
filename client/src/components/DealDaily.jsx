@@ -75,7 +75,11 @@ const DealDaily = () => {
             </div>
             <div className="w-full flex flex-col items-center px-4 gap-2 ">
                 <img src={dealDaily?.thumb} alt="" className="w-full object-contain" />
-                <span className="flex h-4">{reanderStartFromNumber(dealDaily?.totalRatings)}</span>
+                <span className="flex h-4">
+                    {reanderStartFromNumber(dealDaily?.totalRatings, 20)?.map((el, index) => (
+                        <span key={index}>{el}</span>
+                    ))}
+                </span>
                 <span className="line-clamp-1 text-center">{dealDaily?.title}</span>
                 <span>{formatMoney(dealDaily?.price)}</span>
             </div>
