@@ -43,8 +43,8 @@ const BestSeller = () => {
 
     useEffect(() => {
         if (activeTab === 1) setProduct(bestSeller);
-        if (activeTab === 2) setProduct(newProduct);
-    }, [activeTab, bestSeller, newProduct]);
+        if (activeTab === 2) setProduct(newProducts);
+    }, [activeTab, bestSeller, newProducts]);
 
     return (
         <div>

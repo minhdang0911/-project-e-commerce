@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import InputField from '../../components/inputField';
 import { Button } from '../../components';
 import { apiRegister, apiLogin, apiForgotPassword, apiFinalRegister } from '../../apis/user';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import path from '../../utils/path';
 import { login } from '../../store/user/userSlice';
 import { useDispatch } from 'react-redux';
@@ -23,9 +23,11 @@ const Login = () => {
     const [isRegister, setIsRegister] = useState(false);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [invalidFields, setInvalidFields] = useState([]);
-    const [token, settoken] = useState('');
-    let timer = 300;
-    let interval;
+    const [token, setToken] = useState('');
+    const [isVerifyEmail, setIsVerifyEmail] = useState(false);
+    const [timer, setTimer] = useState(300);
+    const intervalRef = useRef(null);
+    const [email, setEmail] = useState('');
 
     const restPayload = () => {
         setPayload({
@@ -41,20 +43,28 @@ const Login = () => {
         restPayload();
     }, [isRegister]);
 
+    useEffect(() => {
+        if (isVerifyEmail) {
+            startTimer();
+        } else {
+            clearInterval(intervalRef.current);
+        }
+    }, [isVerifyEmail]);
+
+    useEffect(() => {
+        if (timer <= 0) {
+            clearInterval(intervalRef.current);
+        }
+    }, [timer]);
+
     const handleSubmit = useCallback(async () => {
         const { firstname, lastname, mobile, ...data } = payload;
-
         const invalids = isRegister ? validate(payload, setInvalidFields) : validate(data, setInvalidFields);
         if (invalids === 0) {
             if (isRegister) {
                 const response = await apiRegister(payload);
-
                 if (response.success) {
                     setIsVerifyEmail(true);
-                    // Swal.fire('Congratulation', response?.mes, 'success').then(() => {
-                    //     setIsRegister(false);
-                    //     restPayload();
-                    // });
                 } else {
                     Swal.fire('Oops', response?.mes, 'error');
                 }
@@ -81,11 +91,9 @@ const Login = () => {
             Swal.fire('Oops', response?.mes, 'error');
         }
         setIsVerifyEmail(false);
-        settoken('');
+        setToken('');
     };
 
-    const [email, setEmail] = useState('');
-    const [isVerifyEmail, setIsVerifyEmail] = useState(false);
     const handleForgotPassword = async () => {
         const response = await apiForgotPassword({ email });
         if (response.success === true) {
@@ -96,13 +104,8 @@ const Login = () => {
     };
 
     const startTimer = () => {
-        interval = setInterval(() => {
-            if (timer <= 0) {
-                clearInterval(interval);
-            } else {
-                timer--;
-                document.getElementById('timer').textContent = formatTime(timer);
-            }
+        intervalRef.current = setInterval(() => {
+            setTimer((prevTimer) => prevTimer - 1);
         }, 1000);
     };
 
@@ -115,23 +118,23 @@ const Login = () => {
     return (
         <div className="w-screen h-screen relative">
             {isVerifyEmail && (
-                <div className="absolute top-0 left-0 right-0 bottom-0 bg-overplay z-50 flex flex-col justify-center items-center">
-                    <div className="bg-white w-[500px] rounded-md">
-                        <h4 className="">
+                <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50">
+                    <div className="bg-white w-96 rounded-lg p-6 shadow-lg transform transition-transform duration-300 scale-95 hover:scale-100">
+                        <h4 className="text-lg font-semibold mb-4">
                             Vui lòng kiểm tra mã code trong email của bạn. Hãy nhập mã code vào đây. Mã code sẽ hết hạn
-                            sau 5 phút
-                            {/* (<span id="timer">{formatTime(timer)}</span> phút). */}
+                            sau 5 phút (<span id="timer">{formatTime(timer)}</span>).
                         </h4>
                         <input
-                            className="p-2 border rounded-md outline-none"
+                            className="w-full p-2 border border-gray-300 rounded-md outline-none mb-4"
                             type="text"
                             value={token}
-                            onChange={(e) => settoken(e.target.value)}
+                            onChange={(e) => setToken(e.target.value)}
+                            placeholder="Nhập mã code"
                         />
                         <button
                             onClick={finalRegister}
                             type="button"
-                            className="ml-4 px-4 py-2 bg-blue-500 font-semibold rounded-md"
+                            className="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition-colors duration-300"
                         >
                             Xác nhận
                         </button>
@@ -139,10 +142,7 @@ const Login = () => {
                 </div>
             )}
             {isForgotPassword && (
-                <div
-                    className="animate-slide-right absolute top-0 left-0 bottom-0 right-0 bg-white
-            flex py-8 z-30 flex-col items-center"
-                >
+                <div className="animate-slide-right absolute top-0 left-0 bottom-0 right-0 bg-white flex py-8 z-30 flex-col items-center">
                     <div className="flex flex-col gap-4">
                         <label htmlFor="email">Nhập vào email của bạn</label>
                         <input
@@ -153,7 +153,6 @@ const Login = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-
                         <div className="flex items-center justify-end gap-4 w-full">
                             <Button name="Xác nhận" handleOnClick={handleForgotPassword} />
                             <Button
@@ -191,7 +190,6 @@ const Login = () => {
                             />
                         </div>
                     )}
-
                     <InputField
                         invalidFields={invalidFields}
                         setInvalidFields={setInvalidFields}
@@ -226,7 +224,6 @@ const Login = () => {
                                 Forgot your account
                             </span>
                         )}
-
                         {!isRegister && (
                             <span
                                 onClick={() => setIsRegister(true)}
@@ -235,7 +232,6 @@ const Login = () => {
                                 Create account
                             </span>
                         )}
-
                         {isRegister && (
                             <span
                                 onClick={() => setIsRegister(false)}
@@ -245,6 +241,9 @@ const Login = () => {
                             </span>
                         )}
                     </div>
+                    <Link className="text-blue-500 text-sm hover:underline cursor-pointer" to={`/${path.HOME}`}>
+                        Go home
+                    </Link>
                 </div>
             </div>
         </div>
