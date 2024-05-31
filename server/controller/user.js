@@ -97,38 +97,59 @@ const register = asyncHandler(async (req, res) => {
         });
     } else {
         const token = makeToken();
-        res.cookie('dataregister', { ...req.body, token }, { httpOnly: true, maxAge: 15 * 60 * 1000 });
-        const html = `Xin vui lòng click vào link dưới đây để hoàn tất quá trình đăng ký. Link này sẽ hết hạn sau 15 phút kể từ bây giờ. 
-        <a href=${process.env.URL_SERVER}/api/user/finalregister/${token}>Click here</a>`;
-        await sendMail({ email, html, subject: 'Hoàn tất đăng ký tài khoản' });
+        const emailEdited = btoa(email) + '@' + token;
+        const newUser = await User.create({
+            email: emailEdited,
+            password,
+            firstname,
+            lastname,
+            mobile,
+        });
+        // res.cookie('dataregister', { ...req.body, token }, { httpOnly: true, maxAge: 15 * 60 * 1000 });
+        if (newUser) {
+            const html = `<h2>Mã đăng kí tài khoản: <br /> <blockquote>${token}</blockquote></h2>`;
+            await sendMail({ email, html, subject: 'Xác nhận đăng ký tài khoản' });
+        }
+        setTimeout(async () => {
+            await User.deleteOne({ email: emailEdited });
+        }, [300000]);
         return res.json({
-            success: true,
-            mes: 'Vui lòng kiểm tra email của bạn để kích hoạt tài khoản',
+            success: newUser ? true : false,
+            mes: newUser ? 'Vui lòng kiểm tra email của bạn để kích hoạt tài khoản' : 'Có lỗi xảy ra',
         });
     }
 });
 
 const finalregister = asyncHandler(async (req, res) => {
-    const cookie = req.cookies;
+    // const cookie = req.cookies;
     const { token } = req.params;
-    if (!cookie || cookie?.dataregister?.token !== token) {
-        res.clearCookie('dataregister');
-        return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
+    const notActivedEmail = await User.findOne({ email: new RegExp(`${token}$`) });
+    if (notActivedEmail) {
+        notActivedEmail.email = atob(notActivedEmail?.email?.split('@')[0]);
+        notActivedEmail.save();
     }
-
-    const newUser = await User.create({
-        email: cookie?.dataregister?.email,
-        password: cookie?.dataregister?.password,
-        firstname: cookie?.dataregister?.firstname,
-        lastname: cookie?.dataregister?.lastname,
-        mobile: cookie?.dataregister?.mobile,
+    return res.json({
+        success: notActivedEmail ? true : false,
+        mes: notActivedEmail ? notActivedEmail : 'Somethings went wrongs',
     });
-    res.clearCookie('dataregister');
-    if (newUser) {
-        return res.redirect(`${process.env.CLIENT_URL}/finalregister/success`);
-    } else {
-        return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
-    }
+    // if (!cookie || cookie?.dataregister?.token !== token) {
+    //     res.clearCookie('dataregister');
+    //     return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
+    // }
+
+    // const newUser = await User.create({
+    //     email: cookie?.dataregister?.email,
+    //     password: cookie?.dataregister?.password,
+    //     firstname: cookie?.dataregister?.firstname,
+    //     lastname: cookie?.dataregister?.lastname,
+    //     mobile: cookie?.dataregister?.mobile,
+    // });
+    // res.clearCookie('dataregister');
+    // if (newUser) {
+    //     return res.redirect(`${process.env.CLIENT_URL}/finalregister/success`);
+    // } else {
+    //     return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
+    // }
 });
 
 const login = asyncHandler(async (req, res) => {

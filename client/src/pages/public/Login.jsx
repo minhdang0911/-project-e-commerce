@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import InputField from '../../components/inputField';
 import { Button } from '../../components';
-import { apiRegister, apiLogin, apiForgotPassword } from '../../apis/user';
+import { apiRegister, apiLogin, apiForgotPassword, apiFinalRegister } from '../../apis/user';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import path from '../../utils/path';
@@ -23,6 +23,9 @@ const Login = () => {
     const [isRegister, setIsRegister] = useState(false);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [invalidFields, setInvalidFields] = useState([]);
+    const [token, settoken] = useState('');
+    let timer = 300;
+    let interval;
 
     const restPayload = () => {
         setPayload({
@@ -47,10 +50,11 @@ const Login = () => {
                 const response = await apiRegister(payload);
 
                 if (response.success) {
-                    Swal.fire('Congratulation', response?.mes, 'success').then(() => {
-                        setIsRegister(false);
-                        restPayload();
-                    });
+                    setIsVerifyEmail(true);
+                    // Swal.fire('Congratulation', response?.mes, 'success').then(() => {
+                    //     setIsRegister(false);
+                    //     restPayload();
+                    // });
                 } else {
                     Swal.fire('Oops', response?.mes, 'error');
                 }
@@ -66,7 +70,22 @@ const Login = () => {
         }
     }, [payload, isRegister]);
 
+    const finalRegister = async () => {
+        const response = await apiFinalRegister(token);
+        if (response.success) {
+            Swal.fire('Congratulation', response?.mes, 'success').then(() => {
+                setIsRegister(false);
+                restPayload();
+            });
+        } else {
+            Swal.fire('Oops', response?.mes, 'error');
+        }
+        setIsVerifyEmail(false);
+        settoken('');
+    };
+
     const [email, setEmail] = useState('');
+    const [isVerifyEmail, setIsVerifyEmail] = useState(false);
     const handleForgotPassword = async () => {
         const response = await apiForgotPassword({ email });
         if (response.success === true) {
@@ -76,12 +95,53 @@ const Login = () => {
         }
     };
 
+    const startTimer = () => {
+        interval = setInterval(() => {
+            if (timer <= 0) {
+                clearInterval(interval);
+            } else {
+                timer--;
+                document.getElementById('timer').textContent = formatTime(timer);
+            }
+        }, 1000);
+    };
+
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    };
+
     return (
         <div className="w-screen h-screen relative">
+            {isVerifyEmail && (
+                <div className="absolute top-0 left-0 right-0 bottom-0 bg-overplay z-50 flex flex-col justify-center items-center">
+                    <div className="bg-white w-[500px] rounded-md">
+                        <h4 className="">
+                            Vui lòng kiểm tra mã code trong email của bạn. Hãy nhập mã code vào đây. Mã code sẽ hết hạn
+                            sau 5 phút
+                            {/* (<span id="timer">{formatTime(timer)}</span> phút). */}
+                        </h4>
+                        <input
+                            className="p-2 border rounded-md outline-none"
+                            type="text"
+                            value={token}
+                            onChange={(e) => settoken(e.target.value)}
+                        />
+                        <button
+                            onClick={finalRegister}
+                            type="button"
+                            className="ml-4 px-4 py-2 bg-blue-500 font-semibold rounded-md"
+                        >
+                            Xác nhận
+                        </button>
+                    </div>
+                </div>
+            )}
             {isForgotPassword && (
                 <div
                     className="animate-slide-right absolute top-0 left-0 bottom-0 right-0 bg-white
-            flex py-8 z-50 flex-col items-center"
+            flex py-8 z-30 flex-col items-center"
                 >
                     <div className="flex flex-col gap-4">
                         <label htmlFor="email">Nhập vào email của bạn</label>
