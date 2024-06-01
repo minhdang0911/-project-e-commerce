@@ -13,7 +13,7 @@ const Header = () => {
             <img
                 src={logo}
                 alt="logo"
-                className="w-[234px] object-contain cursor-pointer"
+                className="w-[234px]  object-contain cursor-pointer"
                 onClick={() => navigate(path.HOME)}
             />
 

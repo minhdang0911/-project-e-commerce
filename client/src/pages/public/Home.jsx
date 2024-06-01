@@ -23,7 +23,7 @@ const Home = () => {
 
     return (
         <>
-            <div className="w-main flex">
+            <div className="w-main flex mt-6">
                 <div className="flex flex-col gap-5 w-[25%] flex-auto ">
                     <Sidebar />
 
@@ -48,7 +48,6 @@ const Home = () => {
                     <CustomSlider products={newProducts} />
                 </div>
             </div>
-
             <div className="my-8 w-full">
                 <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">HOT COLLECTION</h3>
                 <div className="flex flex-wrap gap-4 mt-4 ">
