@@ -10,6 +10,14 @@ module.exports = {
                 main: '#ee3131',
                 overplay: 'rgba(0,0,0,0.3)',
             },
+
+            listStyleType: {
+                none: 'none',
+                disc: 'disc',
+                decimal: 'decimal',
+                square: 'square',
+                roman: 'upper-roman',
+            },
             colors: {
                 main: '#ee3131',
             },

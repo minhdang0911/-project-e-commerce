@@ -11,6 +11,7 @@ const Public = () => {
             <div className="w-main">
                 <Outlet />
             </div>
+
             <Footer />
         </div>
     );

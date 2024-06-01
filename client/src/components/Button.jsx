@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Button = ({ name, handleOnClick, style, iconsBefore, iconAfter, fw }) => {
+const Button = ({ children, handleOnClick, style, fw }) => {
     return (
         <button
             onClick={() => {
@@ -11,9 +11,7 @@ const Button = ({ name, handleOnClick, style, iconsBefore, iconAfter, fw }) => {
                 style ? style : `px-4 py-2 rounded-md text-white bg-main my-2 text-semibold ${fw ? 'w-full' : 'w-fit'}`
             }
         >
-            {iconsBefore}
-            <span>{name}</span>
-            {iconAfter}
+            {children}
         </button>
     );
 };

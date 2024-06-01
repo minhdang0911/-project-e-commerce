@@ -10,7 +10,7 @@ import path from '../utils/path';
 
 const { IoEyeSharp, IoMdMenu, FaHeart } = icons;
 
-const Product = ({ productData, isNew }) => {
+const Product = ({ productData, isNew, normal }) => {
     const [isShowOption, setIsShowOption] = useState(false);
 
     const imageUrl = productData?.thumb || 'https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png';
@@ -43,26 +43,30 @@ const Product = ({ productData, isNew }) => {
                         className="w-[274px] h-[274px] object-cover"
                     />
 
-                    {isNew === true ? (
-                        <img
-                            src={label}
-                            alt=""
-                            className="absolute top-[-22px] left-[-31px] w-[100px] h-[50px] object-cover"
-                        />
-                    ) : (
-                        <img
-                            src={labelBlue}
-                            alt=""
-                            className="absolute top-[-30px] left-[-20px] w-[80px] h-[50px] object-cover"
-                        />
-                    )}
+                    {!normal && (
+                        <>
+                            {isNew === true ? (
+                                <img
+                                    src={label}
+                                    alt=""
+                                    className="absolute top-[-22px] left-[-31px] w-[100px] h-[50px] object-cover"
+                                />
+                            ) : (
+                                <img
+                                    src={labelBlue}
+                                    alt=""
+                                    className="absolute top-[-30px] left-[-20px] w-[80px] h-[50px] object-cover"
+                                />
+                            )}
 
-                    {isNew === true ? (
-                        <span className="font-bold absolute   top-[-8px] left-[5px] text-white">New</span>
-                    ) : (
-                        <span className="font-bold absolute  text-sm  top-[-15px] left-[-14px] text-white">
-                            Trending
-                        </span>
+                            {isNew === true ? (
+                                <span className="font-bold absolute top-[-8px] left-[5px] text-white">New</span>
+                            ) : (
+                                <span className="font-bold absolute text-sm top-[-15px] left-[-14px] text-white">
+                                    Trending
+                                </span>
+                            )}
+                        </>
                     )}
                 </div>
                 <div className="flex flex-col  mt-[15px] items-start gap-1 w-full">
