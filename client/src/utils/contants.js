@@ -118,3 +118,5 @@ export const productInfoTabs = [
         name: 'Đánh Giá Khách Hàng',
     },
 ];
+
+export const colors = ['black', 'brown', 'white', 'gray', 'pink', 'yellow', 'purple', 'orange', 'green', 'blue'];

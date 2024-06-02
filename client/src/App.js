@@ -8,7 +8,7 @@ import {
     Services,
     DetailProduct,
     Blog,
-    Product,
+    Products,
     FinalRegister,
     ResetPassword,
 } from './pages/public';
@@ -33,7 +33,7 @@ function App() {
                     <Route path={path.FAQs} element={<FAQ />}></Route>
                     <Route path={path.FAQs} element={<FAQ />}></Route>
                     <Route path={path.OUR_SERVICES} element={<Services />}></Route>
-                    <Route path={path.PRODUCTS} element={<Product />}></Route>
+                    <Route path={path.PRODUCTS} element={<Products />}></Route>
                     <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
                 </Route>
                 <Route path={path.FINAL_REGISTER} element={<FinalRegister />}></Route>

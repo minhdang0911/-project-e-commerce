@@ -18,3 +18,4 @@ export { default as Breakcrumb } from './Breakcrumb';
 export { default as SelectQuantity } from './SelectQuantity';
 export { default as ProductExtraInfoItem } from './ProductExtraInfoItem';
 export { default as ProductInformation } from './ProductInformation';
+export { default as SeachItem } from './SeachItem';

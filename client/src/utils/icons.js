@@ -3,7 +3,7 @@ import { MdOutlineEmail, MdFireTruck } from 'react-icons/md';
 import { IoBagHandleOutline, IoEyeSharp, IoShieldHalf } from 'react-icons/io5';
 import { FaUser, FaHome, FaStar, FaGift, FaTty } from 'react-icons/fa';
 import { CiStar } from 'react-icons/ci';
-import { IoMdMenu, IoIosArrowForward, IoIosLogOut } from 'react-icons/io';
+import { IoMdMenu, IoIosArrowForward, IoIosLogOut, IoIosArrowDown } from 'react-icons/io';
 import { FaHeart } from 'react-icons/fa6';
 import { FaReply } from 'react-icons/fa6';
 
@@ -25,6 +25,7 @@ const icons = {
     FaTty,
     IoShieldHalf,
     FaReply,
+    IoIosArrowDown,
 };
 
 export default icons;

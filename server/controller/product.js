@@ -33,12 +33,21 @@ const getProducts = asyncHandler(async (req, res) => {
     let queryString = JSON.stringify(queries);
     queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, (matchedEl) => `$${matchedEl}`);
     const formatedQueries = JSON.parse(queryString);
+    let colorQueryObj = {};
 
     // Filtering
     if (queries?.title) formatedQueries.title = { $regex: queries.title, $options: 'i' };
     if (queries?.price) formatedQueries.price = Number(queries.price);
     if (queries?.category) formatedQueries.category = { $regex: queries.category, $options: 'i' };
-    let queryCommand = Product.find(formatedQueries);
+    if (queries?.color) {
+        delete formatedQueries.color;
+        const colorArr = queries.color?.split(',');
+        const colorQuery = colorArr.map((el) => ({ color: { $regex: el, $options: 'i' } }));
+        colorQueryObj = { $or: colorQuery };
+    }
+
+    const q = { ...colorQueryObj, ...formatedQueries };
+    let queryCommand = Product.find(q);
 
     // Sorting
     if (req.query.sort) {
@@ -60,7 +69,7 @@ const getProducts = asyncHandler(async (req, res) => {
     try {
         // Execute query
         const response = await queryCommand;
-        const counts = await Product.countDocuments(formatedQueries);
+        const counts = await Product.countDocuments(q);
         return res.status(200).json({
             success: response.length > 0,
             products: response,
