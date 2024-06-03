@@ -33,11 +33,19 @@ const getProducts = asyncHandler(async (req, res) => {
     let queryString = JSON.stringify(queries);
     queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, (matchedEl) => `$${matchedEl}`);
     const formatedQueries = JSON.parse(queryString);
+
+    // Chuyển đổi các giá trị price thành số
+    if (formatedQueries.price) {
+        if (formatedQueries.price.$gte !== undefined) formatedQueries.price.$gte = Number(formatedQueries.price.$gte);
+        if (formatedQueries.price.$gt !== undefined) formatedQueries.price.$gt = Number(formatedQueries.price.$gt);
+        if (formatedQueries.price.$lte !== undefined) formatedQueries.price.$lte = Number(formatedQueries.price.$lte);
+        if (formatedQueries.price.$lt !== undefined) formatedQueries.price.$lt = Number(formatedQueries.price.$lt);
+    }
+
     let colorQueryObj = {};
 
     // Filtering
     if (queries?.title) formatedQueries.title = { $regex: queries.title, $options: 'i' };
-    if (queries?.price) formatedQueries.price = Number(queries.price);
     if (queries?.category) formatedQueries.category = { $regex: queries.category, $options: 'i' };
     if (queries?.color) {
         delete formatedQueries.color;
@@ -57,7 +65,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
     //fields limitng
     if (req.query.fields) {
-        const fields = +req.query.fields.split(',').join(' ');
+        const fields = req.query.fields.split(',').join(' ');
         queryCommand = queryCommand.select(fields);
     }
 
@@ -66,6 +74,7 @@ const getProducts = asyncHandler(async (req, res) => {
     const limit = +req.query.limit || process.env.LIMIT_PRODUCT;
     const skip = (page - 1) * limit;
     queryCommand.skip(skip).limit(limit);
+
     try {
         // Execute query
         const response = await queryCommand;

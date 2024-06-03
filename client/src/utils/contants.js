@@ -120,3 +120,44 @@ export const productInfoTabs = [
 ];
 
 export const colors = ['black', 'brown', 'white', 'gray', 'pink', 'yellow', 'purple', 'orange', 'green', 'blue'];
+
+export const sorts = [
+    {
+        id: 1,
+        value: '-sold',
+        text: 'Sản phẩm bán chạy nhất',
+    },
+    {
+        id: 2,
+        value: 'title',
+        text: 'Từ A đến Z',
+    },
+    {
+        id: 3,
+        value: '-title',
+        text: 'Từ Z đến A',
+    },
+    {
+        id: 4,
+        value: 'price',
+        text: 'Giá, từ thấp đến cao',
+    },
+
+    {
+        id: 5,
+        value: '-price',
+        text: 'Giá, từ cao đến thấp',
+    },
+
+    {
+        id: 6,
+        value: 'createdAt',
+        text: 'Ngày mới nhất',
+    },
+
+    {
+        id: 7,
+        value: '-createdAt',
+        text: 'Ngày cũ nhất',
+    },
+];
