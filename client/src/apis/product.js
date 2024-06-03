@@ -14,3 +14,11 @@ export const apiGetProductByID = (pid) => {
         method: 'get',
     });
 };
+
+export const apiRatings = (data) => {
+    return axios({
+        url: '/product/ratings',
+        method: 'put',
+        data,
+    });
+};

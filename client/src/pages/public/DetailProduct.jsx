@@ -21,23 +21,35 @@ const DetailProduct = () => {
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [relativProduct, setRelativeProduct] = useState(null);
-
+    const [currentImage, setCurrentImage] = useState(null);
+    const [update, setUpdate] = useState(false);
+    const reRender = useCallback(() => {
+        setUpdate(!update);
+    }, [update]);
     useEffect(() => {
         if (pid) {
             fetchProductData();
             fetchProducts();
         }
+        window.scrollTo(0, 0);
     }, [pid]);
+
+    useEffect(() => {
+        if (pid) {
+            fetchProductData();
+        }
+    }, [update]);
 
     const fetchProductData = async () => {
         const response = await apiGetProductByID(pid);
-        console.log('data1', response);
-        if (response.success) setProduct(response.productData);
+        if (response.success) {
+            setProduct(response.productData);
+            setCurrentImage(response?.productData?.thumb);
+        }
     };
 
     const fetchProducts = async () => {
         const res = await apiGetProduct({ category });
-        console.log('res', res);
         if (res.success) setRelativeProduct(res.products);
     };
 
@@ -69,9 +81,14 @@ const DetailProduct = () => {
         },
         [quantity],
     );
-    console.log('relativProduct', relativProduct);
+
+    const handleClickImage = (e, el) => {
+        e.stopPropagation();
+        setCurrentImage(el);
+    };
+
     return (
-        <div className="w-full">
+        <div className="w-full relative">
             <div className="h-[81px] bg-gray-100 flex  justify-center items-center">
                 <div className="w-main ">
                     <h3 className="font-semi-bold">{title}</h3>
@@ -86,10 +103,10 @@ const DetailProduct = () => {
                                 smallImage: {
                                     alt: 'Wristwatch by Ted Baker London',
                                     isFluidWidth: true,
-                                    src: product?.thumb,
+                                    src: currentImage,
                                 },
                                 largeImage: {
-                                    src: product?.thumb,
+                                    src: currentImage,
                                     width: 1800,
                                     height: 1800,
                                 },
@@ -102,9 +119,10 @@ const DetailProduct = () => {
                             {product?.image?.map((el) => (
                                 <div key={el} className=" ">
                                     <img
+                                        onClick={(e) => handleClickImage(e, el)}
                                         src={el}
                                         alt="sub product"
-                                        className="h-[143px] w-[143px] border object-contain "
+                                        className="cursor-pointer h-[143px] w-[143px] border object-cover "
                                     />
                                 </div>
                             ))}
@@ -149,7 +167,13 @@ const DetailProduct = () => {
             </div>
 
             <div className="w-main m-auto mt-8">
-                <ProductInformation />
+                <ProductInformation
+                    pid={product?._id}
+                    nameProduct={product?.title}
+                    totalRatings={product?.totalRatings}
+                    ratings={product?.ratings}
+                    reRender={reRender}
+                />
             </div>
             <div className="w-main m-auto mt-8">
                 <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">Sản phẩm tương tự </h3>

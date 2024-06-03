@@ -19,3 +19,7 @@ export { default as SelectQuantity } from './SelectQuantity';
 export { default as ProductExtraInfoItem } from './ProductExtraInfoItem';
 export { default as ProductInformation } from './ProductInformation';
 export { default as SeachItem } from './SeachItem';
+export { default as Rating } from './Rating';
+export { default as Votebar } from './Votebar';
+export { default as VoteOption } from './VoteOption';
+export { default as Modal } from './Modal';

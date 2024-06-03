@@ -18,7 +18,7 @@ const fn = async (product) => {
         image: product?.images,
         color: product?.variants.find((el) => el.label === 'Color')?.variants[0] || '',
         thumb: product?.thumb,
-        totalRatings: Math.round(Math.random() * 5),
+        totalRatings: 0,
     });
     console.log('product', product);
 };
