@@ -1,9 +1,9 @@
 import React, { memo, useState, useEffect } from 'react';
 import icons from '../utils/icons';
 import { colors } from '../utils/contants';
-import { createSearchParams, useNavigate, useParams } from 'react-router-dom';
+import { createSearchParams, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { apiGetProduct } from '../apis';
-import useDebouce from '../hooks/useDebounce';
+import useDebounce from '../hooks/useDebounce';
 
 const SeachItem = ({ name, activeClick, changeActiveFilter, type = 'checkbox' }) => {
     const { IoIosArrowDown } = icons;
@@ -15,6 +15,7 @@ const SeachItem = ({ name, activeClick, changeActiveFilter, type = 'checkbox' })
         to: '',
     });
     const { category } = useParams();
+    const [params] = useSearchParams();
 
     const handleSelect = (e) => {
         const alreadyEl = selected?.find((el) => el === e.target.value);
@@ -25,14 +26,13 @@ const SeachItem = ({ name, activeClick, changeActiveFilter, type = 'checkbox' })
 
     useEffect(() => {
         if (selected.length > 0) {
-            navigate({
-                pathname: `/${category}`,
-                search: createSearchParams({
-                    color: selected.join(','),
-                }).toString(),
-            });
+            const existingParams = new URLSearchParams(params);
+            existingParams.set('color', selected.join(','));
+            navigate(`/${category}?${existingParams.toString()}`);
         } else {
-            navigate(`/${category}`);
+            const existingParams = new URLSearchParams(params);
+            existingParams.delete('color');
+            navigate(`/${category}?${existingParams.toString()}`);
         }
     }, [selected]);
 
@@ -47,28 +47,23 @@ const SeachItem = ({ name, activeClick, changeActiveFilter, type = 'checkbox' })
         }
     }, [type]);
 
-    const deboucePriceFrom = useDebouce(price.from, 500);
-    const deboucePriceTo = useDebouce(price.to, 500);
+    const deboucePriceFrom = useDebounce(price.from, 500);
+    const deboucePriceTo = useDebounce(price.to, 500);
     useEffect(() => {
-        const data = {};
+        const existingParams = new URLSearchParams(params);
         if (Number(price.from) > 0) {
-            data.from = price.from;
+            existingParams.set('from', price.from);
+        } else {
+            existingParams.delete('from');
         }
         if (Number(price.to) > 0) {
-            data.to = price.to;
+            existingParams.set('to', price.to);
+        } else {
+            existingParams.delete('to');
         }
-
-        navigate({
-            pathname: `/${category}`,
-            search: createSearchParams(data).toString(),
-        });
+        navigate(`/${category}?${existingParams.toString()}`);
     }, [deboucePriceFrom, deboucePriceTo]);
 
-    useEffect(() => {
-        if (price.from > price.to) {
-            alert('Giá kết thúc không được nhỏ hơn giá bắt đầu ');
-        }
-    }, [price]);
     return (
         <div
             onClick={() => changeActiveFilter(name)}

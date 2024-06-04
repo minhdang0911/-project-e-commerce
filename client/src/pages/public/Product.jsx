@@ -3,7 +3,7 @@ import { useParams, useSearchParams, useNavigate, createSearchParams } from 'rea
 import { Breakcrumb } from '../../components';
 import { apiGetProduct } from '../../apis';
 import Masonry from 'react-masonry-css';
-import { Product, SeachItem } from '../../components';
+import { Product, SeachItem, Pagination } from '../../components';
 import InputSelect from '../../components/InputSelect';
 import { sorts } from '../../utils/contants';
 const breakpointColumnsObj = {
@@ -29,12 +29,14 @@ const Products = () => {
         }
 
         const response = await apiGetProduct(queries);
-        if (response.success) setProducts(response.products);
+        console.log('res1', products);
+        if (response.success) setProducts(response);
     };
 
     useEffect(() => {
+        const existingParams = new URLSearchParams(params);
         const queries = {};
-        for (let [key, value] of params.entries()) {
+        for (let [key, value] of existingParams.entries()) {
             if (key === 'from' || key === 'to') {
                 const numberValue = Number(value);
                 if (!isNaN(numberValue)) {
@@ -48,6 +50,7 @@ const Products = () => {
         }
 
         fetchProductsByCategory(queries);
+        window.scrollTo(0, 0);
     }, [params]);
 
     const changeActiveFilter = useCallback(
@@ -66,13 +69,19 @@ const Products = () => {
     );
 
     useEffect(() => {
-        navigate({
-            pathname: `/${category}`,
-            search: createSearchParams({
-                sort,
-            }).toString(),
-        });
+        if (sort) {
+            const existingParams = new URLSearchParams(params);
+            existingParams.set('sort', sort);
+            navigate(`/${category}?${existingParams.toString()}`);
+        }
     }, [sort]);
+
+    const handleSearchByPrice = (from, to) => {
+        const existingParams = new URLSearchParams(params);
+        existingParams.set('from', from);
+        existingParams.set('to', to);
+        navigate(`/${category}?${existingParams.toString()}`);
+    };
 
     return (
         <div className="w-full">
@@ -91,6 +100,7 @@ const Products = () => {
                             name="price"
                             activeClick={activeClick}
                             changeActiveFilter={changeActiveFilter}
+                            handleSearch={handleSearchByPrice}
                         />
                         <SeachItem name="color" activeClick={activeClick} changeActiveFilter={changeActiveFilter} />
                     </div>
@@ -108,10 +118,13 @@ const Products = () => {
                     className="my-masonry-grid flex mx-[-10px]"
                     columnClassName="my-masonry-grid_column mb-[-20px]"
                 >
-                    {products?.map((item) => (
+                    {products?.products?.map((item) => (
                         <Product normal={true} pid={item.id} key={item.id} productData={item} />
                     ))}
                 </Masonry>
+            </div>
+            <div className="  w-main m-auto my-4 flex justify-end">
+                <Pagination totalCount={products?.counts} />
             </div>
             <div className="w-full h-[500px]"></div>
         </div>
