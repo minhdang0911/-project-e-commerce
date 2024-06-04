@@ -195,7 +195,7 @@ const login = asyncHandler(async (req, res) => {
             userData,
         });
     } else {
-        throw new Error('Invalid credentials');
+        throw new Error('Bạn đã nhập sai tài khoản hoặc mật khẩu');
     }
 });
 
