@@ -175,7 +175,7 @@ const DetailProduct = () => {
                     reRender={reRender}
                 />
             </div>
-            <div className="w-main m-auto mt-8">
+            <div className="w-main m-auto mt-[22rem]">
                 <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">Sản phẩm tương tự </h3>
                 <CustomSlider products={relativProduct} normal={true} />
             </div>

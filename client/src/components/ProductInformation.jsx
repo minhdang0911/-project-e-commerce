@@ -2,7 +2,7 @@ import React, { memo, useCallback, useState } from 'react';
 import { productInfoTabs } from '../utils/contants';
 import { Votebar } from '../components';
 import { reanderStartFromNumber } from '../utils/helper';
-import { Button, VoteOption } from '../components';
+import { Button, VoteOption, Comment } from '../components';
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/app/appSlice';
 import { apiRatings } from '../apis';
@@ -28,7 +28,7 @@ const ProductInformation = ({ totalRatings, ratings, nameProduct, pid, reRender 
             return;
         }
 
-        await apiRatings({ star: score, comment, pid });
+        await apiRatings({ star: score, comment, pid, updatedAt: Date.now() });
         dispatch(showModal({ isShowModal: false, modalChildren: null }));
         reRender();
     };
@@ -60,7 +60,7 @@ const ProductInformation = ({ totalRatings, ratings, nameProduct, pid, reRender 
 
     return (
         <div>
-            <div className="flex items-center gap-2 relative bottom-[-1px]">
+            <div className="flex items-center gap-2 relative bottom-[-1px] ">
                 {productInfoTabs.map((el) => (
                     <span
                         className={`p-2 cursor-pointer px-4 ${
@@ -112,6 +112,18 @@ const ProductInformation = ({ totalRatings, ratings, nameProduct, pid, reRender 
                         <div className="p-4 flex items-center justify-center text-sm gap-2">
                             <span>Bạn có muốn đánh giá sản phẩm?</span>
                             <Button handleOnClick={handleVoteNow}>Đánh giá ngay</Button>
+                        </div>
+
+                        <div className="flex flex-col gap-4">
+                            {ratings?.map((el) => (
+                                <Comment
+                                    name={`${el?.postedBy?.firstname} ${el.postedBy.lastname}`}
+                                    key={el._id}
+                                    star={el.star}
+                                    updatedAt={el.updatedAt}
+                                    comment={el.comment}
+                                />
+                            ))}
                         </div>
                     </div>
                 )}

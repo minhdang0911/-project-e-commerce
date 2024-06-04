@@ -93,3 +93,9 @@ input {
 .my-masonry-grid_column > div {
     margin-bottom: 20px;
 }
+
+.clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
+}
