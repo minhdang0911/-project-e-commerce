@@ -20,7 +20,7 @@ const Pagination = ({ totalCount }) => {
     };
 
     return (
-        <div className="flex w-main justify-between items-center">
+        <div className="flex w-full justify-between items-center">
             {!+params.get('page') && (
                 <span className="text-sm italic">{`Hiển thị sản phẩm từ 1 - ${
                     process.env.REACT_APP_PRODUCTS_LIMIT || 10

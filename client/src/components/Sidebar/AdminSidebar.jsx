@@ -4,6 +4,7 @@ import { adminSidebar } from '../../utils/contants';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 const activedStyle = 'px-4 py-2 flex items-center gap-2 bg-blue-500';
 const notActivedStyle = 'px-4 py-2 flex items-center gap-2 hover:bg-blue-100';
@@ -18,7 +19,10 @@ const AdminSidebar = () => {
     return (
         <div className="bg-white h-full py-4">
             <div className="flex justify-center items-center gap-2 flex-col p-4">
-                <img src={logo} alt="logo" className="w-[200px] object-contain" />
+                <Link to="/">
+                    {' '}
+                    <img src={logo} alt="logo" className="w-[200px] object-contain" />
+                </Link>
                 <small>Chức năng quản trị</small>
             </div>
             <div>

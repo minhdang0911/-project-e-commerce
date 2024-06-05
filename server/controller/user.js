@@ -284,11 +284,60 @@ const resetPassword = asyncHandler(async (req, res) => {
 });
 
 const getUsers = asyncHandler(async (req, res) => {
-    const response = await User.find().select('-refreshToken -password -role');
-    return res.status(200).json({
-        success: response ? true : false,
-        users: response,
-    });
+    const queries = { ...req.query };
+
+    const exclude = ['limit', 'sort', 'page', 'fields'];
+    exclude.forEach((el) => delete queries[el]);
+
+    let queryString = JSON.stringify(queries);
+    queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, (matchedEl) => `$${matchedEl}`);
+    const formatedQueries = JSON.parse(queryString);
+
+    const query = {};
+
+    if (req.query.q) {
+        delete formatedQueries.q;
+        formatedQueries['$or'] = [
+            { firstname: { $regex: req.query.q, $options: 'i' } },
+            { lastname: { $regex: req.query.q, $options: 'i' } },
+            { email: { $regex: req.query.q, $options: 'i' } },
+        ];
+    }
+    // Filtering
+    if (queries?.name) formatedQueries.name = { $regex: queries.name, $options: 'i' };
+
+    let queryCommand = User.find(formatedQueries);
+
+    // Sorting
+    if (req.query.sort) {
+        const sortBy = req.query.sort.split(',').join(' ');
+        queryCommand = queryCommand.sort(sortBy);
+    }
+
+    //fields limitng
+    if (req.query.fields) {
+        const fields = req.query.fields.split(',').join(' ');
+        queryCommand = queryCommand.select(fields);
+    }
+
+    //pagination
+    const page = +req.query.page || 1;
+    const limit = +req.query.limit || process.env.LIMIT_PRODUCT;
+    const skip = (page - 1) * limit;
+    queryCommand.skip(skip).limit(limit);
+
+    try {
+        // Execute query
+        const response = await queryCommand;
+        const counts = await User.countDocuments(formatedQueries);
+        return res.status(200).json({
+            success: response.length > 0,
+            user: response,
+            counts,
+        });
+    } catch (err) {
+        return res.status(500).json({ success: false, message: err.message });
+    }
 });
 
 const deleteUser = asyncHandler(async (req, res) => {

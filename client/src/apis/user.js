@@ -45,3 +45,11 @@ export const apiGetCurrent = () => {
         method: 'get',
     });
 };
+
+export const apiGetUsers = (params) => {
+    return axios({
+        url: '/user/',
+        method: 'get',
+        params,
+    });
+};

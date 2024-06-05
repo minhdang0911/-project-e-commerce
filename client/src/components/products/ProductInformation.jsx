@@ -117,7 +117,7 @@ const ProductInformation = ({ totalRatings, ratings, nameProduct, pid, reRender 
                         <div className="flex flex-col gap-4">
                             {ratings?.map((el) => (
                                 <Comment
-                                    name={`${el?.postedBy?.firstname} ${el.postedBy.lastname}`}
+                                    name={`${el?.postedBy?.firstname} ${el.postedBy?.lastname}`}
                                     key={el._id}
                                     star={el.star}
                                     updatedAt={el.updatedAt}

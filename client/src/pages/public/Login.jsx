@@ -199,6 +199,7 @@ const Login = () => {
                         value={payload.email}
                         setValue={setPayload}
                         nameKey="email"
+                        fullWidth
                     />
                     {isRegister && (
                         <InputField
@@ -216,6 +217,7 @@ const Login = () => {
                         setValue={setPayload}
                         nameKey="password"
                         type="password"
+                        fullWidth
                     />
                     <Button handleOnClick={handleSubmit} fw>
                         {' '}
