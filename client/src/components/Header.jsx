@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import logo from '../assets/logo.JPG';
 import icons from '../utils/icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import path from '../utils/path';
+import { useSelector, UseSelector } from 'react-redux';
 
 const Header = () => {
     const { MdSettingsPhone, MdOutlineEmail, IoBagHandleOutline, FaUser } = icons;
     const navigate = useNavigate();
+    const { current } = useSelector((state) => state.user);
 
     return (
         <div className=" w-main flex justify-between h-[110px] py-[35px]">
@@ -33,14 +35,25 @@ const Header = () => {
                     </span>
                     <span>Online Support 24/7</span>
                 </div>
-                <div className="cursor-pointer flex items-center justify-center gap-2 px-6 border-r">
-                    <IoBagHandleOutline color="red" />
-                    <span>0 item(s) </span>
-                </div>
-                <div className="cursor-pointer flex items-center justify-center px-6  gap-2 ">
-                    <FaUser size={14} />
-                    <span>Hồ sơ</span>
-                </div>
+                {current && (
+                    <Fragment>
+                        <div className="cursor-pointer flex items-center justify-center gap-2 px-6 border-r">
+                            <IoBagHandleOutline color="red" />
+                            <span>0 item(s) </span>
+                        </div>
+                        <Link
+                            to={
+                                current?.role === '2001'
+                                    ? `/${path.ADMIN}/${path.DASHBOARD}`
+                                    : `/${path.MEMBER}/${path.PERSONAL}`
+                            }
+                            className="cursor-pointer flex items-center justify-center px-6  gap-2 "
+                        >
+                            <FaUser size={14} />
+                            <span>Hồ sơ</span>
+                        </Link>
+                    </Fragment>
+                )}
             </div>
         </div>
     );
