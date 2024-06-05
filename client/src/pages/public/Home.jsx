@@ -1,6 +1,6 @@
 import React from 'react';
 import { Banner, Sidebar, BestSeller, FeatureProduct, Product } from '../../components';
-import DealDaily from '../../components/DealDaily';
+import DealDaily from '../../components/products/DealDaily';
 import Slider from 'react-slick';
 import { CustomSlider } from '../../components';
 import { useSelector, UseSelector } from 'react-redux/es/hooks/useSelector';

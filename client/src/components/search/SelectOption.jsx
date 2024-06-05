@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 // import { IoEyeSharp, IoMdMenu } from 'react-icons/io';
 // import { FaHeart } from 'react-icons/fa';
 
@@ -14,4 +14,4 @@ const SelectOption = ({ icon }) => {
     );
 };
 
-export default SelectOption;
+export default memo(SelectOption);

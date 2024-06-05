@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
-import avatar from '../assets/avartardefault.jpg';
+import avatar from '../../assets/avartardefault.jpg';
 import moment from 'moment';
-import { reanderStartFromNumber } from '../utils/helper';
+import { reanderStartFromNumber } from '../../utils/helper';
 
 const Comment = ({ image = avatar, name = 'Anonmyous', content, updatedAt, comment, star }) => {
     return (

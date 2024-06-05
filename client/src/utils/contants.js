@@ -1,7 +1,17 @@
 import path from './path';
 import icons from './icons';
 
-const { MdFireTruck, FaGift, FaTty, IoShieldHalf, FaReply } = icons;
+const {
+    MdFireTruck,
+    FaGift,
+    FaTty,
+    IoShieldHalf,
+    FaReply,
+    MdSpaceDashboard,
+    FaPeopleGroup,
+    FaProductHunt,
+    FaRegMoneyBill1,
+} = icons;
 export const navigation = [
     {
         id: 4,
@@ -178,5 +188,45 @@ export const voteOptions = [
     {
         id: 5,
         text: ' Rất tôt',
+    },
+];
+
+export const adminSidebar = [
+    {
+        id: '1',
+        type: 'single',
+        text: 'Thống kê',
+        path: `/${path.ADMIN}/${path.DASHBOARD}`,
+        icon: <MdSpaceDashboard size={20} />,
+    },
+    {
+        id: '2',
+        type: 'single',
+        text: 'Quản lý người dùng',
+        path: `/${path.ADMIN}/${path.MANAGE_USER}`,
+        icon: <FaPeopleGroup size={20} />,
+    },
+    {
+        id: '3',
+        type: 'parent',
+        text: 'Quản lý sản phẩm',
+        icon: <FaProductHunt size={20} />,
+        submemu: [
+            {
+                text: 'Thêm sản phẩm',
+                path: `/${path.ADMIN}/${path.CREATE_PRODUCT}`,
+            },
+            {
+                text: 'Quản lý sản phẩm',
+                path: `/${path.ADMIN}/${path.MANAGE_PRODUCTS}`,
+            },
+        ],
+    },
+    {
+        id: '4',
+        type: 'single',
+        text: 'Quản lý đơn hàng',
+        path: `/${path.ADMIN}/${path.MANAGE_ORDER}`,
+        icon: <FaRegMoneyBill1 size={20} />,
     },
 ];

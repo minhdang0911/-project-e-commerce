@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
-import logo from '../assets/logo.JPG';
-import icons from '../utils/icons';
+import React, { Fragment, memo } from 'react';
+import logo from '../../assets/logo.JPG';
+import icons from '../../utils/icons';
 import { useNavigate, Link } from 'react-router-dom';
-import path from '../utils/path';
+import path from '../../utils/path';
 import { useSelector, UseSelector } from 'react-redux';
 
 const Header = () => {
@@ -58,4 +58,4 @@ const Header = () => {
         </div>
     );
 };
-export default Header;
+export default memo(Header);

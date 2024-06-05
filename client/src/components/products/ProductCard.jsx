@@ -1,5 +1,5 @@
-import React from 'react';
-import { reanderStartFromNumber, formatMoney } from '../utils/helper';
+import React, { memo } from 'react';
+import { reanderStartFromNumber, formatMoney } from '../../utils/helper';
 
 const ProductCard = ({ price, totalRatings, title, image }) => {
     return (
@@ -20,4 +20,4 @@ const ProductCard = ({ price, totalRatings, title, image }) => {
     );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

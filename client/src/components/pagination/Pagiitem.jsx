@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import clsx from 'clsx';
 import { useSearchParams, useNavigate, useParams, createSearchParams } from 'react-router-dom';
 
@@ -37,4 +37,4 @@ const Pagiitem = ({ children }) => {
     );
 };
 
-export default Pagiitem;
+export default memo(Pagiitem);

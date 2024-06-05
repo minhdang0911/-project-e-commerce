@@ -1,8 +1,8 @@
 import React, { useState, useEffect, memo } from 'react';
-import icons from '../utils/icons';
-import { apiGetProduct } from '../apis/product';
-import { reanderStartFromNumber, formatMoney } from '../utils/helper';
-import Countdown from './Countdown';
+import icons from '../../utils/icons';
+import { apiGetProduct } from '../../apis/product';
+import { reanderStartFromNumber, formatMoney } from '../../utils/helper';
+import Countdown from '../common/Countdown';
 
 const { FaStar, IoMdMenu } = icons;
 // let idInterval;

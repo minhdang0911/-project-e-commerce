@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Slider from 'react-slick';
-import { Product } from './';
+import { Product } from '..';
 
 const settings = {
     dots: false,
@@ -29,4 +29,4 @@ const CustomSlider = ({ products, activeTab, normal }) => {
     );
 };
 
-export default CustomSlider;
+export default memo(CustomSlider);

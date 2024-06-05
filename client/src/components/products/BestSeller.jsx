@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { apiGetProduct } from '../apis/product';
-import { getNewProducts } from '../store/products/asyncAction';
+import React, { useState, useEffect, memo } from 'react';
+import { apiGetProduct } from '../../apis/product';
+import { getNewProducts } from '../../store/products/asyncAction';
 import { useDispatch, useSelector } from 'react-redux';
-import CustomSlider from './CustomSlider';
+import CustomSlider from '../common/CustomSlider';
 
 const tabs = [
     {
@@ -80,4 +80,4 @@ const BestSeller = () => {
     );
 };
 
-export default BestSeller;
+export default memo(BestSeller);

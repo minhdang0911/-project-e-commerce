@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { formatMoney } from '../utils/helper';
-import label from '../assets/label.jpg';
-import labelBlue from '../assets/labelblue.png';
-import { reanderStartFromNumber } from '../utils/helper';
-import SelectOption from './SelectOption';
-import icons from '../utils/icons';
+import React, { useState, memo } from 'react';
+import { formatMoney } from '../../utils/helper';
+import label from '../../assets/label.jpg';
+import labelBlue from '../../assets/labelblue.png';
+import { reanderStartFromNumber } from '../../utils/helper';
+import SelectOption from '../search/SelectOption';
+import icons from '../../utils/icons';
 import { Link } from 'react-router-dom';
-import path from '../utils/path';
+import path from '../../utils/path';
 
 const { IoEyeSharp, IoMdMenu, FaHeart } = icons;
 
@@ -83,4 +83,4 @@ const Product = ({ productData, isNew, normal }) => {
     );
 };
 
-export default Product;
+export default memo(Product);

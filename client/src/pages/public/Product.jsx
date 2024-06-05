@@ -4,7 +4,7 @@ import { Breakcrumb } from '../../components';
 import { apiGetProduct } from '../../apis';
 import Masonry from 'react-masonry-css';
 import { Product, SeachItem, Pagination } from '../../components';
-import InputSelect from '../../components/InputSelect';
+import InputSelect from '../../components/inputs/InputSelect';
 import { sorts } from '../../utils/contants';
 const breakpointColumnsObj = {
     default: 4,

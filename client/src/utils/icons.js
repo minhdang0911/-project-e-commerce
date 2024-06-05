@@ -6,6 +6,10 @@ import { CiStar } from 'react-icons/ci';
 import { IoMdMenu, IoIosArrowForward, IoIosLogOut, IoIosArrowDown } from 'react-icons/io';
 import { FaHeart } from 'react-icons/fa6';
 import { FaReply } from 'react-icons/fa6';
+import { MdSpaceDashboard } from 'react-icons/md';
+import { FaPeopleGroup } from 'react-icons/fa6';
+import { FaProductHunt } from 'react-icons/fa';
+import { FaRegMoneyBill1 } from 'react-icons/fa6';
 
 const icons = {
     MdSettingsPhone,
@@ -26,6 +30,10 @@ const icons = {
     IoShieldHalf,
     FaReply,
     IoIosArrowDown,
+    MdSpaceDashboard,
+    FaPeopleGroup,
+    FaProductHunt,
+    FaRegMoneyBill1,
 };
 
 export default icons;

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import InputField from '../../components/inputField';
+import InputField from '../../components/inputs/inputField';
 import { Button, Loading } from '../../components';
 import { apiRegister, apiLogin, apiForgotPassword, apiFinalRegister } from '../../apis/user';
 import Swal from 'sweetalert2';

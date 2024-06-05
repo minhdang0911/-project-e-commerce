@@ -1,9 +1,9 @@
 import React, { memo, useState, useEffect } from 'react';
-import icons from '../utils/icons';
-import { colors } from '../utils/contants';
+import icons from '../../utils/icons';
+import { colors } from '../../utils/contants';
 import { createSearchParams, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { apiGetProduct } from '../apis';
-import useDebounce from '../hooks/useDebounce';
+import { apiGetProduct } from '../../apis';
+import useDebounce from '../../hooks/useDebounce';
 
 const SeachItem = ({ name, activeClick, changeActiveFilter, type = 'checkbox' }) => {
     const { IoIosArrowDown } = icons;

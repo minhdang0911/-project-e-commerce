@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import icons from '../utils/icons';
+import icons from '../../utils/icons';
 
 const Footer = () => {
     const { MdOutlineEmail } = icons;
