@@ -183,6 +183,7 @@ const Login = () => {
                                 value={payload.firstname}
                                 setValue={setPayload}
                                 nameKey="firstname"
+                                fullWidth
                             />
                             <InputField
                                 invalidFields={invalidFields}
@@ -190,6 +191,7 @@ const Login = () => {
                                 value={payload.lastname}
                                 setValue={setPayload}
                                 nameKey="lastname"
+                                fullWidth
                             />
                         </div>
                     )}
@@ -208,6 +210,7 @@ const Login = () => {
                             value={payload.mobile}
                             setValue={setPayload}
                             nameKey="mobile"
+                            fullWidth
                         />
                     )}
                     <InputField

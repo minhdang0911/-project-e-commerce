@@ -53,3 +53,18 @@ export const apiGetUsers = (params) => {
         params,
     });
 };
+
+export const apiUpdateUser = (data, uid) => {
+    return axios({
+        url: '/user/' + uid,
+        method: 'put',
+        data,
+    });
+};
+
+export const apiDeleteUser = (uid) => {
+    return axios({
+        url: '/user/' + uid,
+        method: 'delete',
+    });
+};
