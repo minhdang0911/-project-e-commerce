@@ -241,3 +241,14 @@ export const roles = [
         value: 'User',
     },
 ];
+
+export const blockStatus = [
+    {
+        code: true,
+        value: 'Khóa',
+    },
+    {
+        code: false,
+        value: 'Hoạt động',
+    },
+];

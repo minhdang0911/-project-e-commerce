@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { apiGetUsers, apiUpdateUser, apiDeleteUser } from '../../apis/user';
-import { roles } from '../../utils/contants';
+import { roles, blockStatus } from '../../utils/contants';
 import moment from 'moment';
 import InputField from '../../components/inputs/inputField';
 import useDebounce from 'hooks/useDebounce';
@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { InputForm, Select, Button } from 'components';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import clsx from 'clsx';
 
 const ManageUser = () => {
     const {
@@ -23,6 +24,7 @@ const ManageUser = () => {
         role: '',
         phone: '',
         status: '',
+        isBlocked: '',
     });
     const [users, setUsers] = useState(null);
     const [query, setQuery] = useState({ q: '' });
@@ -73,7 +75,7 @@ const ManageUser = () => {
     };
 
     return (
-        <div className="w-full p-4 md:p-8 lg:p-12 bg-gray-50">
+        <div className={clsx('w-full p-4 md:p-8 lg:p-12 bg-gray-50', editElm && 'pl-16')}>
             <h1 className="text-2xl lg:text-3xl font-semibold mb-6 border-b pb-4">Quản lý người dùng</h1>
             <div className="w-full mb-4 flex justify-end">
                 <InputField
@@ -93,11 +95,11 @@ const ManageUser = () => {
                             <tr>
                                 <th className="px-4 py-2">#</th>
                                 <th className="px-4 py-2">Email</th>
-                                <th className="px-4 py-2">Họ</th>
-                                <th className="px-4 py-2">Tên</th>
-                                <th className="px-4 py-2">Vai trò</th>
+                                <th className="px-4 py-2 ">Họ</th>
+                                <th className="px-4 py-2 ">Tên</th>
+                                <th className="px-4 py-2 whitespace-nowrap w-[200px]">Vai trò</th>
                                 <th className="px-4 py-2">Số điện thoại</th>
-                                <th className="px-4 py-2">Trạng thái</th>
+                                <th className="px-4 py-2 w-[200px]">Trạng thái</th>
                                 <th className="px-4 py-2">Ngày tạo</th>
                                 <th className="px-4 py-2">Thao tác</th>
                             </tr>
@@ -158,7 +160,15 @@ const ManageUser = () => {
                                     </td>
                                     <td className="py-2 px-4 border-t">
                                         {editElm?._id === el._id ? (
-                                            <Select />
+                                            <Select
+                                                defaultValue={el.role}
+                                                fullWidth
+                                                register={register}
+                                                errors={errors}
+                                                id={'role'}
+                                                validate={{ required: 'Vui lòng nhập trường này' }}
+                                                options={roles}
+                                            />
                                         ) : (
                                             <span>{roles.find((role) => +role.code === +el.role)?.value}</span>
                                         )}
@@ -186,7 +196,15 @@ const ManageUser = () => {
                                     </td>
                                     <td className="py-2 px-4 border-t">
                                         {editElm?._id === el._id ? (
-                                            <Select />
+                                            <Select
+                                                defaultValue={el.isBlocked}
+                                                fullWidth
+                                                register={register}
+                                                errors={errors}
+                                                id={'isBlocked'}
+                                                validate={{ required: 'Vui lòng nhập trường này' }}
+                                                options={blockStatus}
+                                            />
                                         ) : (
                                             <span> {el.isBlocked ? 'Tài khoản bị khóa' : 'Hoạt động'}</span>
                                         )}

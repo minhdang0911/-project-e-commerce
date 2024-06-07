@@ -81,3 +81,15 @@ export const generateRange = (start, end) => {
         return start + index;
     });
 };
+export const getBase64 = (file) => {
+    if (!file) return '';
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const base64String = reader.result.toString();
+            resolve(base64String);
+        };
+        reader.onerror = (error) => reject(error);
+    });
+};

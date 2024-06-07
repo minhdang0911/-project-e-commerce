@@ -22,3 +22,11 @@ export const apiRatings = (data) => {
         data,
     });
 };
+
+export const apiCreateProduct = (data) => {
+    return axios({
+        url: '/product',
+        method: 'post',
+        data,
+    });
+};
