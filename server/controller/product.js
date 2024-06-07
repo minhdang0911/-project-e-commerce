@@ -36,16 +36,13 @@ const getProduct = asyncHandler(async (req, res) => {
 const getProducts = asyncHandler(async (req, res) => {
     const queries = { ...req.query };
 
-    // Tách những trường này ra khỏi query
     const exclude = ['limit', 'sort', 'page', 'fields'];
     exclude.forEach((el) => delete queries[el]);
 
-    // Format các operators cho đúng cú pháp Mongoose
     let queryString = JSON.stringify(queries);
     queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, (matchedEl) => `$${matchedEl}`);
     const formatedQueries = JSON.parse(queryString);
 
-    // Chuyển đổi các giá trị price thành số
     if (formatedQueries.price) {
         if (formatedQueries.price.$gte !== undefined) formatedQueries.price.$gte = Number(formatedQueries.price.$gte);
         if (formatedQueries.price.$gt !== undefined) formatedQueries.price.$gt = Number(formatedQueries.price.$gt);
@@ -55,7 +52,6 @@ const getProducts = asyncHandler(async (req, res) => {
 
     let colorQueryObj = {};
 
-    // Filtering
     if (queries?.title) formatedQueries.title = { $regex: queries.title, $options: 'i' };
     if (queries?.category) formatedQueries.category = { $regex: queries.category, $options: 'i' };
     if (queries?.color) {
@@ -65,34 +61,51 @@ const getProducts = asyncHandler(async (req, res) => {
         colorQueryObj = { $or: colorQuery };
     }
 
-    const q = { ...colorQueryObj, ...formatedQueries };
-    let queryCommand = Product.find(q);
+    let queryObject = {};
 
-    // Sorting
+    if (queries?.q) {
+        delete formatedQueries.q;
+        queryObject = {
+            $or: [
+                { color: { $regex: queries.q, $options: 'i' } },
+                { title: { $regex: queries.q, $options: 'i' } },
+                { category: { $regex: queries.q, $options: 'i' } },
+                { brand: { $regex: queries.q, $options: 'i' } },
+            ],
+        };
+    }
+
+    const qr = { ...colorQueryObj, ...formatedQueries, ...queryObject };
+    let queryCommand = Product.find(qr);
+
     if (req.query.sort) {
         const sortBy = req.query.sort.split(',').join(' ');
         queryCommand = queryCommand.sort(sortBy);
     }
 
-    //fields limitng
     if (req.query.fields) {
         const fields = req.query.fields.split(',').join(' ');
         queryCommand = queryCommand.select(fields);
     }
 
-    //pagination
     const page = +req.query.page || 1;
     const limit = +req.query.limit || process.env.LIMIT_PRODUCT;
     const skip = (page - 1) * limit;
     queryCommand.skip(skip).limit(limit);
 
     try {
-        // Execute query
         const response = await queryCommand;
-        const counts = await Product.countDocuments(q);
+        const counts = await Product.countDocuments(qr);
+
+        // Thêm thuộc tính originalSerialNumber cho từng sản phẩm
+        const productsWithSerialNumbers = response.map((product, index) => ({
+            ...product.toObject(),
+            originalSerialNumber: skip + index + 1,
+        }));
+
         return res.status(200).json({
-            success: response.length > 0,
-            products: response,
+            success: productsWithSerialNumbers.length > 0,
+            products: productsWithSerialNumbers,
             counts,
         });
     } catch (err) {
