@@ -1,24 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { InputForm, Pagination } from 'components';
 import { useForm } from 'react-hook-form';
-import { apiGetProduct } from 'apis/product';
+import { apiGetProduct, apiDeleteProduct } from 'apis/product';
 import moment from 'moment';
 import { useSearchParams } from 'react-router-dom';
 import useDebounce from 'hooks/useDebounce';
+import UpdateProduct from './UpdateProduct';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 const ManageProduct = () => {
     const {
         register,
         formState: { errors },
-        handleSubmit,
-        reset,
         watch,
     } = useForm();
     const [products, setProducts] = useState(null);
-    const [originalProducts, setOriginalProducts] = useState([]); // Thêm trạng thái này
+    const [originalProducts, setOriginalProducts] = useState([]);
     const [params] = useSearchParams();
     const [counts, setCounts] = useState(0);
+    const [editProduct, setEditProduct] = useState(null);
+    const [update, setUpdate] = useState(false);
     const queryDebounce = useDebounce(watch('q'), 800);
+
+    const render = useCallback(() => {
+        setUpdate(!update);
+    }, [update]);
 
     const fetchProducts = async (params) => {
         const response = await apiGetProduct({ ...params, limit: 10 });
@@ -30,7 +37,7 @@ const ManageProduct = () => {
             setProducts(newProducts);
 
             if (!queryDebounce) {
-                setOriginalProducts(newProducts); // Lưu lại sản phẩm gốc nếu không có tìm kiếm
+                setOriginalProducts(newProducts);
             }
 
             setCounts(response.counts);
@@ -41,10 +48,34 @@ const ManageProduct = () => {
         const searchParams = Object.fromEntries([...params]);
         if (queryDebounce) searchParams.q = queryDebounce;
         fetchProducts(searchParams);
-    }, [params, queryDebounce]);
+    }, [params, queryDebounce, update]);
+
+    const handleDeleteProduct = (pid) => {
+        Swal.fire({
+            title: 'Xóa sản phẩm ?',
+            text: 'Bạn có muốn xóa sản phẩm này',
+            icon: 'warning',
+            showCancelButton: true,
+        }).then(async (rs) => {
+            if (rs.isConfirmed) {
+                const response = await apiDeleteProduct(pid);
+                if (response.success) {
+                    render();
+                    toast.success('Xóa sản phẩm thành công');
+                } else {
+                    toast.error('Xóa sản phẩm thất bại');
+                }
+            }
+        });
+    };
 
     return (
         <div className="w-full flex flex-col gap-4 relative">
+            {editProduct && (
+                <div className="absolute inset-0 bg-gray-100 min-h-screen z-50">
+                    <UpdateProduct editProduct={editProduct} render={render} setEditProduct={setEditProduct} />
+                </div>
+            )}
             <div className="h-[69px] w-full"></div>
             <div className="p-4 border-b w-full flex justify-between items-center fixed top-0 bg-gray-100">
                 <h1 className="text-3xl font-bold tracking-tight">Quản lý sản phẩm</h1>
@@ -68,6 +99,7 @@ const ManageProduct = () => {
                         <th className="text-center">Màu sắc</th>
                         <th className="text-center">Tổng đánh giá</th>
                         <th className="text-center">Ngày cập nhật</th>
+                        <th className="text-center">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,6 +122,20 @@ const ManageProduct = () => {
                                 <td className="text-center py-2">{el.color}</td>
                                 <td className="text-center py-2">{el.totalRatings}</td>
                                 <td className="text-center py-2">{moment(el?.updatedAt).format('DD/MM/YYYY')}</td>
+                                <td className="text-center py-2">
+                                    <span
+                                        onClick={() => setEditProduct(el)}
+                                        className="text-blue-500 hover:underline cursor-pointer px-1"
+                                    >
+                                        Sửa
+                                    </span>
+                                    <span
+                                        onClick={() => handleDeleteProduct(el._id)}
+                                        className="text-blue-500 hover:underline cursor-pointer px-1"
+                                    >
+                                        Xóa{' '}
+                                    </span>
+                                </td>
                             </tr>
                         );
                     })}
