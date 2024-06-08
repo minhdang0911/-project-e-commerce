@@ -1,6 +1,7 @@
 const Product = require('../models/product');
 const asyncHandler = require('express-async-handler');
 const slugify = require('slugify');
+const makeSKU = require('uniqid');
 
 const createProduct = asyncHandler(async (req, res) => {
     const { title, price, description, brand, category, color } = req.body;
@@ -191,10 +192,28 @@ const uploadImagesProduct = asyncHandler(async (req, res) => {
         },
         { new: true },
     );
-    console.log(response);
     return res.status(200).json({
         status: response ? true : false,
         updatedProduct: response ? response : 'Cannot upload image product',
+    });
+});
+
+const addVarriant = asyncHandler(async (req, res) => {
+    const { pid } = req.params;
+    const { title, price, color } = req.body;
+    const thumb = req?.files?.thumb[0].path;
+    const images = req.files?.images?.map((el) => el.path);
+    if (!title && !price && !color) throw new Error('Missing input');
+    const response = await Product.findByIdAndUpdate(
+        pid,
+        {
+            $push: { varriants: { color, price, title, thumb, images, sku: makeSKU().toUpperCase() } },
+        },
+        { new: true },
+    );
+    return res.status(200).json({
+        response: response ? true : false,
+        response: response ? response : 'Cannot upload image product',
     });
 });
 
@@ -206,4 +225,5 @@ module.exports = {
     deleteProduct,
     Ratings,
     uploadImagesProduct,
+    addVarriant,
 };

@@ -45,3 +45,15 @@ export const apiDeleteProduct = (pid) => {
         method: 'delete',
     });
 };
+
+export const apiAddVarriant = (pid, data) => {
+    if (typeof pid !== 'string') {
+        throw new Error('Invalid pid');
+    }
+
+    return axios({
+        url: `/product/varriants/${pid}`,
+        method: 'put',
+        data: data,
+    });
+};

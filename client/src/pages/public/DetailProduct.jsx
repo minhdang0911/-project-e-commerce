@@ -8,6 +8,7 @@ import { formatMoney, formatPrice, reanderStartFromNumber } from '../../utils/he
 import { SelectQuantity } from '../../components';
 import { productExtraInfomation } from '../../utils/contants';
 import DOMPurify from 'dompurify';
+import clsx from 'clsx';
 
 const settings = {
     dots: false,
@@ -24,6 +25,25 @@ const DetailProduct = () => {
     const [relativProduct, setRelativeProduct] = useState(null);
     const [currentImage, setCurrentImage] = useState(null);
     const [update, setUpdate] = useState(false);
+    const [varriants, setVarriants] = useState(null);
+    const [currentProduct, setCurrentProduct] = useState({
+        title: '',
+        thumb: '',
+        images: '',
+        price: '',
+    });
+
+    useEffect(() => {
+        if (varriants) {
+            setCurrentProduct({
+                title: product.varriants?.find((el) => el.sku === varriants)?.title,
+                color: product.varriants?.find((el) => el.sku === varriants)?.color,
+                price: product.varriants?.find((el) => el.sku === varriants)?.price,
+                images: product.varriants?.find((el) => el.sku === varriants)?.images,
+            });
+        }
+    }, [varriants]);
+
     const reRender = useCallback(() => {
         setUpdate(!update);
     }, [update]);
@@ -88,12 +108,14 @@ const DetailProduct = () => {
         setCurrentImage(el);
     };
 
+    console.log(currentProduct);
+
     return (
         <div className="w-full relative">
             <div className="h-[81px] bg-gray-100 flex  justify-center items-center">
                 <div className="w-main ">
-                    <h3 className="font-semi-bold">{title}</h3>
-                    <Breakcrumb title={title} category={category} />
+                    <h3 className="font-semi-bold">{currentProduct?.title || product?.title}</h3>
+                    <Breakcrumb title={currentProduct?.title || product?.title} category={category} />
                 </div>
             </div>
             <div className="w-main m-auto mt-4 flex">
@@ -104,10 +126,10 @@ const DetailProduct = () => {
                                 smallImage: {
                                     alt: 'Wristwatch by Ted Baker London',
                                     isFluidWidth: true,
-                                    src: currentImage,
+                                    src: currentProduct?.thumb || currentImage,
                                 },
                                 largeImage: {
-                                    src: currentImage,
+                                    src: currentProduct?.thumb || currentImage,
                                     width: 1800,
                                     height: 1800,
                                 },
@@ -117,22 +139,37 @@ const DetailProduct = () => {
 
                     <div className="w-[458px]">
                         <Slider {...settings} className="image-slider flex gap-2 justify-between">
-                            {product?.image?.map((el) => (
-                                <div key={el} className=" ">
-                                    <img
-                                        onClick={(e) => handleClickImage(e, el)}
-                                        src={el}
-                                        alt="sub product"
-                                        className="cursor-pointer h-[143px] w-[143px] border object-cover "
-                                    />
-                                </div>
-                            ))}
+                            {currentProduct?.images.length === 0 &&
+                                product?.image?.map((el) => (
+                                    <div key={el} className=" ">
+                                        <img
+                                            onClick={(e) => handleClickImage(e, el)}
+                                            src={el}
+                                            alt="sub product"
+                                            className="cursor-pointer h-[143px] w-[143px] border object-cover "
+                                        />
+                                    </div>
+                                ))}
+
+                            {currentProduct?.images.length > 0 &&
+                                currentProduct?.images?.map((el) => (
+                                    <div key={el} className=" ">
+                                        <img
+                                            onClick={(e) => handleClickImage(e, el)}
+                                            src={el}
+                                            alt="sub product"
+                                            className="cursor-pointer h-[143px] w-[143px] border object-cover "
+                                        />
+                                    </div>
+                                ))}
                         </Slider>
                     </div>
                 </div>
                 <div className=" w-2/5 pr-[24px] flex flex-col gap-4 ">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-[30px] font-semibold">{`${formatMoney(formatPrice(product?.price))} `}</h2>
+                        <h2 className="text-[30px] font-semibold">{`${formatMoney(
+                            formatPrice(currentProduct?.price || product?.price),
+                        )} `}</h2>
                         <span className="text-sm text-main">{`Số lượng:${product?.quantity}`}</span>
                     </div>
                     <div className="flex items-center gap-1 ">
@@ -155,6 +192,41 @@ const DetailProduct = () => {
                             ></div>
                         )}
                     </ul>
+
+                    <div className="my-4 flex  gap-4">
+                        <span className="font-semibold whitespace-nowrap text-xs">Màu sắc:</span>
+                        <div className="flex flex-wrap gap-4 items-center w-full ">
+                            <div
+                                onClick={() => setVarriants(null)}
+                                className={clsx(
+                                    'flex items-center gap-2 p-2 border cursor-pointer',
+                                    !varriants && 'border-red-500',
+                                )}
+                            >
+                                <img src={product?.thumb} alt="thumb" className="w-8 h-8 rounded-md object-cover" />
+                                <span className="flex flex-col ">
+                                    <span>{product?.color}</span>
+                                    <span className="text-sm ">{product?.price}</span>
+                                </span>
+                            </div>
+                            {product?.varriants?.map((el) => (
+                                <div
+                                    onClick={() => setVarriants(el.sku)}
+                                    className={clsx(
+                                        'flex items-center gap-2 p-2 border cursor-pointer',
+                                        varriants === el.sku && 'border-red-500',
+                                    )}
+                                >
+                                    <img src={el?.thumb} alt="thumb" className="w-8 h-8 rounded-md object-cover" />
+                                    <span className="flex flex-col ">
+                                        <span>{el?.color}</span>
+                                        <span className="text-sm ">{el?.price}</span>
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center gap-4">
                             <span className="font-semibold">Số lượng</span>
@@ -169,7 +241,7 @@ const DetailProduct = () => {
                 </div>
                 <div className="w-1/5  ">
                     {productExtraInfomation.map((el) => (
-                        <ProductExtraInfoItem key={el?.id} title={el.title} icon={el.icon} sub={el.sub} />
+                        <ProductExtraInfoItem key={el?.id} title={el?.title} icon={el.icon} sub={el.sub} />
                     ))}
                 </div>
             </div>

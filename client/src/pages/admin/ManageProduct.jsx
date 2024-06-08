@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { InputForm, Pagination } from 'components';
+import { CustomizeVariant, InputForm, Pagination } from 'components';
 import { useForm } from 'react-hook-form';
 import { apiGetProduct, apiDeleteProduct } from 'apis/product';
 import moment from 'moment';
@@ -8,6 +8,9 @@ import useDebounce from 'hooks/useDebounce';
 import UpdateProduct from './UpdateProduct';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { FaEdit } from 'react-icons/fa';
+import { IoTrashBinSharp } from 'react-icons/io5';
+import { MdOutlineDashboardCustomize } from 'react-icons/md';
 
 const ManageProduct = () => {
     const {
@@ -21,6 +24,7 @@ const ManageProduct = () => {
     const [counts, setCounts] = useState(0);
     const [editProduct, setEditProduct] = useState(null);
     const [update, setUpdate] = useState(false);
+    const [customizeVariant, setCustomizeVariant] = useState(null);
     const queryDebounce = useDebounce(watch('q'), 800);
 
     const render = useCallback(() => {
@@ -76,6 +80,16 @@ const ManageProduct = () => {
                     <UpdateProduct editProduct={editProduct} render={render} setEditProduct={setEditProduct} />
                 </div>
             )}
+
+            {customizeVariant && (
+                <div className="absolute inset-0 bg-gray-100 min-h-screen z-50">
+                    <CustomizeVariant
+                        customizeVariant={customizeVariant}
+                        render={render}
+                        setCustomizeVariant={setCustomizeVariant}
+                    />
+                </div>
+            )}
             <div className="h-[69px] w-full"></div>
             <div className="p-4 border-b w-full flex justify-between items-center fixed top-0 bg-gray-100">
                 <h1 className="text-3xl font-bold tracking-tight">Quản lý sản phẩm</h1>
@@ -98,6 +112,7 @@ const ManageProduct = () => {
                         <th className="text-center">Đã bán</th>
                         <th className="text-center">Màu sắc</th>
                         <th className="text-center">Tổng đánh giá</th>
+                        <th className="text-center">Tổng biến thể</th>
                         <th className="text-center">Ngày cập nhật</th>
                         <th className="text-center">Hành động</th>
                     </tr>
@@ -121,19 +136,28 @@ const ManageProduct = () => {
                                 <td className="text-center py-2">{el.sold}</td>
                                 <td className="text-center py-2">{el.color}</td>
                                 <td className="text-center py-2">{el.totalRatings}</td>
+                                <td className="text-center py-2">{el?.varriants?.length}</td>
                                 <td className="text-center py-2">{moment(el?.updatedAt).format('DD/MM/YYYY')}</td>
-                                <td className="text-center py-2">
+                                <td className="text-center py-2 flex mt-3">
                                     <span
                                         onClick={() => setEditProduct(el)}
-                                        className="text-blue-500 hover:underline cursor-pointer px-1"
+                                        className="hover:text-orange-500 text-blue-500 hover:underline cursor-pointer px-1"
                                     >
-                                        Sửa
+                                        <FaEdit size={20} />
                                     </span>
                                     <span
                                         onClick={() => handleDeleteProduct(el._id)}
-                                        className="text-blue-500 hover:underline cursor-pointer px-1"
+                                        className=" hover:text-orange-500text-blue-500 hover:underline cursor-pointer px-1"
                                     >
-                                        Xóa{' '}
+                                        <IoTrashBinSharp size={20} color="blue" />
+                                    </span>
+
+                                    <span
+                                        onClick={() => setCustomizeVariant(el)}
+                                        className=" hover:text-orange-500 text-blue-500 hover:underline cursor-pointer px-1"
+                                    >
+                                        {/* Thêm biến thể */}
+                                        <MdOutlineDashboardCustomize size={20} />
                                     </span>
                                 </td>
                             </tr>
