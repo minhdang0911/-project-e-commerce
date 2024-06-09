@@ -5,6 +5,5 @@ import * as apis from '../../apis';
 export const getCurrent = createAsyncThunk('user/current', async (data, { rejectWithValue }) => {
     const response = await apis.apiGetCurrent();
     if (!response.success) return rejectWithValue(response);
-    console.log(response);
     return response.rs;
 });

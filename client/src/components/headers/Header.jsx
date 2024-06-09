@@ -1,14 +1,27 @@
-import React, { Fragment, memo } from 'react';
+import React, { Fragment, memo, useEffect, useState } from 'react';
 import logo from '../../assets/logo.JPG';
 import icons from '../../utils/icons';
 import { useNavigate, Link } from 'react-router-dom';
 import path from '../../utils/path';
-import { useSelector, UseSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from 'store/user/userSlice';
 
 const Header = () => {
     const { MdSettingsPhone, MdOutlineEmail, IoBagHandleOutline, FaUser } = icons;
     const navigate = useNavigate();
+    const [isShowOption, setIsShowOption] = useState(false);
     const { current } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const handleClickOutOption = (e) => {
+            const profile = document.getElementById('profile');
+            if (!profile?.contains(e.target)) setIsShowOption(false);
+        };
+        document.addEventListener('click', handleClickOutOption);
+        return () => {
+            document.removeEventListener('click', handleClickOutOption);
+        };
+    }, []);
 
     return (
         <div className=" w-main flex justify-between h-[110px] py-[35px]">
@@ -41,17 +54,39 @@ const Header = () => {
                             <IoBagHandleOutline color="red" />
                             <span>0 item(s) </span>
                         </div>
-                        <Link
-                            to={
-                                current?.role === '2001'
-                                    ? `/${path.ADMIN}/${path.DASHBOARD}`
-                                    : `/${path.MEMBER}/${path.PERSONAL}`
-                            }
-                            className="cursor-pointer flex items-center justify-center px-6  gap-2 "
+                        <div
+                            id="profile"
+                            onClick={() => setIsShowOption((prev) => !prev)}
+                            className="relative cursor-pointer flex items-center justify-center px-6  gap-2 "
                         >
                             <FaUser size={14} />
                             <span>Hồ sơ</span>
-                        </Link>
+                            {isShowOption && (
+                                <div
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="flex flex-col absolute top-full left-[16px] bg-gray-100 min-w-[150px] py-2 border"
+                                >
+                                    <Link
+                                        className="p-2 hover:bg-sky-100 w-full whitespace-nowrap"
+                                        to={`${path.MEMBER}/${path.PERSONAL}`}
+                                    >
+                                        Thông tin người dùng
+                                    </Link>
+                                    {+current.role === 2001 && (
+                                        <Link
+                                            className="p-2 hover:bg-sky-100 w-full"
+                                            to={`${path.ADMIN}/${path.DASHBOARD}`}
+                                        >
+                                            Quản trị
+                                        </Link>
+                                    )}
+                                    <span onClick={() => dispatch(logout())} className="p-2 hover:bg-sky-100 w-full">
+                                        {' '}
+                                        Đăng xuất{' '}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </Fragment>
                 )}
             </div>

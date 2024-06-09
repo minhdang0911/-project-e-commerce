@@ -22,6 +22,9 @@ const path = {
     //member
     MEMBER: 'nguoi-dung',
     PERSONAL: 'ho-so-nguoi-dung',
+    MY_CART: 'gio-hang-cua-toi',
+    HISTORY: 'lich-su-mua-hang',
+    WISHLIST: 'san-pham-yeu-thich',
 };
 
 export default path;

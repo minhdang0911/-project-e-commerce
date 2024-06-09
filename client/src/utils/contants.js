@@ -1,5 +1,9 @@
 import path from './path';
 import icons from './icons';
+import { FaRegKissWinkHeart } from 'react-icons/fa';
+import { FaUserEdit } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
+import { AiOutlineHistory } from 'react-icons/ai';
 
 const {
     MdFireTruck,
@@ -12,6 +16,7 @@ const {
     FaProductHunt,
     FaRegMoneyBill1,
 } = icons;
+
 export const navigation = [
     {
         id: 4,
@@ -250,5 +255,38 @@ export const blockStatus = [
     {
         code: false,
         value: 'Hoạt động',
+    },
+];
+
+export const memberSidebar = [
+    {
+        id: '1',
+        type: 'single',
+        text: 'Hồ sơ người dùng',
+        path: `/${path.MEMBER}/${path.PERSONAL}`,
+        icon: <FaUserEdit size={20} />,
+    },
+    {
+        id: '2',
+        type: 'single',
+        text: 'Giỏ hàng ',
+        path: `/${path.MEMBER}/${path.MY_CART}`,
+        icon: <FaShoppingCart size={20} />,
+    },
+
+    {
+        id: '3',
+        type: 'single',
+        text: 'Lịch sử mua hàng ',
+        path: `/${path.MEMBER}/${path.HISTORY}`,
+        icon: <AiOutlineHistory size={20} />,
+    },
+
+    {
+        id: '4',
+        type: 'single',
+        text: 'Sản phẩm yêu thích',
+        path: `/${path.MEMBER}/${path.WISHLIST}`,
+        icon: <FaRegKissWinkHeart size={20} />,
     },
 ];

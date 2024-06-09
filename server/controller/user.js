@@ -350,12 +350,16 @@ const deleteUser = asyncHandler(async (req, res) => {
 });
 
 const UpdateUser = asyncHandler(async (req, res) => {
+    console.log(req.file);
     const { _id } = req.user;
-    if (!_id || Object.keys(req.body).length === 0) throw new Error('Missing input');
-    const response = await User.findByIdAndUpdate(_id, req.body, { new: true }).select('-password -role');
+    const { firstname, lastname, email, mobile } = req.body;
+    const data = { firstname, lastname, email, mobile };
+    if (req.file) data.avatar = req.file.path;
+    if (!_id) throw new Error('Missing input');
+    const response = await User.findByIdAndUpdate(_id, data, { new: true }).select('-password -role');
     return res.status(200).json({
         success: response ? true : false,
-        updateUser: response ? response : 'Something wrongs',
+        mes: response ? 'Cập nhật thành công1' : 'Cập nhật thất bại',
     });
 });
 
