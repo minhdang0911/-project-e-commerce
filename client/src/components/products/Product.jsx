@@ -5,20 +5,42 @@ import labelBlue from '../../assets/labelblue.png';
 import { reanderStartFromNumber } from '../../utils/helper';
 import SelectOption from '../search/SelectOption';
 import icons from '../../utils/icons';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import path from '../../utils/path';
+import withBaseComponent from 'hocs/withBaseComponent';
+import { useNavigate } from 'react-router-dom';
+import { showModal } from 'store/app/appSlice';
+import { DetailProduct } from 'pages/public';
 
 const { IoEyeSharp, IoMdMenu, FaHeart } = icons;
 
-const Product = ({ productData, isNew, normal }) => {
+const Product = ({ productData, isNew, normal, dispatch }) => {
     const [isShowOption, setIsShowOption] = useState(false);
+    const navigate = useNavigate();
 
     const imageUrl = productData?.thumb || 'https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png';
-
+    const handleClickOption = (e, flag) => {
+        e.stopPropagation();
+        if (flag === 'MENU')
+            navigate(`/${productData?.category.toLowerCase()}/${productData?._id}/${productData?.title}`);
+        if (flag === 'WISHLIST') console.log('wishlist');
+        if (flag === 'QUICK_VIEW') {
+            dispatch(
+                showModal({
+                    isShowModal: true,
+                    modalChildren: (
+                        <DetailProduct data={{ pid: productData?._id, category: productData?.category }} isQuickView />
+                    ),
+                }),
+            );
+        }
+    };
     return (
         <div className="w-full text-base  px-[10px]">
-            <Link
-                to={`/${productData?.category.toLowerCase()}/${productData?._id}/${productData?.title}`}
+            <div
+                onClick={(e) =>
+                    navigate(`/${productData?.category.toLowerCase()}/${productData?._id}/${productData?.title}`)
+                }
                 className="w-full border p-[15px] flex flex-col items-center"
                 onMouseOver={(e) => {
                     e.stopPropagation();
@@ -32,9 +54,18 @@ const Product = ({ productData, isNew, normal }) => {
                 <div className="w-full relative">
                     {isShowOption && (
                         <div className="absolute bottom-[-10px]  left-0 right-0 flex justify-center gap-2 animate-slide-top ">
-                            <SelectOption icon={<IoEyeSharp />} />
-                            <SelectOption icon={<IoMdMenu />} />
-                            <SelectOption icon={<FaHeart />} />
+                            <span onClick={(e) => handleClickOption(e, 'QUICK_VIEW')}>
+                                {' '}
+                                <SelectOption icon={<IoEyeSharp />} />
+                            </span>
+
+                            <span onClick={(e) => handleClickOption(e, 'MENU')}>
+                                {' '}
+                                <SelectOption icon={<IoMdMenu />} />
+                            </span>
+                            <span onClick={(e) => handleClickOption(e, 'WISHLIST')}>
+                                <SelectOption icon={<FaHeart />} />
+                            </span>
                         </div>
                     )}
                     <img
@@ -78,9 +109,9 @@ const Product = ({ productData, isNew, normal }) => {
                     <span className="line-clamp-1">{productData?.title}</span>
                     <span>{`${formatMoney(productData?.price)}`}</span>
                 </div>
-            </Link>
+            </div>
         </div>
     );
 };
 
-export default memo(Product);
+export default withBaseComponent(memo(Product));

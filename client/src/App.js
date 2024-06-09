@@ -30,7 +30,7 @@ function App() {
     const { isShowModal, modalChildren } = useSelector((state) => state.app);
 
     return (
-        <div className="min-h-screen font-main relative">
+        <div className="h-screen font-main ">
             {isShowModal && <Modal>{modalChildren}</Modal>}
             <Routes>
                 <Route path={path.PUBLIC} element={<Public />}>
@@ -53,7 +53,7 @@ function App() {
                 <Route path={path.MEMBER} element={<MemberLayout />}>
                     <Route path={path.PERSONAL} element={<Personal />} />
                     <Route path={path.HISTORY} element={<History />} />
-                    <Route path={path.MY_CART} element={<MyCart />} />
+                    <Route path={path.MY_CART} element={<MyCart id="cart" />} />
                     <Route path={path.WISHLIST} element={<Wishlist />} />
                 </Route>
                 <Route path={path.FINAL_REGISTER} element={<FinalRegister />}></Route>

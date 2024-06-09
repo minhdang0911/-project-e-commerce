@@ -20,19 +20,23 @@ const tabs = [
 ];
 
 const BestSeller = () => {
+    const { categories } = useSelector((state) => state.app);
     const [bestSeller, setBestSeller] = useState([]);
     const [newProduct, setNewProduct] = useState([]);
+    const [tablet, setNewTablet] = useState([]);
     const [activeTab, setActiveTab] = useState(1);
     const [product, setProduct] = useState(null);
 
     const dispatch = useDispatch();
     const { newProducts } = useSelector((state) => state.products);
-
     const fetchProduct = async () => {
-        const response = await apiGetProduct({ sort: '-sold' });
+        const response = await apiGetProduct({ sort: '-sold', limit: 60 });
         if (response.success) {
             setBestSeller(response.products);
             setProduct(response.products);
+            const productTablet = response.products.filter((el) => el.category === 'Tablet');
+            console.log(productTablet);
+            setNewTablet(productTablet);
         }
     };
 
@@ -44,7 +48,8 @@ const BestSeller = () => {
     useEffect(() => {
         if (activeTab === 1) setProduct(bestSeller);
         if (activeTab === 2) setProduct(newProducts);
-    }, [activeTab, bestSeller, newProducts]);
+        if (activeTab === 3) setProduct(tablet);
+    }, [activeTab, bestSeller, newProducts, tablet]);
 
     return (
         <div>

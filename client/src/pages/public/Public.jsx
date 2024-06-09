@@ -4,7 +4,7 @@ import { Header, Navigation, Product, TopHeader, Footer } from '../../components
 
 const Public = () => {
     return (
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex flex-col items-center max-h-screen overflow-y-auto">
             <TopHeader />
             <Header />
             <Navigation />
