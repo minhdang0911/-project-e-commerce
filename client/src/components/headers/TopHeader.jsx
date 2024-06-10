@@ -24,7 +24,6 @@ const TopHeader = () => {
         }
     }, [mes]);
 
-    console.log('current', current);
     useEffect(() => {
         const setTimeoutId = setTimeout(() => {
             if (isLoggedIn) dispatch(getCurrent());

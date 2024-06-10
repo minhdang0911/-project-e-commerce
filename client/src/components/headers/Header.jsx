@@ -5,6 +5,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import path from '../../utils/path';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from 'store/user/userSlice';
+import withBaseComponent from 'hocs/withBaseComponent';
+import { showCart } from 'store/app/appSlice';
 
 const Header = () => {
     const { MdSettingsPhone, MdOutlineEmail, IoBagHandleOutline, FaUser } = icons;
@@ -50,9 +52,12 @@ const Header = () => {
                 </div>
                 {current && (
                     <Fragment>
-                        <div className="cursor-pointer flex items-center justify-center gap-2 px-6 border-r">
+                        <div
+                            onClick={() => dispatch(showCart())}
+                            className="cursor-pointer flex items-center justify-center gap-2 px-6 border-r"
+                        >
                             <IoBagHandleOutline color="red" />
-                            <span>0 item(s) </span>
+                            <span> {`${current?.cart?.length || 0} item(s)`}</span>
                         </div>
                         <div
                             id="profile"
@@ -93,4 +98,4 @@ const Header = () => {
         </div>
     );
 };
-export default memo(Header);
+export default withBaseComponent(memo(Header));

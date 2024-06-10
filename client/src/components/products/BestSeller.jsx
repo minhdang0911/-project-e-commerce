@@ -35,7 +35,7 @@ const BestSeller = () => {
             setBestSeller(response.products);
             setProduct(response.products);
             const productTablet = response.products.filter((el) => el.category === 'Tablet');
-            console.log(productTablet);
+
             setNewTablet(productTablet);
         }
     };

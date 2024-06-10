@@ -8,3 +8,4 @@ export { default as Blog } from './Blog';
 export { default as DetailProduct } from './DetailProduct';
 export { default as FinalRegister } from './FinalRegister';
 export { default as ResetPassword } from './ResetPassword';
+export { default as DetailCart } from './DetailCart';

@@ -11,20 +11,53 @@ import withBaseComponent from 'hocs/withBaseComponent';
 import { useNavigate } from 'react-router-dom';
 import { showModal } from 'store/app/appSlice';
 import { DetailProduct } from 'pages/public';
+import { FaCartPlus } from 'react-icons/fa';
+import { apiUpdateCart } from 'apis';
+import { toast } from 'react-toastify';
+import { getCurrent } from 'store/user/asyncAction';
+import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+import { BsFillCartCheckFill } from 'react-icons/bs';
 
 const { IoEyeSharp, IoMdMenu, FaHeart } = icons;
 
 const Product = ({ productData, isNew, normal, dispatch }) => {
     const [isShowOption, setIsShowOption] = useState(false);
+    const { current } = useSelector((state) => state.user);
     const navigate = useNavigate();
 
     const imageUrl = productData?.thumb || 'https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png';
-    const handleClickOption = (e, flag) => {
-        e.stopPropagation();
-        if (flag === 'MENU')
-            navigate(`/${productData?.category.toLowerCase()}/${productData?._id}/${productData?.title}`);
-        if (flag === 'WISHLIST') console.log('wishlist');
-        if (flag === 'QUICK_VIEW') {
+    const handleClickOption = async (e, flag) => {
+        e.stopPropagation(); // Ngăn chặn sự kiện lan truyền
+        console.log(flag);
+
+        if (flag === 'CART') {
+            if (!current) {
+                Swal.fire({
+                    title: 'Almost',
+                    text: 'Bạn phải đăng nhập để mua hàng',
+                    icon: 'info',
+                    showConfirmButton: 'Trở về đăng nhập',
+                    showCancelButton: true,
+                    confirmButtonText: 'Trở về đăng nhập',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate(`/${path.LOGIN}`);
+                    }
+                });
+            } else {
+                const response = await apiUpdateCart({ pid: productData._id, color: productData?.color });
+                if (response.success) {
+                    toast.success(response.mes);
+                    dispatch(getCurrent());
+                } else {
+                    toast.error(response.mes);
+                }
+            }
+        }
+
+        if (flag === 'WISHLIST') {
+        } else if (flag === 'QUICK_VIEW') {
             dispatch(
                 showModal({
                     isShowModal: true,
@@ -35,15 +68,19 @@ const Product = ({ productData, isNew, normal, dispatch }) => {
             );
         }
     };
+
+    console.log('cart', current?.cart);
+    console.log('id', productData?._id);
+
     return (
         <div className="w-full text-base  px-[10px]">
             <div
-                onClick={(e) =>
-                    navigate(`/${productData?.category.toLowerCase()}/${productData?._id}/${productData?.title}`)
-                }
+                // onClick={(e) => {
+                //     navigate(`/${productData?.category.toLowerCase()}/${productData?._id}/${productData?.title}`);
+                //     e.stopPropagation();
+                // }}
                 className="w-full border p-[15px] flex flex-col items-center"
                 onMouseOver={(e) => {
-                    e.stopPropagation();
                     setIsShowOption(true);
                 }}
                 onMouseLeave={(e) => {
@@ -54,16 +91,24 @@ const Product = ({ productData, isNew, normal, dispatch }) => {
                 <div className="w-full relative">
                     {isShowOption && (
                         <div className="absolute bottom-[-10px]  left-0 right-0 flex justify-center gap-2 animate-slide-top ">
-                            <span onClick={(e) => handleClickOption(e, 'QUICK_VIEW')}>
+                            <span onClick={(e) => handleClickOption(e, 'QUICK_VIEW')} title="xem mô tả">
                                 {' '}
                                 <SelectOption icon={<IoEyeSharp />} />
                             </span>
 
-                            <span onClick={(e) => handleClickOption(e, 'MENU')}>
-                                {' '}
-                                <SelectOption icon={<IoMdMenu />} />
-                            </span>
-                            <span onClick={(e) => handleClickOption(e, 'WISHLIST')}>
+                            {current?.cart?.some((el) => el.product._id === productData?._id) ? (
+                                <span title="Đã thêm vào giỏ hàng">
+                                    {' '}
+                                    <SelectOption icon={<BsFillCartCheckFill color="green" />} />
+                                </span>
+                            ) : (
+                                <span onClick={(e) => handleClickOption(e, 'CART')} title="Thêm vào giỏ hàng">
+                                    {' '}
+                                    <SelectOption icon={<FaCartPlus />} />
+                                </span>
+                            )}
+
+                            <span title="Thích sản phẩm" onClick={(e) => handleClickOption(e, 'WISHLIST')}>
                                 <SelectOption icon={<FaHeart />} />
                             </span>
                         </div>

@@ -11,6 +11,7 @@ import {
     Products,
     FinalRegister,
     ResetPassword,
+    DetailCart,
 } from './pages/public';
 import { Adminlayout, Doashboard, CreateProduct, ManageOrder, ManageProduct, ManageUser } from './pages/admin';
 import { MemberLayout, Personal, History, MyCart, Wishlist } from './pages/member';
@@ -21,16 +22,27 @@ import { Modal } from './components';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFound from 'pages/public/NotFound';
+import { Cart } from './components';
+import { showCart } from 'store/app/appSlice';
 
 function App() {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getCategories());
     }, [dispatch]);
-    const { isShowModal, modalChildren } = useSelector((state) => state.app);
+    const { isShowModal, modalChildren, isShowCart } = useSelector((state) => state.app);
 
     return (
         <div className="h-screen font-main ">
+            {isShowCart && (
+                <div
+                    onClick={() => dispatch(showCart())}
+                    className="absolute inset-0 bg-overplay z-50 flex justify-end"
+                >
+                    <Cart />
+                </div>
+            )}
+
             {isShowModal && <Modal>{modalChildren}</Modal>}
             <Routes>
                 <Route path={path.PUBLIC} element={<Public />}>
@@ -41,6 +53,7 @@ function App() {
                     <Route path={path.OUR_SERVICES} element={<Services />}></Route>
                     <Route path={path.PRODUCTS} element={<Products />}></Route>
                     <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
+                    <Route path={path.DETAIL_CART} element={<DetailCart />}></Route>
                 </Route>
                 <Route path={path.ADMIN} element={<Adminlayout />}>
                     <Route path={path.DASHBOARD} element={<Doashboard />} />

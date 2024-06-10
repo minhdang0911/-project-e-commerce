@@ -22,14 +22,12 @@ const Products = () => {
     const [params] = useSearchParams();
 
     const fetchProductsByCategory = async (queries) => {
-        // Kiểm tra và chuyển đổi các giá trị từ và đến thành số
         if (queries.price) {
             if (queries.price.gte) queries.price.gte = Number(queries.price.gte);
             if (queries.price.lte) queries.price.lte = Number(queries.price.lte);
         }
 
-        const response = await apiGetProduct(queries);
-        console.log('res1', products);
+        const response = await apiGetProduct({ ...queries, category });
         if (response.success) setProducts(response);
     };
 
