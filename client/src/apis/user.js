@@ -85,9 +85,9 @@ export const apiUpdateCart = (data) => {
     });
 };
 
-export const apiRemoveCart = (pid) => {
+export const apiRemoveCart = (pid, color) => {
     return axios({
-        url: '/user/remove-cart/' + pid,
+        url: `/user/remove-cart/${pid}/${color}`,
         method: 'delete',
     });
 };

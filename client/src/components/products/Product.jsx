@@ -28,8 +28,7 @@ const Product = ({ productData, isNew, normal, dispatch }) => {
 
     const imageUrl = productData?.thumb || 'https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png';
     const handleClickOption = async (e, flag) => {
-        e.stopPropagation(); // Ngăn chặn sự kiện lan truyền
-        console.log(flag);
+        e.stopPropagation();
 
         if (flag === 'CART') {
             if (!current) {
@@ -69,16 +68,13 @@ const Product = ({ productData, isNew, normal, dispatch }) => {
         }
     };
 
-    console.log('cart', current?.cart);
-    console.log('id', productData?._id);
-
     return (
         <div className="w-full text-base  px-[10px]">
             <div
-                // onClick={(e) => {
-                //     navigate(`/${productData?.category.toLowerCase()}/${productData?._id}/${productData?.title}`);
-                //     e.stopPropagation();
-                // }}
+                onClick={(e) => {
+                    navigate(`/${productData?.category.toLowerCase()}/${productData?._id}/${productData?.title}`);
+                    e.stopPropagation();
+                }}
                 className="w-full border p-[15px] flex flex-col items-center"
                 onMouseOver={(e) => {
                     setIsShowOption(true);

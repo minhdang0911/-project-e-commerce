@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { createSearchParams, useParams } from 'react-router-dom';
 import { apiGetProductByID, apiGetProduct } from '../../apis/product';
 import { Breakcrumb, Button, ProductExtraInfoItem, ProductInformation, CustomSlider } from '../../components';
 import Slider from 'react-slick';
@@ -9,6 +9,13 @@ import { SelectQuantity } from '../../components';
 import { productExtraInfomation } from '../../utils/contants';
 import DOMPurify from 'dompurify';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
+import { apiUpdateCart } from 'apis';
+import withBaseComponent from 'hocs/withBaseComponent';
+import path from 'utils/path';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import { getCurrent } from 'store/user/asyncAction';
 
 const settings = {
     dots: false,
@@ -18,7 +25,7 @@ const settings = {
     slidesToScroll: 1,
 };
 
-const DetailProduct = ({ isQuickView, data }) => {
+const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
     const params = useParams();
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -33,7 +40,12 @@ const DetailProduct = ({ isQuickView, data }) => {
         thumb: '',
         images: '',
         price: '',
+        quantity: '',
     });
+
+    const titleRef = useRef();
+
+    const { current } = useSelector((state) => state.user);
 
     useEffect(() => {
         if (varriants) {
@@ -42,9 +54,18 @@ const DetailProduct = ({ isQuickView, data }) => {
                 color: product.varriants?.find((el) => el.sku === varriants)?.color,
                 price: product.varriants?.find((el) => el.sku === varriants)?.price,
                 images: product.varriants?.find((el) => el.sku === varriants)?.images,
+                thumb: product.varriants?.find((el) => el.sku === varriants)?.thumb,
+            });
+        } else {
+            setCurrentProduct({
+                title: product?.title,
+                color: product?.color || [],
+                price: product?.price,
+                images: product?.images,
+                thumb: product?.thumb,
             });
         }
-    }, [varriants]);
+    }, [varriants, product]);
 
     useEffect(() => {
         if (data) {
@@ -65,7 +86,8 @@ const DetailProduct = ({ isQuickView, data }) => {
             fetchProducts();
         }
         window.scrollTo(0, 0);
-    }, [pid]);
+        titleRef.current.scrollIntoView({ block: 'start' });
+    }, [pid, params.pid]);
 
     useEffect(() => {
         if (pid) {
@@ -110,7 +132,13 @@ const DetailProduct = ({ isQuickView, data }) => {
         (flag) => {
             if (flag === 'minus' && quantity === 1) return;
             if (flag === 'minus') setQuantity((prev) => +prev - 1);
-            if (flag === 'plus') setQuantity((prev) => +prev + 1);
+            if (flag === 'plus') {
+                if (quantity === '' || quantity === '0') {
+                    setQuantity(1);
+                } else {
+                    setQuantity((prev) => +prev + 1);
+                }
+            }
         },
         [quantity],
     );
@@ -120,13 +148,47 @@ const DetailProduct = ({ isQuickView, data }) => {
         setCurrentImage(el);
     };
 
-    console.log(currentProduct);
+    const handleAddToCart = async () => {
+        if (!current) {
+            Swal.fire({
+                title: 'Almost',
+                text: 'Bạn phải đăng nhập để mua hàng',
+                icon: 'info',
+                showConfirmButton: 'Trở về đăng nhập',
+                showCancelButton: true,
+                confirmButtonText: 'Trở về đăng nhập',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate({
+                        pathname: `/${path.LOGIN}`,
+                        search: createSearchParams({ redirect: location.pathname }).toString(),
+                    });
+                }
+            });
+        } else {
+            const response = await apiUpdateCart({
+                pid,
+                color: currentProduct?.color || product?.color,
+                quantity: quantity,
+                price: currentProduct?.price || product?.price,
+                thumbnail: currentProduct?.thumb || product?.thumb,
+                title: currentProduct?.title || product?.title,
+            });
+            if (response.success) {
+                toast.success(response.mes);
+                dispatch(getCurrent());
+                console.log(currentProduct);
+            } else {
+                toast.error(response.mes);
+            }
+        }
+    };
 
     return (
         <div onClick={(e) => e.stopPropagation()} className={clsx('w-full')}>
             {!isQuickView && (
                 <div className="h-[81px] bg-gray-100 flex  justify-center items-center">
-                    <div className="w-main ">
+                    <div className="w-main " ref={titleRef}>
                         <h3 className="font-semi-bold">{currentProduct?.title || product?.title}</h3>
                         <Breakcrumb title={currentProduct?.title || product?.title} category={category} />
                     </div>
@@ -153,7 +215,7 @@ const DetailProduct = ({ isQuickView, data }) => {
 
                     <div className="w-[458px]">
                         <Slider {...settings} className="image-slider flex gap-2 justify-between">
-                            {currentProduct?.images.length === 0 &&
+                            {currentProduct?.images?.length === 0 &&
                                 product?.image?.map((el) => (
                                     <div key={el} className=" ">
                                         <img
@@ -165,7 +227,7 @@ const DetailProduct = ({ isQuickView, data }) => {
                                     </div>
                                 ))}
 
-                            {currentProduct?.images.length > 0 &&
+                            {currentProduct?.images?.length > 0 &&
                                 currentProduct?.images?.map((el) => (
                                     <div key={el} className=" ">
                                         <img
@@ -250,7 +312,9 @@ const DetailProduct = ({ isQuickView, data }) => {
                                 handleChanglQuantity={handleChanglQuantity}
                             />
                         </div>
-                        <Button fw>Thêm vào giỏ hàng</Button>
+                        <Button fw handleOnClick={handleAddToCart}>
+                            Thêm vào giỏ hàng
+                        </Button>
                     </div>
                 </div>
                 {!isQuickView && (
@@ -288,4 +352,4 @@ const DetailProduct = ({ isQuickView, data }) => {
     );
 };
 
-export default DetailProduct;
+export default withBaseComponent(DetailProduct);
