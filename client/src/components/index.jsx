@@ -35,3 +35,4 @@ export { default as CustomizeVariant } from './products/CustomizeVariant';
 export { default as MemberSidebar } from './Sidebar/MemberSidebar';
 export { default as QuickView } from './products/QuickView';
 export { default as Cart } from './products/Cart';
+export { default as Paypal } from './common/Paypal';

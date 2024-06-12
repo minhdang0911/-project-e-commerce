@@ -69,7 +69,7 @@ const Cart = ({ dispatch, navigate }) => {
                     <Button
                         handleOnClick={() => {
                             dispatch(showCart());
-                            navigate(`/${path.DETAIL_CART}`);
+                            navigate(`/${path.MEMBER}/${path.MY_CART}`);
                         }}
                     >
                         <span className="text-[11px]">Đi đến chi tiết giỏ hàng</span>

@@ -14,7 +14,7 @@ import {
     DetailCart,
 } from './pages/public';
 import { Adminlayout, Doashboard, CreateProduct, ManageOrder, ManageProduct, ManageUser } from './pages/admin';
-import { MemberLayout, Personal, History, MyCart, Wishlist } from './pages/member';
+import { MemberLayout, Personal, History, MyCart, Wishlist, Checkout } from './pages/member';
 import path from './utils/path';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from './store/app/asyncAction';
@@ -45,6 +45,7 @@ function App() {
 
             {isShowModal && <Modal>{modalChildren}</Modal>}
             <Routes>
+                <Route path={path.CHECKOUT} element={<Checkout />} />
                 <Route path={path.PUBLIC} element={<Public />}>
                     <Route path={path.HOME} element={<Home />}></Route>
                     <Route path={path.BLOGS} element={<Blog />}></Route>
@@ -53,7 +54,8 @@ function App() {
                     <Route path={path.OUR_SERVICES} element={<Services />}></Route>
                     <Route path={path.PRODUCTS} element={<Products />}></Route>
                     <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
-                    <Route path={path.DETAIL_CART} element={<DetailCart />}></Route>
+
+                    {/* <Route path={path.DETAIL_CART} element={<DetailCart />}></Route> */}
                 </Route>
                 <Route path={path.ADMIN} element={<Adminlayout />}>
                     <Route path={path.DASHBOARD} element={<Doashboard />} />
@@ -66,7 +68,7 @@ function App() {
                 <Route path={path.MEMBER} element={<MemberLayout />}>
                     <Route path={path.PERSONAL} element={<Personal />} />
                     <Route path={path.HISTORY} element={<History />} />
-                    <Route path={path.MY_CART} element={<MyCart id="cart" />} />
+                    <Route path={path.MY_CART} element={<DetailCart />} />
                     <Route path={path.WISHLIST} element={<Wishlist />} />
                 </Route>
                 <Route path={path.FINAL_REGISTER} element={<FinalRegister />}></Route>

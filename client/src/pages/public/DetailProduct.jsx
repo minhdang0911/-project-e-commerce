@@ -177,7 +177,6 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
             if (response.success) {
                 toast.success(response.mes);
                 dispatch(getCurrent());
-                console.log(currentProduct);
             } else {
                 toast.error(response.mes);
             }

@@ -4,6 +4,7 @@ import { FaRegKissWinkHeart } from 'react-icons/fa';
 import { FaUserEdit } from 'react-icons/fa';
 import { FaShoppingCart } from 'react-icons/fa';
 import { AiOutlineHistory } from 'react-icons/ai';
+import { SiGooglehome } from 'react-icons/si';
 
 const {
     MdFireTruck,
@@ -288,5 +289,13 @@ export const memberSidebar = [
         text: 'Sản phẩm yêu thích',
         path: `/${path.MEMBER}/${path.WISHLIST}`,
         icon: <FaRegKissWinkHeart size={20} />,
+    },
+
+    {
+        id: '5',
+        type: 'single',
+        text: 'Trở lại',
+        path: `/`,
+        icon: <SiGooglehome size={20} />,
     },
 ];

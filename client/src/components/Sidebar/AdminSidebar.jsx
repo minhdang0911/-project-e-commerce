@@ -17,7 +17,9 @@ const AdminSidebar = () => {
     };
 
     return (
-        <div className="bg-white h-full py-4">
+        <div className="bg-white h-full py-4 md:py-0">
+            {' '}
+            {/* Xóa padding ở trên màn hình có kích thước trên md */}
             <div className="flex justify-center items-center gap-2 flex-col p-4">
                 <Link to="/">
                     {' '}
@@ -38,7 +40,7 @@ const AdminSidebar = () => {
                             </NavLink>
                         )}
                         {el.type === 'parent' && (
-                            <div className="flex flex-col  ">
+                            <div className="flex flex-col">
                                 <div
                                     onClick={() => handleShowTabs(el.id)}
                                     className="px-4 py-2 justify-between flex items-center gap-2 hover:bg-blue-100 cursor-pointer"

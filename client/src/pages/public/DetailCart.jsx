@@ -3,7 +3,9 @@ import OrderItem from 'components/products/OrderItem';
 import withBaseComponent from 'hocs/withBaseComponent';
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { formatMoney } from 'utils/helper';
+import path from 'utils/path';
 
 const DetailCart = ({ location, dispatch }) => {
     const { currentCart } = useSelector((state) => state.user);
@@ -19,8 +21,8 @@ const DetailCart = ({ location, dispatch }) => {
         <div className="w-full">
             <div className="h-[81px] bg-gray-100 flex justify-center items-center">
                 <div className="w-main">
-                    <h3 className="font-semi-bold uppercase">Chi tiết giỏ hàng</h3>
-                    <Breakcrumb category={location.pathname?.replace('/', '')?.split('-').join('')} />
+                    <h3 className="font-semi-bold uppercase text-2xl">Chi tiết giỏ hàng</h3>
+                    {/* <Breakcrumb category={location.pathname?.replace('/', '')?.split('-').join('')} /> */}
                 </div>
             </div>
             <div className="flex flex-col border mt-8 w-main mx-auto my-8 ">
@@ -43,7 +45,9 @@ const DetailCart = ({ location, dispatch }) => {
                 <span className="text-xs italic">
                     Vận chuyển, thuế và giảm giá được tính khi thanh toán. Cập nhật giỏ hàng
                 </span>
-                <Button>Checkout</Button>
+                <Link target="_blank" className="bg-main text-white px-4 py-2 rounded-md" to={`/${path.CHECKOUT}`}>
+                    Checkout
+                </Link>
             </div>
         </div>
     );

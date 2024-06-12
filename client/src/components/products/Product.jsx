@@ -18,10 +18,11 @@ import { getCurrent } from 'store/user/asyncAction';
 import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { BsFillCartCheckFill } from 'react-icons/bs';
+import { createSearchParams } from 'react-router-dom';
 
 const { IoEyeSharp, IoMdMenu, FaHeart } = icons;
 
-const Product = ({ productData, isNew, normal, dispatch }) => {
+const Product = ({ productData, isNew, normal, dispatch, location }) => {
     const [isShowOption, setIsShowOption] = useState(false);
     const { current } = useSelector((state) => state.user);
     const navigate = useNavigate();
@@ -41,11 +42,21 @@ const Product = ({ productData, isNew, normal, dispatch }) => {
                     confirmButtonText: 'Trở về đăng nhập',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate(`/${path.LOGIN}`);
+                        navigate({
+                            pathname: `/${path.LOGIN}`,
+                            search: createSearchParams({ redirect: location.pathname }).toString(),
+                        });
                     }
                 });
             } else {
-                const response = await apiUpdateCart({ pid: productData._id, color: productData?.color });
+                const response = await apiUpdateCart({
+                    pid: productData._id,
+                    color: productData.color,
+                    quantity: 1,
+                    price: productData.price,
+                    thumbnail: productData.thumb,
+                    title: productData.title,
+                });
                 if (response.success) {
                     toast.success(response.mes);
                     dispatch(getCurrent());

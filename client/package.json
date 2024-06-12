@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.4.0",
     "@reduxjs/toolkit": "^1.9.7",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/line-clamp": "^0.4.4",
@@ -28,6 +29,7 @@
     "react-slick": "^0.30.2",
     "react-spinners": "^0.13.8",
     "react-toastify": "^10.0.5",
+    "recharts": "^2.12.7",
     "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.11.0",
