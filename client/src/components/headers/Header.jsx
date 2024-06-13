@@ -40,7 +40,7 @@ const Header = () => {
                         <MdSettingsPhone color="red" />
                         <span className="font-semibold">(+84) 919 222 333</span>
                     </span>
-                    <span>Mon-Sat 9:00AM - 8:00PM</span>
+                    <span>Thứ 2 - Thứ 6 9:00AM - 8:00PM</span>
                 </div>
 
                 <div className="flex flex-col items-center px-6 border-r">
@@ -48,7 +48,7 @@ const Header = () => {
                         <MdOutlineEmail color="red" />
                         <span className="font-semibold">minhdang9a8@gmail.com</span>
                     </span>
-                    <span>Online Support 24/7</span>
+                    <span>Hỗ trợ trực tuyên 24/7</span>
                 </div>
                 {current && (
                     <Fragment>

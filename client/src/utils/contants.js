@@ -21,12 +21,12 @@ const {
 export const navigation = [
     {
         id: 4,
-        value: 'HOME',
+        value: 'Trang chủ',
         path: `/${path.HOME}`,
     },
     {
         id: 1,
-        value: 'PRODUCTS',
+        value: 'Sản phẩm',
         path: `/${path.PRODUCTS}`,
     },
     {
@@ -36,7 +36,7 @@ export const navigation = [
     },
     {
         id: 3,
-        value: 'OUR SERVICES',
+        value: 'Dịch vụ',
         path: `/${path.OUR_SERVICES}`,
     },
     {

@@ -120,8 +120,21 @@ const Login = () => {
         return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSubmit();
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('keypress', handleKeyPress);
+        return () => {
+            document.removeEventListener('keypress', handleKeyPress);
+        };
+    }, [handleKeyPress]);
+
     return (
-        <div className="w-screen h-screen relative">
+        <div className="w-screen h-screen relative flex flex-col items-center justify-center bg-gray-100">
             {isVerifyEmail && (
                 <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50">
                     <div className="bg-white w-96 rounded-lg p-6 shadow-lg transform transition-transform duration-300 scale-95 hover:scale-100">
@@ -153,7 +166,7 @@ const Login = () => {
                         <input
                             type="text"
                             id="email"
-                            className="w-[800px] pb-2 border-b outline-none placeholder:text-sm"
+                            className="w-full max-w-md pb-2 border-b outline-none placeholder:text-sm"
                             placeholder="Example:email@gmail.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -175,10 +188,10 @@ const Login = () => {
                 className="w-full h-full object-cover"
             />
             <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-                <div className="p-8 bg-white rounded-md min-w-[500px] flex flex-col items-center">
-                    <h1 className="text-[28px] font-semibold text-main mb-8">{isRegister ? 'Register' : 'Login'}</h1>
+                <div className="p-8 bg-white rounded-md w-full max-w-lg flex flex-col items-center">
+                    <h1 className="text-[28px] font-semibold text-main mb-8">{isRegister ? 'Đăng ký' : 'Đăng nhập'}</h1>
                     {isRegister && (
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col md:flex-row md:gap-2 w-full">
                             <InputField
                                 invalidFields={invalidFields}
                                 setInvalidFields={setInvalidFields}
@@ -225,8 +238,7 @@ const Login = () => {
                         fullWidth
                     />
                     <Button handleOnClick={handleSubmit} fw>
-                        {' '}
-                        {isRegister ? 'Register' : 'Login'}
+                        {isRegister ? 'Đăng ký' : 'Đăng nhập'}
                     </Button>
                     <div className="flex items-center justify-between my-2 w-full text-sm">
                         {!isRegister && (
@@ -234,7 +246,7 @@ const Login = () => {
                                 onClick={() => setIsForgotPassword(true)}
                                 className="text-blue-500 hover:underline cursor-pointer"
                             >
-                                Forgot your account
+                                Quên mật khẩu
                             </span>
                         )}
                         {!isRegister && (
@@ -242,7 +254,7 @@ const Login = () => {
                                 onClick={() => setIsRegister(true)}
                                 className="text-blue-500 hover:underline cursor-pointer"
                             >
-                                Create account
+                                Tạo tài khoản
                             </span>
                         )}
                         {isRegister && (
@@ -250,12 +262,12 @@ const Login = () => {
                                 onClick={() => setIsRegister(false)}
                                 className="text-blue-500 hover:underline cursor-pointer"
                             >
-                                Go Login
+                                Đi đến đăng nhập
                             </span>
                         )}
                     </div>
                     <Link className="text-blue-500 text-sm hover:underline cursor-pointer" to={`/${path.HOME}`}>
-                        Go home
+                        Trở lại
                     </Link>
                 </div>
             </div>

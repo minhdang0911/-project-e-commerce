@@ -44,10 +44,14 @@ const Personal = () => {
             toast.error(response.mes);
         }
     };
+
     return (
-        <div className="w-full relative px-4">
+        <div className="w-full px-4">
             <header className="text-3xl font-semibold py-4 border-b border-b-blue-200">Thông tin người dùng</header>
-            <form onSubmit={handleSubmit(handleUpdateInfor)} className="w-3/5 mx-auto py-8 flex flex-col gap-4">
+            <form
+                onSubmit={handleSubmit(handleUpdateInfor)}
+                className="w-full md:w-3/5 mx-auto py-8 flex flex-col gap-4"
+            >
                 <InputForm
                     label="Họ"
                     register={register}
@@ -90,7 +94,7 @@ const Personal = () => {
                         require: 'Bạn phải nhập trường này',
                         pattern: {
                             value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/gm,
-                            message: 'Dịnh dạng số điện thoại ko hợp lệ',
+                            message: 'Dịnh dạng số điện thoại không hợp lệ',
                         },
                     }}
                     fullWidth
@@ -111,7 +115,7 @@ const Personal = () => {
                     <span>{moment(current?.createdAt).fromNow()}</span>
                 </div>
 
-                <div className="flex flex-col  gap-2 ">
+                <div className="flex flex-col gap-2">
                     <span className="font-medium">Ảnh đại diện :</span>
                     <label htmlFor="file">
                         <img

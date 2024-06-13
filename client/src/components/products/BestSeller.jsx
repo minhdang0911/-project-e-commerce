@@ -7,15 +7,15 @@ import CustomSlider from '../common/CustomSlider';
 const tabs = [
     {
         id: 1,
-        name: 'best seller',
+        name: 'Sản phẩm bán chạy',
     },
     {
         id: 2,
-        name: 'new arrivals',
+        name: 'Sản phẩm mới',
     },
     {
         id: 3,
-        name: 'Tablet',
+        name: 'Máy tính bảng',
     },
 ];
 

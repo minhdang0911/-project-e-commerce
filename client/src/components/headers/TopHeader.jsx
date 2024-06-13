@@ -22,23 +22,24 @@ const TopHeader = () => {
                 }
             });
         }
-    }, [mes]);
+    }, [mes, dispatch, navigate]);
 
     useEffect(() => {
         const setTimeoutId = setTimeout(() => {
             if (isLoggedIn) dispatch(getCurrent());
-        }, [300]);
+        }, 300);
         return () => {
             clearTimeout(setTimeoutId);
         };
     }, [dispatch, isLoggedIn]);
+
     return (
-        <div className="h-[30px] w-full bg-main flex items-center justify-center">
-            <div className="w-main flex items-center justify-between text-xs text-white">
-                <span>Đặt hàng online hoặc gọi ngày (+84) 919 615 222</span>
+        <div className="h-[30px] w-full bg-main flex items-center justify-center px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-screen-xl flex items-center justify-between text-xs text-white">
+                <span className="truncate">Đặt hàng online hoặc gọi ngay (+84) 919 615 222</span>
                 {isLoggedIn && current ? (
                     <small className="text-[12px] flex gap-2 items-center text-sm">
-                        <span>{`Xin chào, ${current?.firstname} ${current?.lastname}`}</span>
+                        <span className="hidden sm:inline">{`Xin chào, ${current?.firstname} ${current?.lastname}`}</span>
                         <span
                             onClick={() => dispatch(logout())}
                             className="hover:rounded-full hover:bg-gray-200 p-2 hover:text-main cursor-pointer"

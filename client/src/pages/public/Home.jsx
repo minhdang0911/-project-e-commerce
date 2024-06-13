@@ -42,14 +42,14 @@ const Home = () => {
                     className="text-[20px] font-semibold py-[15px] 
                 border-b-2 border-main"
                 >
-                    NEW ARRIVALS
+                    Sản phẩm mới
                 </h3>
                 <div className=" mt-4 mx-[-10px]">
                     <CustomSlider products={newProducts} />
                 </div>
             </div>
             <div className="my-8 w-full">
-                <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">HOT COLLECTION</h3>
+                <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">BỘ SƯU TẬP HOT</h3>
                 <div className="flex flex-wrap gap-4 mt-4 ">
                     {categories
                         ?.filter((el) => el.brand.length > 0)
