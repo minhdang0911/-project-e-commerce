@@ -86,7 +86,9 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
             fetchProducts();
         }
         window.scrollTo(0, 0);
-        titleRef.current.scrollIntoView({ block: 'start' });
+        if (titleRef.current) {
+            titleRef.current.scrollIntoView({ block: 'start' });
+        }
     }, [pid, params.pid]);
 
     useEffect(() => {
@@ -186,8 +188,8 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
     return (
         <div onClick={(e) => e.stopPropagation()} className={clsx('w-full')}>
             {!isQuickView && (
-                <div className="h-[81px] bg-gray-100 flex  justify-center items-center">
-                    <div className="w-main " ref={titleRef}>
+                <div className="h-[81px] bg-gray-100 flex justify-center items-center">
+                    <div className="w-full max-w-6xl px-4" ref={titleRef}>
                         <h3 className="font-semi-bold">{currentProduct?.title || product?.title}</h3>
                         <Breakcrumb title={currentProduct?.title || product?.title} category={category} />
                     </div>

@@ -133,14 +133,14 @@ const CreateProduct = () => {
                         fullWidth
                         placeholder="Tên sản phẩm"
                     />
-                    <div className="w-full my-6 flex gap-4">
+                    <div className="w-full my-6 flex flex-col md:flex-row gap-4">
                         <InputForm
                             label="Giá"
                             register={register}
                             errors={errors}
                             id="price"
                             validate={{ require: 'Bạn phải nhập trường này' }}
-                            style="flex-1"
+                            className="flex-1"
                             placeholder="Giá sản phẩm"
                             type="number"
                             fullWidth
@@ -152,7 +152,7 @@ const CreateProduct = () => {
                             errors={errors}
                             id="quantity"
                             validate={{ require: 'Bạn phải nhập trường này' }}
-                            style="flex-1"
+                            className="flex-1"
                             placeholder="Số lượng sản phẩm"
                             type="number"
                             fullWidth
@@ -164,19 +164,19 @@ const CreateProduct = () => {
                             errors={errors}
                             id="color"
                             validate={{ require: 'Bạn phải nhập trường này' }}
-                            style="flex-1"
+                            className="flex-1"
                             placeholder="Màu sắc sản phẩm"
                             fullWidth
                         />
                     </div>
-                    <div className="w-full my-6 gap-4 flex">
+                    <div className="w-full my-6 gap-4 flex flex-col md:flex-row">
                         <Select
                             label="Danh mục"
                             options={categories?.map((el) => ({ code: el?._id, value: el?.title }))}
                             register={register}
                             id="category"
                             validate={{ require: 'Bạn phải nhập trường này' }}
-                            style="flex-auto"
+                            className="flex-auto"
                             errors={errors}
                             fullWidth
                         />
@@ -188,7 +188,7 @@ const CreateProduct = () => {
                                 ?.brand?.map((el) => ({ code: el, value: el }))}
                             register={register}
                             id="brand"
-                            style="flex-auto"
+                            className="flex-auto"
                             errors={errors}
                             fullWidth
                         />

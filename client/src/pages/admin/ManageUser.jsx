@@ -11,6 +11,7 @@ import { InputForm, Select, Button } from 'components';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import clsx from 'clsx';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const ManageUser = () => {
     const {
@@ -60,7 +61,7 @@ const ManageUser = () => {
 
     const handleDeleteUser = (uid) => {
         Swal.fire({
-            title: 'Xóa người dùng ?',
+            title: 'Xóa người dùng?',
             text: 'Bạn có chắc muốn xóa người dùng này',
             showCancelButton: true,
         }).then(async (result) => {
@@ -82,7 +83,7 @@ const ManageUser = () => {
                     nameKey={'q'}
                     value={query.q}
                     setValue={setQuery}
-                    style={'w-full md:w-1/2 lg:w-1/3'}
+                    className={'w-full md:w-1/2 lg:w-1/3'}
                     placeholder="Tìm kiếm người dùng theo tên hoặc email"
                     isHideLabel
                 />
@@ -95,8 +96,8 @@ const ManageUser = () => {
                             <tr>
                                 <th className="px-4 py-2">#</th>
                                 <th className="px-4 py-2">Email</th>
-                                <th className="px-4 py-2 ">Họ</th>
-                                <th className="px-4 py-2 ">Tên</th>
+                                <th className="px-4 py-2">Họ</th>
+                                <th className="px-4 py-2">Tên</th>
                                 <th className="px-4 py-2 whitespace-nowrap w-[200px]">Vai trò</th>
                                 <th className="px-4 py-2">Số điện thoại</th>
                                 <th className="px-4 py-2 w-[200px]">Trạng thái</th>
@@ -104,143 +105,146 @@ const ManageUser = () => {
                                 <th className="px-4 py-2">Thao tác</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <TransitionGroup component="tbody">
                             {users?.user?.map((el, index) => (
-                                <tr key={index} className="hover:bg-gray-100 transition-colors">
-                                    <td className="py-2 px-4 border-t">{index + 1}</td>
-                                    <td className="py-2 px-4 border-t">
-                                        {editElm?._id === el._id ? (
-                                            <InputForm
-                                                fullWidth
-                                                register={register}
-                                                errors={errors}
-                                                id={'email'}
-                                                validate={{
-                                                    require: true,
-                                                    pattern: {
-                                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                                        message: 'Vui lòng nhập đúng định dạng email ',
-                                                    },
-                                                }}
-                                                defaultValue={editElm.email}
-                                            />
-                                        ) : (
-                                            <span>{el.email}</span>
-                                        )}
-                                    </td>
-                                    <td className="py-2 px-4 border-t">
-                                        {' '}
-                                        {editElm?._id === el._id ? (
-                                            <InputForm
-                                                defaultValue={editElm.firstname}
-                                                fullWidth
-                                                register={register}
-                                                errors={errors}
-                                                id={'firstname'}
-                                                validate={{ required: 'Vui lòng nhập trường này' }}
-                                            />
-                                        ) : (
-                                            <span>{el.firstname}</span>
-                                        )}
-                                    </td>
-                                    <td className="py-2 px-4 border-t">
-                                        {' '}
-                                        {editElm?._id === el._id ? (
-                                            <InputForm
-                                                defaultValue={editElm.lastname}
-                                                fullWidth
-                                                register={register}
-                                                errors={errors}
-                                                id={'lastname'}
-                                                validate={{ required: 'Vui lòng nhập trường này' }}
-                                            />
-                                        ) : (
-                                            <span>{el.lastname}</span>
-                                        )}
-                                    </td>
-                                    <td className="py-2 px-4 border-t">
-                                        {editElm?._id === el._id ? (
-                                            <Select
-                                                defaultValue={el.role}
-                                                fullWidth
-                                                register={register}
-                                                errors={errors}
-                                                id={'role'}
-                                                validate={{ required: 'Vui lòng nhập trường này' }}
-                                                options={roles}
-                                            />
-                                        ) : (
-                                            <span>{roles.find((role) => +role.code === +el.role)?.value}</span>
-                                        )}
-                                    </td>
-                                    <td className="py-2 px-4 border-t">
-                                        {' '}
-                                        {editElm?._id === el._id ? (
-                                            <InputForm
-                                                defaultValue={editElm.mobile}
-                                                fullWidth
-                                                register={register}
-                                                errors={errors}
-                                                id={'mobile'}
-                                                validate={{
-                                                    required: 'Vui lòng nhập số điện thoại',
-                                                    pattern: {
-                                                        value: /^0\d{9}$/,
-                                                        message: 'Số điện thoại phải bắt đầu bằng số 0 và có 10 số',
-                                                    },
-                                                }}
-                                            />
-                                        ) : (
-                                            <span>{el.mobile}</span>
-                                        )}
-                                    </td>
-                                    <td className="py-2 px-4 border-t">
-                                        {editElm?._id === el._id ? (
-                                            <Select
-                                                defaultValue={el.isBlocked}
-                                                fullWidth
-                                                register={register}
-                                                errors={errors}
-                                                id={'isBlocked'}
-                                                validate={{ required: 'Vui lòng nhập trường này' }}
-                                                options={blockStatus}
-                                            />
-                                        ) : (
-                                            <span> {el.isBlocked ? 'Tài khoản bị khóa' : 'Hoạt động'}</span>
-                                        )}
-                                    </td>
-                                    <td className="py-2 px-4 border-t">{moment(el.createdAt).format('DD/MM/YYYY')}</td>
-                                    <td className="py-2 px-4 border-t">
-                                        {editElm?._id === el?._id ? (
+                                <CSSTransition key={el._id} timeout={500} classNames="fade">
+                                    <tr className="hover:bg-gray-100 transition-colors">
+                                        <td className="py-2 px-4 border-t">{index + 1}</td>
+                                        <td className="py-2 px-4 border-t">
+                                            {editElm?._id === el._id ? (
+                                                <InputForm
+                                                    fullWidth
+                                                    register={register}
+                                                    errors={errors}
+                                                    id={'email'}
+                                                    validate={{
+                                                        required: true,
+                                                        pattern: {
+                                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                            message: 'Vui lòng nhập đúng định dạng email ',
+                                                        },
+                                                    }}
+                                                    defaultValue={editElm.email}
+                                                />
+                                            ) : (
+                                                <span>{el.email}</span>
+                                            )}
+                                        </td>
+                                        <td className="py-2 px-4 border-t">
+                                            {editElm?._id === el._id ? (
+                                                <InputForm
+                                                    defaultValue={editElm.firstname}
+                                                    fullWidth
+                                                    register={register}
+                                                    errors={errors}
+                                                    id={'firstname'}
+                                                    validate={{ required: 'Vui lòng nhập trường này' }}
+                                                />
+                                            ) : (
+                                                <span>{el.firstname}</span>
+                                            )}
+                                        </td>
+                                        <td className="py-2 px-4 border-t">
+                                            {editElm?._id === el._id ? (
+                                                <InputForm
+                                                    defaultValue={editElm.lastname}
+                                                    fullWidth
+                                                    register={register}
+                                                    errors={errors}
+                                                    id={'lastname'}
+                                                    validate={{ required: 'Vui lòng nhập trường này' }}
+                                                />
+                                            ) : (
+                                                <span>{el.lastname}</span>
+                                            )}
+                                        </td>
+                                        <td className="py-2 px-4 border-t">
+                                            {editElm?._id === el._id ? (
+                                                <Select
+                                                    defaultValue={el.role}
+                                                    fullWidth
+                                                    register={register}
+                                                    errors={errors}
+                                                    id={'role'}
+                                                    validate={{ required: 'Vui lòng nhập trường này' }}
+                                                    options={roles}
+                                                />
+                                            ) : (
+                                                <span>{roles.find((role) => +role.code === +el.role)?.value}</span>
+                                            )}
+                                        </td>
+                                        <td className="py-2 px-4 border-t">
+                                            {editElm?._id === el._id ? (
+                                                <InputForm
+                                                    defaultValue={editElm.mobile}
+                                                    fullWidth
+                                                    register={register}
+                                                    errors={errors}
+                                                    id={'mobile'}
+                                                    validate={{
+                                                        required: 'Vui lòng nhập số điện thoại',
+                                                        pattern: {
+                                                            value: /^0\d{9}$/,
+                                                            message: 'Số điện thoại phải bắt đầu bằng số 0 và có 10 số',
+                                                        },
+                                                    }}
+                                                />
+                                            ) : (
+                                                <span>{el.mobile}</span>
+                                            )}
+                                        </td>
+                                        <td className="py-2 px-4 border-t">
+                                            {editElm?._id === el._id ? (
+                                                <Select
+                                                    defaultValue={el.isBlocked}
+                                                    fullWidth
+                                                    register={register}
+                                                    errors={errors}
+                                                    id={'isBlocked'}
+                                                    validate={{ required: 'Vui lòng nhập trường này' }}
+                                                    options={blockStatus}
+                                                />
+                                            ) : (
+                                                <span>{el.isBlocked ? 'Tài khoản bị khóa' : 'Hoạt động'}</span>
+                                            )}
+                                        </td>
+                                        <td className="py-2 px-4 border-t">
+                                            {moment(el.createdAt).format('DD/MM/YYYY')}
+                                        </td>
+                                        <td className="py-2 px-4 border-t">
+                                            {editElm?._id === el._id ? (
+                                                <span
+                                                    onClick={() => setEditElm(null)}
+                                                    className="whitespace-nowrap text-blue-600 hover:underline cursor-pointer mr-2"
+                                                >
+                                                    Trở lại
+                                                </span>
+                                            ) : (
+                                                <span
+                                                    onClick={() => setEditElm(el)}
+                                                    className="text-blue-600 hover:underline cursor-pointer mr-2"
+                                                >
+                                                    Sửa
+                                                </span>
+                                            )}
                                             <span
-                                                onClick={() => setEditElm(null)}
-                                                className="whitespace-nowrap text-blue-600 hover:underline cursor-pointer mr-2"
+                                                onClick={() => handleDeleteUser(el._id)}
+                                                className="text-red-600 hover
+                                                cursor-pointer"
                                             >
-                                                Trở lại
+                                                Xóa
                                             </span>
-                                        ) : (
-                                            <span
-                                                onClick={() => setEditElm(el)}
-                                                className="text-blue-600 hover:underline cursor-pointer mr-2"
-                                            >
-                                                Sửa
-                                            </span>
-                                        )}
-                                        <span
-                                            onClick={() => handleDeleteUser(el._id)}
-                                            className="text-red-600 hover:underline cursor-pointer"
-                                        >
-                                            Xóa
-                                        </span>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                </CSSTransition>
                             ))}
-                        </tbody>
+                        </TransitionGroup>
                     </table>
                 </form>
             </div>
+            {/* Pagination */}
             {/* {users && users.counts > 0 && (
-                <div className="flex justify-end">
+                <div className="flex justify-end mt-4">
                     <Pagination totalCount={users.counts} />
                 </div>
             )} */}
