@@ -1,10 +1,8 @@
-import React, { memo, Fragment, useState } from 'react';
-import logo from '../../assets/logo1.png';
+import React, { memo, useState } from 'react';
 import { memberSidebar } from '../../utils/contants';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import avartardefault from '../../assets/avartardefault.jpg';
 
@@ -20,14 +18,14 @@ const MemberSidebar = () => {
     };
 
     return (
-        <div className="bg-white h-full py-4 w-[250px] flex-none">
+        <div className="bg-white h-full py-4 w-[250px] lg:w-[250px] flex-none">
             <div className="w-full flex flex-col items-center justify-center py-4">
                 <img src={current?.avatar || avartardefault} alt="logo" className="w-16 h-16 object-cover" />
                 <small>{`${current?.firstname} ${current?.lastname}`}</small>
             </div>
             <div>
                 {memberSidebar.map((el) => (
-                    <Fragment key={el.id}>
+                    <div key={el.id}>
                         {el.type === 'single' && (
                             <NavLink
                                 to={el.path}
@@ -38,7 +36,7 @@ const MemberSidebar = () => {
                             </NavLink>
                         )}
                         {el.type === 'parent' && (
-                            <div className="flex flex-col  ">
+                            <div className="flex flex-col">
                                 <div
                                     onClick={() => handleShowTabs(el.id)}
                                     className="px-4 py-2 justify-between flex items-center gap-2 hover:bg-blue-100 cursor-pointer"
@@ -67,7 +65,7 @@ const MemberSidebar = () => {
                                 )}
                             </div>
                         )}
-                    </Fragment>
+                    </div>
                 ))}
             </div>
         </div>

@@ -14,6 +14,7 @@ const Header = () => {
     const [isShowOption, setIsShowOption] = useState(false);
     const { current } = useSelector((state) => state.user);
     const dispatch = useDispatch();
+
     useEffect(() => {
         const handleClickOutOption = (e) => {
             const profile = document.getElementById('profile');
@@ -26,76 +27,82 @@ const Header = () => {
     }, []);
 
     return (
-        <div className=" w-main flex justify-between h-[110px] py-[35px]">
-            <img
-                src={logo}
-                alt="logo"
-                className="w-[234px]  object-contain cursor-pointer"
-                onClick={() => navigate(path.HOME)}
-            />
+        <header className="w-full bg-white shadow">
+            <div className="w-full max-w-screen-xl mx-auto flex justify-between items-center h-[80px] py-[20px] px-4 sm:px-6 lg:px-8">
+                <img
+                    src={logo}
+                    alt="logo"
+                    className="w-[100px] h-[100px] object-contain cursor-pointer"
+                    onClick={() => navigate(path.HOME)}
+                />
 
-            <div className="flex text-[13px]">
-                <div className="flex flex-col items-center px-6 border-r">
-                    <span className="flex gap-4 items-center">
-                        <MdSettingsPhone color="red" />
-                        <span className="font-semibold">(+84) 919 222 333</span>
-                    </span>
-                    <span>Thứ 2 - Thứ 6 9:00AM - 8:00PM</span>
-                </div>
+                <div className="flex flex-col sm:flex-row text-[13px] items-center gap-4 sm:gap-6">
+                    <div className="flex flex-col items-center text-center sm:border-r sm:px-6">
+                        <span className="flex gap-2 items-center">
+                            <MdSettingsPhone color="red" />
+                            <span className="font-semibold">(+84) 919 222 333</span>
+                        </span>
+                        <span>Mon - Fri 9:00AM - 8:00PM</span>
+                    </div>
 
-                <div className="flex flex-col items-center px-6 border-r">
-                    <span className="flex gap-4 items-center">
-                        <MdOutlineEmail color="red" />
-                        <span className="font-semibold">minhdang9a8@gmail.com</span>
-                    </span>
-                    <span>Hỗ trợ trực tuyên 24/7</span>
-                </div>
-                {current && (
-                    <Fragment>
-                        <div
-                            onClick={() => dispatch(showCart())}
-                            className="cursor-pointer flex items-center justify-center gap-2 px-6 border-r"
-                        >
-                            <IoBagHandleOutline color="red" />
-                            <span> {`${current?.cart?.length || 0} item(s)`}</span>
-                        </div>
-                        <div
-                            id="profile"
-                            onClick={() => setIsShowOption((prev) => !prev)}
-                            className="relative cursor-pointer flex items-center justify-center px-6  gap-2 "
-                        >
-                            <FaUser size={14} />
-                            <span>Hồ sơ</span>
-                            {isShowOption && (
-                                <div
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="flex flex-col absolute top-full left-[16px] bg-gray-100 min-w-[150px] py-2 border"
-                                >
-                                    <Link
-                                        className="p-2 hover:bg-sky-100 w-full whitespace-nowrap"
-                                        to={`${path.MEMBER}/${path.PERSONAL}`}
+                    <div className="flex flex-col items-center text-center sm:border-r sm:px-6">
+                        <span className="flex gap-2 items-center">
+                            <MdOutlineEmail color="red" />
+                            <span className="font-semibold">minhdang9a8@gmail.com</span>
+                        </span>
+                        <span>24/7 Support</span>
+                    </div>
+
+                    {current && (
+                        <Fragment>
+                            <div
+                                onClick={() => dispatch(showCart())}
+                                className="cursor-pointer flex items-center justify-center gap-2 sm:border-r sm:px-6"
+                            >
+                                <IoBagHandleOutline color="red" />
+                                <span>{`${current?.cart?.length || 0} item(s)`}</span>
+                            </div>
+                            <div
+                                id="profile"
+                                onClick={() => setIsShowOption((prev) => !prev)}
+                                className="relative cursor-pointer flex items-center justify-center gap-2 sm:px-6"
+                            >
+                                <FaUser size={14} />
+                                <span>Profile</span>
+                                {isShowOption && (
+                                    <div
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="flex flex-col absolute top-full right-0 bg-white border shadow-lg rounded-md py-2 z-10"
                                     >
-                                        Thông tin người dùng
-                                    </Link>
-                                    {+current.role === 2001 && (
                                         <Link
-                                            className="p-2 hover:bg-sky-100 w-full"
-                                            to={`${path.ADMIN}/${path.DASHBOARD}`}
+                                            className="p-2 hover:bg-gray-100 w-full whitespace-nowrap"
+                                            to={`${path.MEMBER}/${path.PERSONAL}`}
                                         >
-                                            Quản trị
+                                            User Info
                                         </Link>
-                                    )}
-                                    <span onClick={() => dispatch(logout())} className="p-2 hover:bg-sky-100 w-full">
-                                        {' '}
-                                        Đăng xuất{' '}
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-                    </Fragment>
-                )}
+                                        {+current.role === 2001 && (
+                                            <Link
+                                                className="p-2 hover:bg-gray-100 w-full"
+                                                to={`${path.ADMIN}/${path.DASHBOARD}`}
+                                            >
+                                                Admin
+                                            </Link>
+                                        )}
+                                        <span
+                                            onClick={() => dispatch(logout())}
+                                            className="p-2 hover:bg-gray-100 w-full cursor-pointer"
+                                        >
+                                            Logout
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        </Fragment>
+                    )}
+                </div>
             </div>
-        </div>
+        </header>
     );
 };
+
 export default withBaseComponent(memo(Header));

@@ -1,13 +1,12 @@
 import React, { memo } from 'react';
-// import { apiGetCategories } from '../apis/app';
 import { NavLink } from 'react-router-dom';
 import { createSlug } from '../../utils/helper';
 import { useSelector } from 'react-redux';
 
-function Sidebar() {
+const Sidebar = () => {
     const { categories } = useSelector((state) => state.app);
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
             {categories.map((category) => (
                 <NavLink
                     to={createSlug(category.title)}
@@ -23,6 +22,6 @@ function Sidebar() {
             ))}
         </div>
     );
-}
+};
 
 export default memo(Sidebar);

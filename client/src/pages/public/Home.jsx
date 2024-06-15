@@ -3,10 +3,8 @@ import { Banner, Sidebar, BestSeller, FeatureProduct, Product } from '../../comp
 import DealDaily from '../../components/products/DealDaily';
 import Slider from 'react-slick';
 import { CustomSlider } from '../../components';
-import { useSelector, UseSelector } from 'react-redux/es/hooks/useSelector';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 import icons from '../../utils/icons';
-
-// import { apiGetProduct } from '../../apis/product';
 
 const settings = {
     dots: false,
@@ -23,13 +21,12 @@ const Home = () => {
 
     return (
         <>
-            <div className="w-main flex mt-6">
-                <div className="flex flex-col gap-5 w-[25%] flex-auto ">
+            <div className="w-full flex flex-col lg:flex-row mt-6">
+                <div className="flex flex-col gap-5 w-full lg:w-[25%] flex-auto">
                     <Sidebar />
-
                     <DealDaily />
                 </div>
-                <div className="flex flex-col gap-5 pl-5 w-[75%] flex-auto ">
+                <div className="flex flex-col gap-5 pl-0 lg:pl-5 w-full lg:w-[75%] flex-auto">
                     <Banner />
                     <BestSeller />
                 </div>
@@ -38,26 +35,21 @@ const Home = () => {
                 <FeatureProduct />
             </div>
             <div className="my-8 w-full">
-                <h3
-                    className="text-[20px] font-semibold py-[15px] 
-                border-b-2 border-main"
-                >
-                    Sản phẩm mới
-                </h3>
-                <div className=" mt-4 mx-[-10px]">
+                <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">Sản phẩm mới</h3>
+                <div className="mt-4 mx-[-10px]">
                     <CustomSlider products={newProducts} />
                 </div>
             </div>
             <div className="my-8 w-full">
                 <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">BỘ SƯU TẬP HOT</h3>
-                <div className="flex flex-wrap gap-4 mt-4 ">
+                <div className="flex flex-wrap gap-4 mt-4">
                     {categories
                         ?.filter((el) => el.brand.length > 0)
                         ?.map((el) => (
-                            <div key={el._id} className="w-[396px]">
+                            <div key={el._id} className="w-full md:w-[48%] lg:w-[30%] xl:w-[23%]">
                                 <div className="border flex p-4 gap-4 min-h-[190px]">
-                                    <img src={el?.image} className="flex-1 w-[144px] h-[129px] object-cover" />
-                                    <div className="flex-1 text-gray-700">
+                                    <img src={el?.image} className="w-[144px] h-[129px] object-cover" />
+                                    <div className="text-gray-700 flex-1">
                                         <h4 className="font-semibold uppercase">{el.title}</h4>
                                         <ul className="text-sm">
                                             {el?.brand.map((item) => (
@@ -79,4 +71,5 @@ const Home = () => {
         </>
     );
 };
+
 export default Home;

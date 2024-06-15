@@ -5,7 +5,6 @@ import { reanderStartFromNumber, formatMoney } from '../../utils/helper';
 import Countdown from '../common/Countdown';
 
 const { FaStar, IoMdMenu } = icons;
-// let idInterval;
 
 const DealDaily = () => {
     const [dealDaily, setDealDaily] = useState(null);
@@ -70,10 +69,10 @@ const DealDaily = () => {
                 <span className="flex-1 pl-4">
                     <FaStar size={20} color="#DD1111" />
                 </span>
-                <span className="flex-8 font-semiboldbold text-[20px] flex text-center text-gray-600">Deal Daily</span>
+                <span className="flex-8 font-semibold text-[20px] flex text-center text-gray-600">Deal Daily</span>
                 <span className="flex-1"></span>
             </div>
-            <div className="w-full flex flex-col items-center px-4 gap-2 ">
+            <div className="w-full flex flex-col items-center px-4 gap-2">
                 <img src={dealDaily?.thumb} alt="" className="w-full object-contain" />
                 <span className="flex h-4">
                     {reanderStartFromNumber(dealDaily?.totalRatings, 20)?.map((el, index) => (
