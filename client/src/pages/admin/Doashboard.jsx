@@ -4,6 +4,8 @@ import { apiGetProduct } from 'apis';
 import { useSelector } from 'react-redux';
 import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from 'recharts';
 import { FaUser, FaBox, FaList } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import path from 'utils/path';
 
 const Dashboard = () => {
     const [usersCount, setUsersCount] = useState(0);
@@ -39,27 +41,39 @@ const Dashboard = () => {
         <div className="container mx-auto">
             <h1 className="text-2xl font-bold mb-4">Thống kê</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-gradient-to-r from-blue-400 to-blue-600 p-4 shadow-lg rounded-lg flex items-center">
+                <Link
+                    to={`/${path.ADMIN}/${path.MANAGE_USER}`}
+                    className="bg-gradient-to-r from-blue-400 to-blue-600 p-4 shadow-lg rounded-lg flex items-center"
+                >
                     <FaUser className="text-white text-4xl mr-4" />
                     <div>
                         <h2 className="text-lg font-semibold text-white">Tổng số người dùng</h2>
                         <p className="text-white text-2xl">{usersCount}</p>
+                        <p className="text-white">Xem chi tiết</p>
                     </div>
-                </div>
-                <div className="bg-gradient-to-r from-green-400 to-green-600 p-4 shadow-lg rounded-lg flex items-center">
+                </Link>
+                <Link
+                    to={`/${path.ADMIN}/${path.MANAGE_PRODUCTS}`}
+                    className="bg-gradient-to-r from-green-400 to-green-600 p-4 shadow-lg rounded-lg flex items-center"
+                >
                     <FaBox className="text-white text-4xl mr-4" />
                     <div>
                         <h2 className="text-lg font-semibold text-white">Tổng số sản phẩm</h2>
                         <p className="text-white text-2xl">{productCount}</p>
+                        <p className="text-white">Xem chi tiết</p>
                     </div>
-                </div>
-                <div className="bg-gradient-to-r from-yellow-400 to-yellow-600 p-4 shadow-lg rounded-lg flex items-center">
+                </Link>
+                <Link
+                    to={`/${path.ADMIN}/${path.MANAGE_ORDER}`}
+                    className="bg-gradient-to-r from-yellow-400 to-yellow-600 p-4 shadow-lg rounded-lg flex items-center"
+                >
                     <FaList className="text-white text-4xl mr-4" />
                     <div>
                         <h2 className="text-lg font-semibold text-white">Tổng số danh mục sản phẩm</h2>
                         <p className="text-white text-2xl">{categoryCount}</p>
+                        <p className="text-white">Xem chi tiết</p>
                     </div>
-                </div>
+                </Link>
             </div>
             <div className="mt-8">
                 <ResponsiveContainer width="100%" height={400}>

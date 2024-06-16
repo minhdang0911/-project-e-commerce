@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { CustomizeVariant, InputForm, Pagination } from 'components';
+import { InputForm, Pagination, Button, CustomizeVariant } from 'components';
 import { useForm } from 'react-hook-form';
 import { apiGetProduct, apiDeleteProduct } from 'apis/product';
 import moment from 'moment';
@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 import { FaEdit } from 'react-icons/fa';
 import { IoTrashBinSharp } from 'react-icons/io5';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const ManageProduct = () => {
     const {
@@ -73,6 +75,48 @@ const ManageProduct = () => {
         });
     };
 
+    const handleExport = () => {
+        if (!products || products.length === 0) {
+            toast.error('Không có dữ liệu để xuất');
+            return;
+        }
+
+        const data = products.map((product) => ({
+            STT: originalProducts.find((prod) => prod._id === product._id)?.originalIndex || product.originalIndex,
+            'Hình ảnh': product.thumb,
+            'Tên sản phẩm': product.title,
+            'Thương hiệu': product.brand,
+            'Danh mục': product.category,
+            Giá: product.price,
+            'Số lượng': product.quantity,
+            'Đã bán': product.sold,
+            'Màu sắc': product.color,
+            'Tổng đánh giá': product.totalRatings,
+            'Tổng biến thể': product?.varriants?.length || 0,
+            'Ngày cập nhật': moment(product.updatedAt).format('DD/MM/YYYY'),
+        }));
+
+        console.log('Exporting data:', data); // Debugging line
+
+        // Prepare the workbook and worksheet
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Products');
+
+        // Generate and save the Excel file
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+        const s2ab = (s) => {
+            const buf = new ArrayBuffer(s.length);
+            const view = new Uint8Array(buf);
+            for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+            return buf;
+        };
+
+        const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+        saveAs(blob, 'ProductList.xlsx');
+    };
+
     return (
         <div className="w-full flex flex-col gap-4 relative">
             {editProduct && (
@@ -98,6 +142,12 @@ const ManageProduct = () => {
                 <form className="w-[45%] ">
                     <InputForm id="q" register={register} errors={errors} fullWidth placeholder="Tìm kiếm sản phẩm" />
                 </form>
+                <Button
+                    handleOnClick={handleExport}
+                    style="bg-blue-600 text-white px-4 py-2 rounded-lg ml-4 mt-[-38px]"
+                >
+                    Xuất danh sách
+                </Button>
             </div>
             <table className="table-auto">
                 <thead>
