@@ -16,6 +16,7 @@ import path from 'utils/path';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { getCurrent } from 'store/user/asyncAction';
+import { motion } from 'framer-motion';
 
 const settings = {
     dots: false,
@@ -110,17 +111,6 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
         if (res.success) setRelativeProduct(res.products);
     };
 
-    // const handleQuantity = useCallback(
-    //     (number) => {
-    //         if (!Number(number) || Number(number) < 1) {
-    //             return;
-    //         } else {
-    //             setQuantity(number);
-    //         }
-    //     },
-    //     [quantity],
-    // );
-
     const handleQuantity = useCallback(
         (number) => {
             if (number === '' || (Number(number) && Number(number) >= 1)) {
@@ -149,6 +139,10 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
         e.stopPropagation();
         setCurrentImage(el);
     };
+
+    useEffect(()=>{
+        document.title=''
+    })
 
     const handleAddToCart = async () => {
         if (!current) {
@@ -188,16 +182,29 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
     return (
         <div onClick={(e) => e.stopPropagation()} className={clsx('w-full')}>
             {!isQuickView && (
-                <div className="h-[81px] bg-gray-100 flex justify-center items-center">
+                <motion.div
+                    className="h-[81px] bg-gray-100 flex justify-center items-center"
+                    initial={{ opacity: 0, y: -50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <div className="w-full max-w-6xl px-4" ref={titleRef}>
                         <h3 className="font-semi-bold">{currentProduct?.title || product?.title}</h3>
                         <Breakcrumb title={currentProduct?.title || product?.title} category={category} />
                     </div>
-                </div>
+                </motion.div>
             )}
-            <div className={clsx('bg-white m-auto mt-4 flex', isQuickView ? 'w-[1000px] gap-16 ' : 'w-main')}>
-                <div className="flex-4 flex flex-col gap-4 w-2/5">
-                    <div className="h-[458px] w-[458px] ">
+            <motion.div
+                className={clsx(
+                    'bg-white m-auto mt-4 flex flex-col lg:flex-row',
+                    isQuickView ? 'w-[1000px] gap-16 ' : 'w-main',
+                )}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div className="flex-4 flex flex-col gap-4 w-full lg:w-2/5">
+                    <div className="h-[300px] w-full lg:h-[458px] lg:w-[458px]">
                         <ReactImageMagnify
                             {...{
                                 smallImage: {
@@ -214,7 +221,7 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                         />
                     </div>
 
-                    <div className="w-[458px]">
+                    <div className="w-full lg:w-[458px]">
                         <Slider {...settings} className="image-slider flex gap-2 justify-between">
                             {currentProduct?.images?.length === 0 &&
                                 product?.image?.map((el) => (
@@ -223,7 +230,7 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                                             onClick={(e) => handleClickImage(e, el)}
                                             src={el}
                                             alt="sub product"
-                                            className="cursor-pointer h-[143px] w-[143px] border object-cover "
+                                            className="cursor-pointer h-[80px] w-[80px] lg:h-[143px] lg:w-[143px] border object-cover"
                                         />
                                     </div>
                                 ))}
@@ -235,16 +242,16 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                                             onClick={(e) => handleClickImage(e, el)}
                                             src={el}
                                             alt="sub product"
-                                            className="cursor-pointer h-[143px] w-[143px] border object-cover "
+                                            className="cursor-pointer h-[80px] w-[80px] lg:h-[143px] lg:w-[143px] border object-cover"
                                         />
                                     </div>
                                 ))}
                         </Slider>
                     </div>
                 </div>
-                <div className={(clsx('w-2/5 pr-[24px] flex flex-col gap-4'), isQuickView && 'w-1/2')}>
+                <div className={(clsx('w-full lg:w-2/5 pr-[24px] flex flex-col gap-4'), isQuickView && 'w-1/2')}>
                     <div className="flex items-center justify-between">
-                        <h2 className="text-[30px] font-semibold">{`${formatMoney(
+                        <h2 className="text-[20px] lg:text-[30px] font-semibold">{`${formatMoney(
                             formatPrice(currentProduct?.price || product?.price),
                         )} `}</h2>
                         <span className="text-sm text-main">{`Số lượng:${product?.quantity}`}</span>
@@ -264,15 +271,15 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                             ))}
                         {product?.description?.length <= 1 && (
                             <div
-                                className="text-sm line-clamp-[10] mb-8 "
+                                className="text-sm line-clamp-[10] mb-8"
                                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product?.description[0]) }}
                             ></div>
                         )}
                     </ul>
 
-                    <div className="my-4 flex  gap-4">
+                    <div className="my-4 flex flex-col gap-4">
                         <span className="font-semibold whitespace-nowrap text-xs">Màu sắc:</span>
-                        <div className="flex flex-wrap gap-4 items-center w-full ">
+                        <div className="flex flex-wrap gap-4 items-center w-full">
                             <div
                                 onClick={() => setVarriants(null)}
                                 className={clsx(
@@ -281,9 +288,9 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                                 )}
                             >
                                 <img src={product?.thumb} alt="thumb" className="w-8 h-8 rounded-md object-cover" />
-                                <span className="flex flex-col ">
+                                <span className="flex flex-col">
                                     <span>{product?.color}</span>
-                                    <span className="text-sm ">{product?.price}</span>
+                                    <span className="text-sm">{product?.price}</span>
                                 </span>
                             </div>
                             {product?.varriants?.map((el) => (
@@ -295,9 +302,9 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                                     )}
                                 >
                                     <img src={el?.thumb} alt="thumb" className="w-8 h-8 rounded-md object-cover" />
-                                    <span className="flex flex-col ">
+                                    <span className="flex flex-col">
                                         <span>{el?.color}</span>
-                                        <span className="text-sm ">{el?.price}</span>
+                                        <span className="text-sm">{el?.price}</span>
                                     </span>
                                 </div>
                             ))}
@@ -319,16 +326,21 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                     </div>
                 </div>
                 {!isQuickView && (
-                    <div className="w-1/5  ">
+                    <div className="w-full lg:w-1/5">
                         {productExtraInfomation.map((el) => (
                             <ProductExtraInfoItem key={el?.id} title={el?.title} icon={el.icon} sub={el.sub} />
                         ))}
                     </div>
                 )}
-            </div>
+            </motion.div>
 
             {!isQuickView && (
-                <div className="w-main m-auto mt-8">
+                <motion.div
+                    className="w-main m-auto mt-8"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <ProductInformation
                         pid={product?._id}
                         nameProduct={product?.title}
@@ -336,16 +348,21 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                         ratings={product?.ratings}
                         reRender={reRender}
                     />
-                </div>
+                </motion.div>
             )}
             {!isQuickView && (
                 <>
-                    <div className="w-main m-auto mt-[22rem]">
+                    <motion.div
+                        className="w-main m-auto mt-[22rem]"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                    >
                         <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">
                             Sản phẩm tương tự{' '}
                         </h3>
                         <CustomSlider products={relativProduct} normal={true} />
-                    </div>
+                    </motion.div>
                     <div className="h-[100px] w-full"></div>
                 </>
             )}
