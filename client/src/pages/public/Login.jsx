@@ -29,6 +29,8 @@ const Login = () => {
     const [timer, setTimer] = useState(300);
     const intervalRef = useRef(null);
     const [email, setEmail] = useState('');
+    const [blockedUntil, setBlockedUntil] = useState(null);
+    const [attemptCount, setAttemptCount] = useState(0);
 
     const restPayload = () => {
         setPayload({
@@ -60,6 +62,14 @@ const Login = () => {
         }
     }, [timer]);
 
+    useEffect(() => {
+        const now = new Date();
+        if (blockedUntil && now > new Date(blockedUntil)) {
+            setBlockedUntil(null);
+            setAttemptCount(0);
+        }
+    }, [blockedUntil]);
+
     const handleSubmit = useCallback(async () => {
         const { firstname, lastname, mobile, ...data } = payload;
         const invalids = isRegister ? validate(payload, setInvalidFields) : validate(data, setInvalidFields);
@@ -74,16 +84,41 @@ const Login = () => {
                     Swal.fire('Oops', response?.mes, 'error');
                 }
             } else {
+                if (blockedUntil) {
+                    Swal.fire('Oops', 'Tài khoản của bạn đã bị khóa. Vui lòng thử lại sau.', 'error');
+                    return;
+                }
+
                 const result = await apiLogin(data);
                 if (result.success) {
-                    dispatch(login({ isLoggedIn: true, token: result.accessToken, userData: result.userData }));
-                    searchParams.get('redirect') ? navigate(searchParams.get('redirect')) : navigate(`/${path.HOME}`);
+                    const { userData } = result;
+                    if (userData.isBlocked) {
+                        Swal.fire('Oops', 'Tài khoản của bạn đã bị khóa.', 'error');
+                    } else {
+                        dispatch(login({ isLoggedIn: true, token: result.accessToken, userData: result.userData }));
+                        searchParams.get('redirect')
+                            ? navigate(searchParams.get('redirect'))
+                            : navigate(`/${path.HOME}`);
+                        setAttemptCount(0); // Reset attempt count on successful login
+                    }
                 } else {
-                    Swal.fire('Oops', result?.mes, 'error');
+                    setAttemptCount((prev) => prev + 1);
+                    if (attemptCount + 1 >= 5) {
+                        const blockUntil = new Date();
+                        blockUntil.setDate(blockUntil.getDate() + 1);
+                        setBlockedUntil(blockUntil);
+                        Swal.fire(
+                            'Oops',
+                            'Tài khoản của bạn đã nhập sai mật khẩu 5 lần và sẽ được mở lại sau 1 ngày.',
+                            'error',
+                        );
+                    } else {
+                        Swal.fire('Oops', result?.mes, 'error');
+                    }
                 }
             }
         }
-    }, [payload, isRegister]);
+    }, [payload, isRegister, attemptCount, blockedUntil]);
 
     const finalRegister = async () => {
         const response = await apiFinalRegister(token);
@@ -172,12 +207,13 @@ const Login = () => {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <div className="flex items-center justify-end gap-4 w-full">
-                            <Button name="Xác nhận" handleOnClick={handleForgotPassword} />
+                            <Button handleOnClick={handleForgotPassword}>Xác nhận</Button>
                             <Button
-                                name="Trở lại"
                                 handleOnClick={() => setIsForgotPassword(false)}
                                 style="px-4 py-2 rounded-md text-white bg-orange-500 text-semibold my-2"
-                            />
+                            >
+                                Trở lại
+                            </Button>
                         </div>
                     </div>
                 </div>

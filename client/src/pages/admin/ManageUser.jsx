@@ -153,7 +153,7 @@ const ManageUser = () => {
                         <TransitionGroup component="tbody">
                             {users?.user?.map((el, index) => (
                                 <CSSTransition key={el._id} timeout={500} classNames="fade">
-                                    <tr className="hover:bg-gray-100 transition-colors">
+                                    <tr className="hover:bg-gray-100 transition-colors mt-[-10px]">
                                         <td className="py-2 px-4 border-t">{index + 1}</td>
                                         <td className="py-2 px-4 border-t">
                                             {editElm?._id === el._id ? (
@@ -170,6 +170,7 @@ const ManageUser = () => {
                                                         },
                                                     }}
                                                     defaultValue={editElm.email}
+                                                    style="mt-10"
                                                 />
                                             ) : (
                                                 <span>{el.email}</span>
@@ -184,6 +185,7 @@ const ManageUser = () => {
                                                     errors={errors}
                                                     id={'firstname'}
                                                     validate={{ required: 'Vui lòng nhập trường này' }}
+                                                    style="mt-10"
                                                 />
                                             ) : (
                                                 <span>{el.firstname}</span>
@@ -198,6 +200,7 @@ const ManageUser = () => {
                                                     errors={errors}
                                                     id={'lastname'}
                                                     validate={{ required: 'Vui lòng nhập trường này' }}
+                                                    style="mt-10"
                                                 />
                                             ) : (
                                                 <span>{el.lastname}</span>
@@ -225,6 +228,7 @@ const ManageUser = () => {
                                                     fullWidth
                                                     register={register}
                                                     errors={errors}
+                                                    style="mt-10"
                                                     id={'mobile'}
                                                     validate={{
                                                         required: 'Vui lòng nhập số điện thoại',

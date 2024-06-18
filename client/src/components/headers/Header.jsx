@@ -42,7 +42,7 @@ const Header = () => {
                             <MdSettingsPhone color="red" />
                             <span className="font-semibold">(+84) 919 222 333</span>
                         </span>
-                        <span>Mon - Fri 9:00AM - 8:00PM</span>
+                        <span>Thứ 2 - chủ nhật 9:00AM - 8:00PM</span>
                     </div>
 
                     <div className="flex flex-col items-center text-center sm:border-r sm:px-6">
@@ -50,7 +50,7 @@ const Header = () => {
                             <MdOutlineEmail color="red" />
                             <span className="font-semibold">minhdang9a8@gmail.com</span>
                         </span>
-                        <span>24/7 Support</span>
+                        <span>Hỗ trợ 24/7</span>
                     </div>
 
                     {current && (
@@ -68,7 +68,7 @@ const Header = () => {
                                 className="relative cursor-pointer flex items-center justify-center gap-2 sm:px-6"
                             >
                                 <FaUser size={14} />
-                                <span>Profile</span>
+                                <span>Hồ sơ</span>
                                 {isShowOption && (
                                     <div
                                         onClick={(e) => e.stopPropagation()}
@@ -78,21 +78,21 @@ const Header = () => {
                                             className="p-2 hover:bg-gray-100 w-full whitespace-nowrap"
                                             to={`${path.MEMBER}/${path.PERSONAL}`}
                                         >
-                                            User Info
+                                            Thông tin tài khoản
                                         </Link>
                                         {+current.role === 2001 && (
                                             <Link
                                                 className="p-2 hover:bg-gray-100 w-full"
                                                 to={`${path.ADMIN}/${path.DASHBOARD}`}
                                             >
-                                                Admin
+                                                Quản trị
                                             </Link>
                                         )}
                                         <span
                                             onClick={() => dispatch(logout())}
                                             className="p-2 hover:bg-gray-100 w-full cursor-pointer"
                                         >
-                                            Logout
+                                            Đăng xuất
                                         </span>
                                     </div>
                                 )}

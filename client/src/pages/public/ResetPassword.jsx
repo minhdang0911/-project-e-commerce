@@ -3,14 +3,17 @@ import { Button } from '../../components';
 import { useParams } from 'react-router-dom';
 import { apiResetPassword } from '../../apis/user';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 const ResetPassword = () => {
     const [password, setPassword] = useState('');
     const { token } = useParams();
+    const navigate = useNavigate();
 
     const handleResettPassword = async () => {
         const response = await apiResetPassword({ password, token });
         if (response.success === true) {
             toast.success(response.mes);
+            navigate('/login');
         } else {
             toast.error(response.mes, { theme: 'colored' });
         }
@@ -32,7 +35,7 @@ const ResetPassword = () => {
                 />
 
                 <div className="flex items-center justify-end gap-4 w-full">
-                    <Button name="Xác nhận" handleOnClick={handleResettPassword} />
+                    <Button handleOnClick={handleResettPassword}>Xác nhận</Button>
                 </div>
             </div>
         </div>
