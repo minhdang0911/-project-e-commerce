@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { validate } from '../../utils/helper';
 import { showModal } from '../../store/app/appSlice';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Login = () => {
     const [payload, setPayload] = useState({
         email: '',
         password: '',
+        confirmPassword: '',
         firstname: '',
         lastname: '',
         mobile: '',
@@ -31,11 +33,14 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [blockedUntil, setBlockedUntil] = useState(null);
     const [attemptCount, setAttemptCount] = useState(0);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const restPayload = () => {
         setPayload({
             email: '',
             password: '',
+            confirmPassword: '',
             firstname: '',
             lastname: '',
             mobile: '',
@@ -71,10 +76,15 @@ const Login = () => {
     }, [blockedUntil]);
 
     const handleSubmit = useCallback(async () => {
-        const { firstname, lastname, mobile, ...data } = payload;
+        const { firstname, lastname, mobile, confirmPassword, ...data } = payload;
         const invalids = isRegister ? validate(payload, setInvalidFields) : validate(data, setInvalidFields);
         if (invalids === 0) {
             if (isRegister) {
+                if (payload.password !== payload.confirmPassword) {
+                    Swal.fire('Oops', 'Mật khẩu và xác nhận mật khẩu không khớp.', 'error');
+                    return;
+                }
+
                 dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
                 const response = await apiRegister(payload);
                 dispatch(showModal({ isShowModal: false, modalChildren: null }));
@@ -264,15 +274,42 @@ const Login = () => {
                             fullWidth
                         />
                     )}
-                    <InputField
-                        invalidFields={invalidFields}
-                        setInvalidFields={setInvalidFields}
-                        value={payload.password}
-                        setValue={setPayload}
-                        nameKey="password"
-                        type="password"
-                        fullWidth
-                    />
+                    <div className="relative w-full">
+                        <InputField
+                            invalidFields={invalidFields}
+                            setInvalidFields={setInvalidFields}
+                            value={payload.password}
+                            setValue={setPayload}
+                            nameKey="password"
+                            type={showPassword ? 'text' : 'password'}
+                            fullWidth
+                        />
+                        <span
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                        >
+                            {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                        </span>
+                    </div>
+                    {isRegister && (
+                        <div className="relative w-full">
+                            <InputField
+                                invalidFields={invalidFields}
+                                setInvalidFields={setInvalidFields}
+                                value={payload.confirmPassword}
+                                setValue={setPayload}
+                                nameKey="confirmPassword"
+                                type={showConfirmPassword ? 'text' : 'password'}
+                                fullWidth
+                            />
+                            <span
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                                onClick={() => setShowConfirmPassword((prev) => !prev)}
+                            >
+                                {showConfirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                            </span>
+                        </div>
+                    )}
                     <Button handleOnClick={handleSubmit} fw>
                         {isRegister ? 'Đăng ký' : 'Đăng nhập'}
                     </Button>
