@@ -1,53 +1,37 @@
-import React, { useEffect } from 'react';
-import './NotFound.css';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const NotFound = () => {
-    useEffect(() => {
-        const colorSwitcher = document.querySelector('[data-theme-color-switch]');
-        let currentTheme = 'light';
-
-        colorSwitcher.addEventListener('click', function () {
-            const root = document.documentElement;
-
-            if (currentTheme === 'dark') {
-                root.style.setProperty('--bg-color', '#fff');
-                root.style.setProperty('--text-color', '#000');
-                colorSwitcher.textContent = '\u{1F319}';
-                currentTheme = 'light';
-            } else {
-                root.style.setProperty('--bg-color', '#050505');
-                root.style.setProperty('--text-color', '#fff');
-                colorSwitcher.textContent = '\u{2600}';
-                currentTheme = 'dark';
-            }
-
-            colorSwitcher.setAttribute('data-theme', currentTheme);
-        });
-    }, []);
-
     return (
-        <main className="error-page">
-            <div className="container">
-                <div className="eyes">
-                    <div className="eye">
-                        <div className="eye__pupil eye__pupil--left"></div>
+        <section className="py-10 bg-white min-h-screen flex items-center">
+            <div className="container mx-auto px-4">
+                <div className="flex flex-col md:flex-row justify-center items-center">
+                    <div className="md:w-1/2 lg:w-2/5 mb-8 md:mb-0">
+                        <div
+                            className="bg-cover bg-center h-96 bg-no-repeat"
+                            style={{
+                                backgroundImage:
+                                    'url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif)',
+                            }}
+                        >
+                            <h1 className="text-8xl text-center">404</h1>
+                        </div>
                     </div>
-                    <div className="eye">
-                        <div className="eye__pupil eye__pupil--right"></div>
+                    <div className="md:w-1/2 lg:w-3/5 text-center md:text-left md:ml-10">
+                        <div className="content">
+                            <h3 className="text-4xl font-semibold mb-4">Không tìm thấy trang!</h3>
+                            <p className="text-lg mb-6">Bạn có chắc chắn muốn ở đây không?</p>
+                            <Link
+                                to="/"
+                                className="text-white bg-yellow-600 hover:bg-yellow-700 py-3 px-6 inline-block text-lg rounded-lg transition duration-300"
+                            >
+                                Trở lại
+                            </Link>
+                        </div>
                     </div>
                 </div>
-                <div className="error-page__heading">
-                    <h1 className="error-page__heading-title">Looks like you're lost</h1>
-                    <p className="error-page__heading-desciption">404 error</p>
-                </div>
-                <a className="error-page__button" href="#" aria-label="back to home" title="back to home">
-                    back to home
-                </a>
             </div>
-            <button className="color-switcher" data-theme-color-switch>
-                &#127769;
-            </button>
-        </main>
+        </section>
     );
 };
 

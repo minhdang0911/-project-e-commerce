@@ -44,6 +44,11 @@ export const navigation = [
         value: 'FAQs',
         path: `/${path.FAQs}`,
     },
+    {
+        id: 6,
+        value: 'Liên hệ',
+        path: `/${path.CONTACT}`,
+    },
 ];
 
 export const productExtraInfomation = [

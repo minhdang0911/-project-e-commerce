@@ -12,6 +12,7 @@ const path = {
     RESET_PASSWORD: 'reset-password/:token',
     DETAIL_CART: 'chi-tiet-gio-hang',
     CHECKOUT: 'checkout',
+    CONTACT: 'lien-he',
 
     //admin
     ADMIN: 'admin',

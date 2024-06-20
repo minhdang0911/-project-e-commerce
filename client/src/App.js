@@ -12,6 +12,7 @@ import {
     FinalRegister,
     ResetPassword,
     DetailCart,
+    Contact,
 } from './pages/public';
 import { Adminlayout, Doashboard, CreateProduct, ManageOrder, ManageProduct, ManageUser } from './pages/admin';
 import { MemberLayout, Personal, History, MyCart, Wishlist, Checkout } from './pages/member';
@@ -54,7 +55,7 @@ function App() {
                     <Route path={path.OUR_SERVICES} element={<Services />}></Route>
                     <Route path={path.PRODUCTS} element={<Products />}></Route>
                     <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
-
+                    <Route path={path.CONTACT} element={<Contact />}></Route>
                     {/* <Route path={path.DETAIL_CART} element={<DetailCart />}></Route> */}
                 </Route>
                 <Route path={path.ADMIN} element={<Adminlayout />}>
@@ -73,7 +74,7 @@ function App() {
                 </Route>
                 <Route path={path.FINAL_REGISTER} element={<FinalRegister />}></Route>
                 <Route path={path.LOGIN} element={<Login />}></Route>
-                {/* <Route path={Path} element={<NotFound />} /> */}
+                <Route path={path.ALL} element={<NotFound />} />
             </Routes>
             <ToastContainer
                 position="top-right"
