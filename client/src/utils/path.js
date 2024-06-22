@@ -13,6 +13,7 @@ const path = {
     DETAIL_CART: 'chi-tiet-gio-hang',
     CHECKOUT: 'checkout',
     CONTACT: 'lien-he',
+    ALL_PRODUCT: 'tat-ca-san-pham',
 
     //admin
     ADMIN: 'admin',

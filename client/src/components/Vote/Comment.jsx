@@ -4,6 +4,7 @@ import moment from 'moment';
 import { reanderStartFromNumber } from '../../utils/helper';
 
 const Comment = ({ image = avatar, name = 'Anonmyous', content, updatedAt, comment, star }) => {
+    console.log(name);
     return (
         <div className="flex gap-4  max-h-[120px] ">
             <div className="flex-none">
@@ -11,7 +12,7 @@ const Comment = ({ image = avatar, name = 'Anonmyous', content, updatedAt, comme
             </div>
             <div className="flex flex-col flex-auto ">
                 <div className="flex justify-between items-center">
-                    <h3 className="font-semibold">{name}</h3>
+                    <h3 className="font-semibold">{name === 'undefined undefined' ? 'khach hang' : name}</h3>
                     <span className="text-xs italic ">{moment(updatedAt)?.fromNow()}</span>
                 </div>
                 <div className="flex flex-col gap-2 pl-4 mt-4 border py-2 bg-gray-100 border-gray-300">

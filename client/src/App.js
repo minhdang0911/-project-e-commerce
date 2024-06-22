@@ -13,6 +13,7 @@ import {
     ResetPassword,
     DetailCart,
     Contact,
+    AllProduct,
 } from './pages/public';
 import { Adminlayout, Doashboard, CreateProduct, ManageOrder, ManageProduct, ManageUser } from './pages/admin';
 import { MemberLayout, Personal, History, MyCart, Wishlist, Checkout } from './pages/member';
@@ -54,6 +55,7 @@ function App() {
                     <Route path={path.FAQs} element={<FAQ />}></Route>
                     <Route path={path.OUR_SERVICES} element={<Services />}></Route>
                     <Route path={path.PRODUCTS} element={<Products />}></Route>
+                    <Route path={path.ALL_PRODUCT} element={<AllProduct />}></Route>
                     <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
                     <Route path={path.CONTACT} element={<Contact />}></Route>
                     {/* <Route path={path.DETAIL_CART} element={<DetailCart />}></Route> */}
