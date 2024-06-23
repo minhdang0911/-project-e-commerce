@@ -17,7 +17,10 @@ const Sidebar = () => {
                             : 'px-5 pt-[15px] pb-[14px] text-sm hover:text-main'
                     }
                 >
-                    {category.title}
+                    <div className="flex">
+                        {category.title}
+                        <div className="ml-2">({category?.brand?.length})</div>
+                    </div>
                 </NavLink>
             ))}
         </div>

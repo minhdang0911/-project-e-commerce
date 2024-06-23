@@ -1,10 +1,15 @@
 import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+import { apiCreateOrder } from 'apis';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const style = { layout: 'vertical' };
 
-const ButtonWrapper = ({ currency, showSpinner, amount }) => {
+const ButtonWrapper = ({ currency, showSpinner, amount, payload, setIsSuccess }) => {
     const [{ isPending, options }, dispatch] = usePayPalScriptReducer();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch({
@@ -15,6 +20,18 @@ const ButtonWrapper = ({ currency, showSpinner, amount }) => {
             },
         });
     }, [currency, showSpinner]);
+
+    const handleSaveOrder = async () => {
+        const response = await apiCreateOrder({ ...payload, status: 'Succeed' });
+        if (response?.success) {
+            setIsSuccess(true);
+            setTimeout(() => {
+                Swal.fire('Chúc mừng', 'Bạn đã thanh toán thành công', 'success').then(() => {
+                    navigate('/');
+                });
+            }, 500);
+        }
+    };
 
     return (
         <>
@@ -38,7 +55,7 @@ const ButtonWrapper = ({ currency, showSpinner, amount }) => {
                 onApprove={(data, actions) =>
                     actions.order.capture().then(async (response) => {
                         if (response.status === 'COMPLETED') {
-                            console.log(response);
+                            handleSaveOrder();
                         }
                     })
                 }
@@ -47,11 +64,17 @@ const ButtonWrapper = ({ currency, showSpinner, amount }) => {
     );
 };
 
-export default function Paypal({ amount }) {
+export default function Paypal({ amount, payload, setIsSuccess }) {
     return (
         <div style={{ maxWidth: '750px', minHeight: '200px', margin: 'auto' }}>
             <PayPalScriptProvider options={{ clientId: 'test', components: 'buttons', currency: 'USD' }}>
-                <ButtonWrapper showSpinner={false} currency={'USD'} amount={amount} />
+                <ButtonWrapper
+                    payload={payload}
+                    setIsSuccess={setIsSuccess}
+                    showSpinner={false}
+                    currency={'USD'}
+                    amount={amount}
+                />
             </PayPalScriptProvider>
         </div>
     );

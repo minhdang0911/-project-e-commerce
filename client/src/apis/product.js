@@ -57,3 +57,11 @@ export const apiAddVarriant = (pid, data) => {
         data: data,
     });
 };
+
+export const apiCreateOrder = (data) => {
+    return axios({
+        url: '/order/',
+        method: 'post',
+        data,
+    });
+};

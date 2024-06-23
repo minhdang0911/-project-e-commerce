@@ -1,5 +1,7 @@
 import icons from './icons';
+import { FaStarHalfAlt } from 'react-icons/fa';
 const { FaStar, CiStar } = icons;
+
 export function createSlug(string) {
     return string
         .toLowerCase()
@@ -18,14 +20,36 @@ export const formatMoney = (number) => {
 
 export const reanderStartFromNumber = (number, size) => {
     if (!Number(number)) return;
-    const starts = [];
-    for (let i = 0; i < +number; i++) {
-        starts.push(<FaStar color="orange" size={size || 16} />);
+    const stars = [];
+
+    if (number >= 3.1 && number <= 3.4) {
+        for (let i = 0; i < 3; i++) {
+            stars.push(<FaStar color="orange" size={size || 16} key={i} />);
+        }
+        for (let i = 3; i < 5; i++) {
+            stars.push(<CiStar color="orange" size={size || 16} key={i} />);
+        }
+    } else if (number >= 3.5 && number <= 3.9) {
+        // 3 sao sáng, 1 sao sáng nửa, 1 sao không sáng
+        for (let i = 0; i < 3; i++) {
+            stars.push(<FaStar color="orange" size={size || 16} key={i} />);
+        }
+        stars.push(<FaStarHalfAlt color="orange" size={size || 16} key={3} />);
+        stars.push(<CiStar color="orange" size={size || 16} key={4} />);
+    } else {
+        // Mặc định: Hiển thị số sao tương ứng với `number`
+        for (let i = 0; i < Math.floor(number); i++) {
+            stars.push(<FaStar color="orange" size={size || 16} key={i} />);
+        }
+        if (number % 1 !== 0) {
+            stars.push(<FaStarHalfAlt color="orange" size={size || 16} key={Math.floor(number)} />);
+        }
+        for (let i = Math.ceil(number); i < 5; i++) {
+            stars.push(<CiStar color="orange" size={size || 16} key={i} />);
+        }
     }
-    for (let i = 5; i > +number; i--) {
-        starts.push(<CiStar color="orange" size={size || 16} />);
-    }
-    return starts;
+
+    return stars;
 };
 
 export const validate = (payload, setInvalidFields) => {
