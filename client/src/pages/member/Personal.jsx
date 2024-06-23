@@ -8,6 +8,7 @@ import { apiUpdateCurrent } from 'apis';
 import { getCurrent } from 'store/user/asyncAction';
 import { toast } from 'react-toastify';
 import Skeleton from 'react-loading-skeleton'; // Import skeleton component
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const Personal = () => {
     const {
@@ -20,6 +21,8 @@ const Personal = () => {
     const { current } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false); // State to control loading state
+    const { searchParams } = useSearchParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         reset({
@@ -28,6 +31,7 @@ const Personal = () => {
             email: current?.email,
             mobile: current?.mobile,
             avatar: current?.avatar,
+            address: current?.address,
         });
     }, [current]);
 
@@ -44,6 +48,9 @@ const Personal = () => {
         if (response.success) {
             dispatch(getCurrent());
             toast.success(response.mes);
+            if (searchParams && searchParams.get('redirect')) {
+                navigate(searchParams.get('redirect'));
+            }
         } else {
             toast.error(response.mes);
         }
@@ -114,6 +121,17 @@ const Personal = () => {
                                     value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/gm,
                                     message: 'Dịnh dạng số điện thoại không hợp lệ',
                                 },
+                            }}
+                            fullWidth
+                        />
+
+                        <InputForm
+                            label="Địa chỉ"
+                            register={register}
+                            errors={errors}
+                            id="address"
+                            validate={{
+                                require: 'Bạn phải nhập trường này',
                             }}
                             fullWidth
                         />

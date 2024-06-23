@@ -54,8 +54,8 @@ function App() {
                     <Route path={path.DETAIL_PRODUCT__CATEGORY__PID__TITLE} element={<DetailProduct />}></Route>
                     <Route path={path.FAQs} element={<FAQ />}></Route>
                     <Route path={path.OUR_SERVICES} element={<Services />}></Route>
-                    <Route path={path.PRODUCTS} element={<Products />}></Route>
-                    <Route path={path.ALL_PRODUCT} element={<AllProduct />}></Route>
+                    <Route path={path.PRODUCTS__CATEGORY} element={<Products />}></Route>
+                    {/* <Route path={path.ALL_PRODUCT} element={<AllProduct />}></Route> */}
                     <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
                     <Route path={path.CONTACT} element={<Contact />}></Route>
                     {/* <Route path={path.DETAIL_CART} element={<DetailCart />}></Route> */}

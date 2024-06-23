@@ -27,7 +27,10 @@ const Products = () => {
             if (queries.price.lte) queries.price.lte = Number(queries.price.lte);
         }
 
-        const response = await apiGetProduct({ ...queries, category });
+        if (category && category !== 'tat-ca-san-pham') queries.category = category;
+
+        const response = await apiGetProduct(queries);
+        console.log('sp', response);
         if (response.success) setProducts(response);
     };
 

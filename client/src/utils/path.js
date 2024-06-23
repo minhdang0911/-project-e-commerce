@@ -3,7 +3,7 @@ const path = {
     HOME: '',
     ALL: '*',
     LOGIN: 'login',
-    PRODUCTS: ':category',
+    PRODUCTS__CATEGORY: ':category',
     BLOGS: 'blogs',
     OUR_SERVICES: 'services',
     FAQs: 'faqs',
@@ -13,7 +13,7 @@ const path = {
     DETAIL_CART: 'chi-tiet-gio-hang',
     CHECKOUT: 'checkout',
     CONTACT: 'lien-he',
-    ALL_PRODUCT: 'tat-ca-san-pham',
+    PRODUCTS: 'tat-ca-san-pham',
 
     //admin
     ADMIN: 'admin',

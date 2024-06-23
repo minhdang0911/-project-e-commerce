@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatMoney } from 'utils/helper';
 import payment from '../../assets/Payment.gif';
-import { useForm } from 'react-hook-form';
 import { getCurrent } from 'store/user/asyncAction';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,19 +11,6 @@ const Checkout = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const {
-        register,
-        formState: { errors },
-        watch,
-        setValue,
-    } = useForm();
-
-    const address = watch('address');
-
-    useEffect(() => {
-        setValue('address', current?.address);
-    }, [current?.address]);
 
     useEffect(() => {
         if (isSuccess) {
@@ -49,24 +35,26 @@ const Checkout = () => {
             <div className="flex flex-col gap-6 col-span-6 w-full justify-center">
                 <h2 className="text-3xl font-bold mb-6">Thanh toán đơn hàng</h2>
                 <div className="flex gap-6 justify-between w-full">
-                    <table className="table-auto flex-1">
-                        <thead>
-                            <tr className="border bg-gray-200">
-                                <th className="text-left p-2">Sản phẩm</th>
-                                <th className="text-center p-2">Số lượng</th>
-                                <th className="text-right p-2">Giá</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentCartLocal.map((item) => (
-                                <tr key={item.product._id} className="border">
-                                    <td className="text-left p-2">{item.product.title}</td>
-                                    <td className="text-center p-2">{item.quantity}</td>
-                                    <td className="text-right p-2">{formatMoney(item.price)}</td>
+                    <div className="flex-1">
+                        <table className="table-auto h-fit">
+                            <thead>
+                                <tr className="border bg-gray-200">
+                                    <th className="text-left p-2">Sản phẩm</th>
+                                    <th className="text-center p-2">Số lượng</th>
+                                    <th className="text-right p-2">Giá</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {currentCartLocal.map((item) => (
+                                    <tr key={item.product._id} className="border">
+                                        <td className="text-left p-2">{item.product.title}</td>
+                                        <td className="text-center p-2">{item.quantity}</td>
+                                        <td className="text-right p-2">{formatMoney(item.price)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                     <div className="flex-1 flex flex-col justify-between gap-6">
                         <div className="flex flex-col gap-6">
                             <span className="flex items-center gap-8 text-sm">
@@ -77,37 +65,27 @@ const Checkout = () => {
                                     )}
                                 </span>
                             </span>
-                            <InputForm
-                                label="Địa chỉ"
-                                register={register}
-                                errors={errors}
-                                id="address"
-                                validate={{ require: 'Bạn phải nhập trường này' }}
-                                placeholder="Địa chỉ của bạn"
-                                fullWidth
-                                style="text-sm"
-                            />
+
+                            <span className="flex items-center gap-8 text-sm">
+                                <span className="font-medium">Địa chỉ</span>
+                                <span className="text-main font-bold">{current?.address}</span>
+                            </span>
                         </div>
                         <div className="w-full mx-auto">
-                            {address && address.length > 10 && (
-                                <Paypal
-                                    payload={{
-                                        products: currentCartLocal,
-                                        total: Math.round(
-                                            currentCartLocal.reduce(
-                                                (sum, item) => item.price * item.quantity + sum,
-                                                0,
-                                            ) / 23500,
-                                        ),
-                                        address,
-                                    }}
-                                    setIsSuccess={setIsSuccess}
-                                    amount={Math.round(
+                            <Paypal
+                                payload={{
+                                    products: currentCartLocal,
+                                    total: Math.round(
                                         currentCartLocal.reduce((sum, item) => item.price * item.quantity + sum, 0) /
                                             23500,
-                                    )}
-                                />
-                            )}
+                                    ),
+                                    address: current?.address,
+                                }}
+                                setIsSuccess={setIsSuccess}
+                                amount={Math.round(
+                                    currentCartLocal.reduce((sum, item) => item.price * item.quantity + sum, 0) / 23500,
+                                )}
+                            />
                         </div>
                     </div>
                 </div>

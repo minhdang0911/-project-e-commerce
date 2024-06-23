@@ -1,28 +1,44 @@
-import { Breakcrumb, Button, SelectQuantity } from 'components';
+import { Button } from 'components';
 import OrderItem from 'components/products/OrderItem';
 import withBaseComponent from 'hocs/withBaseComponent';
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { createSearchParams, Link } from 'react-router-dom';
 import { formatMoney } from 'utils/helper';
 import path from 'utils/path';
+import Swal from 'sweetalert2';
 
-const DetailCart = ({ location, dispatch }) => {
-    const { currentCart } = useSelector((state) => state.user);
+const DetailCart = ({ location, navigate }) => {
+    const { currentCart, current } = useSelector((state) => state.user);
 
-    const handleChangeQuantites = (pid, quantity, color) => {
-        // console.log(pid, quantity, color);
-        // console.log(currentCart);
+    const handleSubmit = () => {
+        if (!current?.address) {
+            return Swal.fire({
+                icon: 'info',
+                title: 'Almost!',
+                text: 'Bạn cần cập nhật địa chỉ để thanh toán',
+                showConfirmButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Cập nhật',
+                cancelButtonText: 'Hủy',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate({
+                        pathname: `/${path.MEMBER}/${path.PERSONAL}`,
+                        search: createSearchParams({ redirect: location.pathname }).toString(),
+                    });
+                }
+            });
+        } else {
+            navigate('/checkout');
+        }
     };
-
-    console.log(currentCart);
 
     return (
         <div className="w-full">
             <div className="h-[81px] bg-gray-100 flex justify-center items-center">
                 <div className="w-main">
                     <h3 className="font-semi-bold uppercase text-2xl">Chi tiết giỏ hàng</h3>
-                    {/* <Breakcrumb category={location.pathname?.replace('/', '')?.split('-').join('')} /> */}
                 </div>
             </div>
             <div className="flex flex-col border mt-8 w-main mx-auto my-8 ">
@@ -45,9 +61,7 @@ const DetailCart = ({ location, dispatch }) => {
                 <span className="text-xs italic">
                     Vận chuyển, thuế và giảm giá được tính khi thanh toán. Cập nhật giỏ hàng
                 </span>
-                <Link target="_blank" className="bg-main text-white px-4 py-2 rounded-md" to={`/${path.CHECKOUT}`}>
-                    Checkout
-                </Link>
+                <Button handleOnClick={handleSubmit}>Checkout</Button>
             </div>
         </div>
     );

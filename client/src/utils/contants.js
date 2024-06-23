@@ -27,7 +27,7 @@ export const navigation = [
     {
         id: 1,
         value: 'Sản phẩm',
-        path: `/${path.ALL_PRODUCT}`,
+        path: `/${path.PRODUCTS}`,
     },
     {
         id: 2,

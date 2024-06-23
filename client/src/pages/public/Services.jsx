@@ -60,16 +60,15 @@ const Services = () => {
                     />
                     <h3 className="text-xl font-bold text-center mb-2">PRIVACY POLICY</h3>
                     <p className="text-center text-gray-700">
-                        Chính sách bảo mật của website 5THEWAY® cần tuân theo các điều khoản và các điều kiện pháp lý
-                        liên quan đến bảo mật thông tin cá nhân. Vì vậy , khách hàng sử dụng website 5THEWAY® vui lòng
-                        chấp nhận và tôn trọng chính sách bảo mật sẽ được nêu bên dưới. Nếu quý khách không đồng ý và
-                        tuân thủ chính sách của chúng tôi, 5THEWAY® có quyền yêu cầu người dùng hạn chế sử dụng website
-                        5THEWAY® để đảm bảo quyền lợi và sự an toàn của thông tin cá nhân quý khách. Việc truy cập và sử
-                        dụng trang website chỉ dành cho nhu cầu sử dụng cá nhân của quý khách, vì vậy mọi thông tin cá
-                        nhân chúng tôi thu thập được liệt kê bên dưới chỉ nhằm cho mục đích hỗ trợ quá trình sử dụng
-                        dịch vụ và mua hàng trên website . Những thông tin cá nhân của quý khách mà chúng tôi thu thập
-                        bao gồm: - Họ/Tên người dùng - Ngày sinh - Giới tính - Địa chỉ Email - Số điện thoại - Địa chỉ
-                        thường trú
+                        Chính sách bảo mật của website cần tuân theo các điều khoản và các điều kiện pháp lý liên quan
+                        đến bảo mật thông tin cá nhân. Vì vậy , khách hàng sử dụng website vui lòng chấp nhận và tôn
+                        trọng chính sách bảo mật sẽ được nêu bên dưới. Nếu quý khách không đồng ý và tuân thủ chính sách
+                        của chúng tôi, có quyền yêu cầu người dùng hạn chế sử dụng website để đảm bảo quyền lợi và sự an
+                        toàn của thông tin cá nhân quý khách. Việc truy cập và sử dụng trang website chỉ dành cho nhu
+                        cầu sử dụng cá nhân của quý khách, vì vậy mọi thông tin cá nhân chúng tôi thu thập được liệt kê
+                        bên dưới chỉ nhằm cho mục đích hỗ trợ quá trình sử dụng dịch vụ và mua hàng trên website . Những
+                        thông tin cá nhân của quý khách mà chúng tôi thu thập bao gồm: - Họ/Tên người dùng - Ngày sinh -
+                        Giới tính - Địa chỉ Email - Số điện thoại - Địa chỉ thường trú
                     </p>
                 </div>
                 <div className="service-item p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-300">
