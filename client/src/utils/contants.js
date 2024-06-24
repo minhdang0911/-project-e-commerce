@@ -5,6 +5,7 @@ import { FaUserEdit } from 'react-icons/fa';
 import { FaShoppingCart } from 'react-icons/fa';
 import { AiOutlineHistory } from 'react-icons/ai';
 import { SiGooglehome } from 'react-icons/si';
+import { FaMoneyCheckDollar } from 'react-icons/fa6';
 
 const {
     MdFireTruck,
@@ -239,6 +240,14 @@ export const adminSidebar = [
         text: 'Quản lý đơn hàng',
         path: `/${path.ADMIN}/${path.MANAGE_ORDER}`,
         icon: <FaRegMoneyBill1 size={20} />,
+    },
+
+    {
+        id: '5',
+        type: 'single',
+        text: 'Doanh thu',
+        path: `/${path.ADMIN}/${path.RUVENUE}`,
+        icon: <FaMoneyCheckDollar size={20} />,
     },
 ];
 

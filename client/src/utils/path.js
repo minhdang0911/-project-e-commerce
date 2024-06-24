@@ -22,6 +22,7 @@ const path = {
     MANAGE_PRODUCTS: 'quan-ly-san-pham',
     MANAGE_ORDER: 'quan-ly-don-hang',
     CREATE_PRODUCT: 'them-san-pham',
+    RUVENUE: 'doanh-thu',
 
     //member
     MEMBER: 'nguoi-dung',

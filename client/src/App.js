@@ -15,7 +15,7 @@ import {
     Contact,
     AllProduct,
 } from './pages/public';
-import { Adminlayout, Doashboard, CreateProduct, ManageOrder, ManageProduct, ManageUser } from './pages/admin';
+import { Adminlayout, Doashboard, CreateProduct, ManageOrder, ManageProduct, ManageUser, Ruvenue } from './pages/admin';
 import { MemberLayout, Personal, History, MyCart, Wishlist, Checkout } from './pages/member';
 import path from './utils/path';
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,6 +66,7 @@ function App() {
                     <Route path={path.MANAGE_PRODUCTS} element={<ManageProduct />} />
                     <Route path={path.MANAGE_USER} element={<ManageUser />} />
                     <Route path={path.CREATE_PRODUCT} element={<CreateProduct />} />
+                    <Route path={path.RUVENUE} element={<Ruvenue />} />
                 </Route>
 
                 <Route path={path.MEMBER} element={<MemberLayout />}>
