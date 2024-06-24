@@ -65,3 +65,11 @@ export const apiCreateOrder = (data) => {
         data,
     });
 };
+
+export const apiGetUserOrder = (params) => {
+    return axios({
+        url: '/order/',
+        method: 'get',
+        params,
+    });
+};

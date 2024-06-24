@@ -37,3 +37,4 @@ export { default as QuickView } from './products/QuickView';
 export { default as Cart } from './products/Cart';
 export { default as Paypal } from './common/Paypal';
 export { default as Congrat } from './common/Congrat';
+export { default as CustomSelect } from './inputs/CustomSelect';

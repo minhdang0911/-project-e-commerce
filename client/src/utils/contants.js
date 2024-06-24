@@ -304,3 +304,14 @@ export const memberSidebar = [
         icon: <SiGooglehome size={20} />,
     },
 ];
+
+export const statusOrder = [
+    {
+        label: 'Cancelled',
+        value: 'Cancelled',
+    },
+    {
+        label: 'Succeed',
+        value: 'Succeed',
+    },
+];
