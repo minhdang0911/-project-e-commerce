@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import clsx from 'clsx';
 import { useSearchParams, useNavigate, useParams, createSearchParams, useLocation } from 'react-router-dom';
 
-const Pagiitem = ({ children }) => {
+const Pagiitem = ({ children, onClick }) => {
     const { category } = useParams();
     const location = useLocation();
 
@@ -18,6 +18,7 @@ const Pagiitem = ({ children }) => {
             pathname: location.pathname,
             search: createSearchParams(queries).toString(),
         });
+        onClick();
     };
 
     return (
@@ -26,8 +27,8 @@ const Pagiitem = ({ children }) => {
             disabled={!Number(children)}
             onClick={handlePagination}
             className={clsx(
-                'w-10 h-10  flex justify-center  ',
-                !Number(children) && 'items-end pb-2 ',
+                'w-10 h-10 flex justify-center',
+                !Number(children) && 'items-end pb-2',
                 Number(children) && 'items-center hover:rounded-full hover:bg-gray-300',
                 +params.get('page') === +children && 'rounded-full bg-gray-300',
                 !+params.get('page') && +children === 1 && 'rounded-full bg-gray-300',

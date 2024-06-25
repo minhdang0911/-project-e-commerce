@@ -49,7 +49,7 @@ var userSchema = new mongoose.Schema(
         wishlist: [
             {
                 type: mongoose.Types.ObjectId,
-                ref: 'product',
+                ref: 'Product',
             },
         ],
         isBlocked: {

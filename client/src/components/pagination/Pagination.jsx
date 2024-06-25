@@ -4,34 +4,31 @@ import Pagiitem from './Pagiitem';
 import { useSearchParams } from 'react-router-dom';
 
 const Pagination = ({ totalCount }) => {
-    const [params] = useSearchParams();
+    const [params, setSearchParams] = useSearchParams();
+    const currentPage = +params.get('page') || 1;
+    const pageSize = +process.env.REACT_APP_PRODUCTS_LIMIT || 10;
+    const pagination = usePagination(totalCount, currentPage);
+
     useEffect(() => {
-        const page = 1;
-    }, [params]);
-    const pagination = usePagination(totalCount, 2);
+        if (currentPage < 1 || currentPage > Math.ceil(totalCount / pageSize)) {
+            setSearchParams({ page: 1 });
+        }
+    }, [currentPage, totalCount, pageSize, setSearchParams]);
 
     const range = () => {
-        const currentPage = +params.get('page');
-        const pageSize = +process.env.REACT_APP_PRODUCTS_LIMIT || 10;
         const start = (currentPage - 1) * pageSize + 1;
         const end = Math.min(currentPage * pageSize, totalCount);
-
         return `${start} - ${end}`;
     };
 
     return (
         <div className="flex w-full justify-between items-center">
-            {!+params.get('page') && (
-                <span className="text-sm italic">{`Hiển thị sản phẩm từ 1 - ${
-                    process.env.REACT_APP_PRODUCTS_LIMIT || 10
-                } trên ${totalCount}`}</span>
-            )}
-            {+params.get('page') && (
-                <span className="text-sm italic">{`Hiển thị sản phẩm từ ${range()} trên ${totalCount}`}</span>
-            )}
+            <span className="text-sm italic">{`Hiển thị sản phẩm từ ${range()} trên ${totalCount}`}</span>
             <div className="flex items-center">
-                {pagination?.map((el) => (
-                    <Pagiitem key={el}>{el}</Pagiitem>
+                {pagination?.map((el, index) => (
+                    <Pagiitem key={index} onClick={() => setSearchParams({ page: el })}>
+                        {el}
+                    </Pagiitem>
                 ))}
             </div>
         </div>

@@ -120,7 +120,7 @@ const Products = () => {
                     columnClassName="my-masonry-grid_column mb-[-20px]"
                 >
                     {products?.products?.map((item) => (
-                        <Product normal={true} pid={item.id} key={item.id} productData={item} />
+                        <Product normal={true} pid={item._id} key={item.id} productData={item} />
                     ))}
                 </Masonry>
             </div>

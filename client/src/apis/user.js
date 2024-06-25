@@ -91,3 +91,10 @@ export const apiRemoveCart = (pid, color) => {
         method: 'delete',
     });
 };
+
+export const apiUpdateWishlist = (pid) => {
+    return axios({
+        url: `/user/wishlist/` + pid,
+        method: 'put',
+    });
+};

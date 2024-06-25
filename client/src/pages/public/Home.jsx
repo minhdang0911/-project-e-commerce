@@ -5,6 +5,7 @@ import Slider from 'react-slick';
 import { CustomSlider } from '../../components';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import icons from '../../utils/icons';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
 const settings = {
     dots: false,
@@ -18,6 +19,7 @@ const Home = () => {
     const { IoIosArrowForward } = icons;
     const { newProducts } = useSelector((state) => state.products);
     const { categories } = useSelector((state) => state.app);
+    const navigate = useNavigate();
 
     return (
         <>
@@ -46,14 +48,23 @@ const Home = () => {
                     {categories
                         ?.filter((el) => el.brand.length > 0)
                         ?.map((el) => (
-                            <div key={el._id} className="w-full md:w-[48%] lg:w-[30%] xl:w-[23%]">
+                            <div key={el._id} className="w-full md:w-[50%] lg:w-[30%] xl:w-[23%]">
                                 <div className="border flex p-4 gap-4 min-h-[190px]">
                                     <img src={el?.image} className="w-[144px] h-[129px] object-cover" />
                                     <div className="text-gray-700 flex-1">
                                         <h4 className="font-semibold uppercase">{el.title}</h4>
                                         <ul className="text-sm">
                                             {el?.brand.map((item) => (
-                                                <span key={item} className="flex gap-1 items-center text-gray-500">
+                                                <span
+                                                    key={item}
+                                                    className="flex gap-1 items-center text-gray-500 hover:underline cursor-pointer"
+                                                    onClick={() =>
+                                                        navigate({
+                                                            pathname: `/${el?.title}`,
+                                                            search: createSearchParams({ brand: item }).toString(),
+                                                        })
+                                                    }
+                                                >
                                                     <IoIosArrowForward size={14} />
                                                     <li>{item}</li>
                                                 </span>

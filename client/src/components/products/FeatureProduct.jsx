@@ -16,6 +16,8 @@ const FeatureProduct = () => {
         fetchProducts();
     }, []);
 
+    console.log('products', products);
+
     return (
         <div className="w-full">
             <h3
@@ -29,10 +31,12 @@ const FeatureProduct = () => {
                     return (
                         <ProductCard
                             key={el._id}
+                            pid={el._id}
                             image={el.thumb}
                             title={el.title}
                             totalRatings={el.totalRatings}
                             price={el.price}
+                            category={el.category}
                         />
                     );
                 })}

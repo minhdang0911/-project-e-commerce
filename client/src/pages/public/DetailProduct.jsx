@@ -140,9 +140,9 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
         setCurrentImage(el);
     };
 
-    useEffect(()=>{
-        document.title=''
-    })
+    useEffect(() => {
+        document.title = '';
+    });
 
     const handleAddToCart = async () => {
         if (!current) {
@@ -180,7 +180,7 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
     };
 
     return (
-        <div onClick={(e) => e.stopPropagation()} className={clsx('w-full')}>
+        <div onClick={(e) => e.stopPropagation()} className={clsx('w-full')} ref={titleRef}>
             {!isQuickView && (
                 <motion.div
                     className="h-[81px] bg-gray-100 flex justify-center items-center"
@@ -188,7 +188,7 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <div className="w-full max-w-6xl px-4" ref={titleRef}>
+                    <div className="w-full max-w-6xl px-4">
                         <h3 className="font-semi-bold">{currentProduct?.title || product?.title}</h3>
                         <Breakcrumb title={currentProduct?.title || product?.title} category={category} />
                     </div>

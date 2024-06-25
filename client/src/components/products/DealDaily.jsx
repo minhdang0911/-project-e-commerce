@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import icons from '../../utils/icons';
 import { apiGetProduct } from '../../apis/product';
 import { reanderStartFromNumber, formatMoney } from '../../utils/helper';
@@ -8,60 +8,66 @@ const { FaStar, IoMdMenu } = icons;
 
 const DealDaily = () => {
     const [dealDaily, setDealDaily] = useState(null);
-    const [hour, setHour] = useState(0);
-    const [minutes, setMinutes] = useState(2);
-    const [second, setSecond] = useState(2);
-    const [expireTime, setExpireTime] = useState(false);
+    const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
-    const fetchDealDaily = async () => {
-        const response = await apiGetProduct({ limit: 1, page: Math.floor(Math.random() * 10) + 1, totalRatings: 5 });
-        if (response.success) {
-            setDealDaily(response.products[0]);
-            const h = 24 - new Date().getHours();
-            const m = 60 - new Date().getMinutes();
-            const s = 60 - new Date().getSeconds();
-            setHour(h);
-            setMinutes(m);
-            setSecond(s);
-        } else {
-            setHour(0);
-            setMinutes(59);
-            setSecond(59);
+    // Function to fetch new deal daily
+    const fetchDealDaily = useCallback(async () => {
+        try {
+            const response = await apiGetProduct({
+                limit: 1,
+                page: Math.floor(Math.random() * 10) + 1,
+                totalRatings: 5,
+            });
+            if (response.success && response.products.length > 0) {
+                const selectedDeal = response.products[0];
+                setDealDaily(selectedDeal);
+
+                // Calculate time left until end of current day
+                const now = new Date();
+                const endOfCurrentDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+                const timeDifference = endOfCurrentDay - now;
+
+                const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                setTimeLeft({ hours, minutes, seconds });
+            } else {
+                setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+            }
+        } catch (error) {
+            console.error('Failed to fetch daily deal:', error);
         }
-    };
-
-    useEffect(() => {
-        fetchDealDaily();
     }, []);
 
+    // Initial fetch when component mounts
     useEffect(() => {
-        let idInterval = setInterval(() => {
-            setSecond((prevSecond) => {
-                if (prevSecond > 0) return prevSecond - 1;
-                if (minutes > 0) {
-                    setMinutes((prevMinutes) => prevMinutes - 1);
-                    return 59;
+        fetchDealDaily();
+    }, [fetchDealDaily]);
+
+    // Interval to update countdown timer
+    useEffect(() => {
+        const idInterval = setInterval(() => {
+            setTimeLeft((prevTimeLeft) => {
+                const { hours, minutes, seconds } = prevTimeLeft;
+
+                if (seconds > 0) {
+                    return { hours, minutes, seconds: seconds - 1 };
+                } else if (minutes > 0) {
+                    return { hours, minutes: minutes - 1, seconds: 59 };
+                } else if (hours > 0) {
+                    return { hours: hours - 1, minutes: 59, seconds: 59 };
+                } else {
+                    fetchDealDaily(); // Refresh deal when countdown finishes
+                    return { hours: 0, minutes: 0, seconds: 0 };
                 }
-                if (hour > 0) {
-                    setHour((prevHour) => prevHour - 1);
-                    setMinutes(59);
-                    return 59;
-                }
-                setExpireTime((prevExpireTime) => !prevExpireTime);
-                return 0;
             });
         }, 1000);
 
         return () => {
             clearInterval(idInterval);
         };
-    }, [minutes, hour]);
-
-    useEffect(() => {
-        if (expireTime) {
-            fetchDealDaily();
-        }
-    }, [expireTime]);
+    }, [fetchDealDaily]);
 
     return (
         <div className="border w-full flex-auto">
@@ -84,9 +90,9 @@ const DealDaily = () => {
             </div>
             <div className="px-4 mt-8">
                 <div className="flex justify-center gap-2 items-center mb-4">
-                    <Countdown unit={'Hours'} number={hour} />
-                    <Countdown unit={'Minutes'} number={minutes} />
-                    <Countdown unit={'Second'} number={second} />
+                    <Countdown unit={'Hours'} number={timeLeft.hours} />
+                    <Countdown unit={'Minutes'} number={timeLeft.minutes} />
+                    <Countdown unit={'Seconds'} number={timeLeft.seconds} />
                 </div>
                 <button
                     type="button"

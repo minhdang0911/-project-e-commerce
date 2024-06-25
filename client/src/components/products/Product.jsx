@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { showModal } from 'store/app/appSlice';
 import { DetailProduct } from 'pages/public';
 import { FaCartPlus } from 'react-icons/fa';
-import { apiUpdateCart } from 'apis';
+import { apiUpdateCart, apiUpdateWishlist } from 'apis';
 import { toast } from 'react-toastify';
 import { getCurrent } from 'store/user/asyncAction';
 import { useSelector } from 'react-redux';
@@ -22,9 +22,10 @@ import { createSearchParams } from 'react-router-dom';
 
 const { IoEyeSharp, IoMdMenu, FaHeart } = icons;
 
-const Product = ({ productData, isNew, normal, dispatch, location }) => {
+const Product = ({ productData, isNew, normal, dispatch, location, pid }) => {
     const [isShowOption, setIsShowOption] = useState(false);
     const { current } = useSelector((state) => state.user);
+    console.log('tesst', current);
     const navigate = useNavigate();
 
     const imageUrl = productData?.thumb || 'https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png';
@@ -67,6 +68,13 @@ const Product = ({ productData, isNew, normal, dispatch, location }) => {
         }
 
         if (flag === 'WISHLIST') {
+            const response = await apiUpdateWishlist(pid);
+            if (response.success) {
+                toast.success(response.rs);
+                dispatch(getCurrent());
+            } else {
+                toast.error(response.rs);
+            }
         } else if (flag === 'QUICK_VIEW') {
             dispatch(
                 showModal({
@@ -116,7 +124,13 @@ const Product = ({ productData, isNew, normal, dispatch, location }) => {
                             )}
 
                             <span title="Thích sản phẩm" onClick={(e) => handleClickOption(e, 'WISHLIST')}>
-                                <SelectOption icon={<FaHeart />} />
+                                <SelectOption
+                                    icon={
+                                        <FaHeart
+                                            color={current?.wishlist?.some((i) => i._id === pid) ? 'red' : 'gray'}
+                                        />
+                                    }
+                                />
                             </span>
                         </div>
                     )}

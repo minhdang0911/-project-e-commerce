@@ -291,11 +291,11 @@ const ManageUser = () => {
                 </form>
             </div>
             {/* Pagination */}
-            {/* {users && users.counts > 0 && (
+            {users && users.counts > 0 && (
                 <div className="flex justify-end mt-4">
                     <Pagination totalCount={users.counts} />
                 </div>
-            )} */}
+            )}
         </div>
     );
 };

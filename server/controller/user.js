@@ -201,19 +201,36 @@ const login = asyncHandler(async (req, res) => {
 
 const getCurrent = asyncHandler(async (req, res) => {
     const { _id } = req.user;
-    const user = await User.findById(_id)
-        .select('-refreshToken -password ')
-        .populate({
-            path: 'cart',
-            populate: {
-                path: 'product',
-                select: 'title thumb price',
-            },
+    try {
+        const user = await User.findById(_id)
+            .select('-refreshToken -password ')
+            .populate({
+                path: 'cart',
+                populate: {
+                    path: 'product',
+                    select: 'title thumb price',
+                },
+            })
+            .populate('wishlist', 'title thumb price color');
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            rs: user,
         });
-    return res.status(200).json({
-        success: user ? true : false,
-        rs: user ? user : 'User not found',
-    });
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+    }
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
@@ -452,6 +469,26 @@ const removeProductInCart = asyncHandler(async (req, res) => {
     });
 });
 
+const updateWishlist = asyncHandler(async (req, res) => {
+    const { pid } = req.params;
+    const { _id } = req.user;
+    const user = await User.findById(_id);
+    const alreadyWishlist = user.wishlist?.find((el) => el.toString() === pid);
+    if (alreadyWishlist) {
+        const response = await User.findByIdAndUpdate(_id, { $pull: { wishlist: pid } }, { new: true });
+        return res.status(200).json({
+            success: response ? true : false,
+            rs: response ? 'Cập nhật thành công' : 'Cập nhật thất bại',
+        });
+    } else {
+        const response = await User.findByIdAndUpdate(_id, { $push: { wishlist: pid } }, { new: true });
+        return res.status(200).json({
+            success: response ? true : false,
+            rs: response ? 'Cập nhật thành công' : 'Cập nhật thất bại',
+        });
+    }
+});
+
 module.exports = {
     register,
     login,
@@ -468,4 +505,5 @@ module.exports = {
     updateCart,
     finalregister,
     removeProductInCart,
+    updateWishlist,
 };

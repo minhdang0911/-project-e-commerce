@@ -70,27 +70,42 @@ const History = ({ navigate, location }) => {
                 <table className="min-w-full table-auto">
                     <thead>
                         <tr className="border bg-sky-500 text-white">
+                            <th className="text-center">STT</th>
                             <th className="text-center">Sản phẩm</th>
                             <th className="text-center">Tổng tiền</th>
                             <th className="text-center">Trạng thái</th>
                             <th className="text-center">Ngày đặt</th>
-                            <th className="text-center">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {orders?.map((el) => (
+                        {orders?.map((el, indexx) => (
                             <tr className="border-b" key={el._id}>
-                                <td className="text-center py-2">
-                                    <span className="flex flex-col">
+                                <td className="text-center">{indexx + 1}</td>
+                                <td className="text-center py-2 max-w-[300px]">
+                                    <span className="grid grid-cols-4 gap-4">
                                         {el.products.map((item, index) => (
-                                            <span key={index}>• {`${item.title} - ${item.color}`}</span>
+                                            <span className="flex col-span-1 items-center gap-2" key={index}>
+                                                <img
+                                                    src={item?.thumbnail}
+                                                    className="w-8 h-8 rounded-md object-cover"
+                                                />
+                                                <span className="flex flex-col">
+                                                    <span className="text-main text-[10px] whitespace-nowrap">
+                                                        {item.title}
+                                                    </span>
+                                                    <span className="flex items-center text-xs gap-2">
+                                                        <span>số lượng</span>
+                                                        <span className="text-main">{item?.quantity}</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                            // <span key={index}>• {`${item.title} - ${item.color}`}</span>
                                         ))}
                                     </span>
                                 </td>
                                 <td className="text-center">{el.total} 💲</td>
                                 <td className="text-center">{el.status}</td>
                                 <td className="text-center">{moment(el.createdAt).format('DD/MM/YYYY')}</td>
-                                <td className="text-center">Actions</td>
                             </tr>
                         ))}
                     </tbody>
