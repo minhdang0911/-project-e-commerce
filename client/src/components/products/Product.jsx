@@ -25,7 +25,7 @@ const { IoEyeSharp, IoMdMenu, FaHeart } = icons;
 const Product = ({ productData, isNew, normal, dispatch, location, pid }) => {
     const [isShowOption, setIsShowOption] = useState(false);
     const { current } = useSelector((state) => state.user);
-    console.log('tesst', current);
+
     const navigate = useNavigate();
 
     const imageUrl = productData?.thumb || 'https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png';

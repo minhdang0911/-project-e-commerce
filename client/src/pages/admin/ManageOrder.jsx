@@ -9,7 +9,8 @@ const ManageOrder = () => {
     const [allOrders, setAllOrders] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedOrderProducts, setSelectedOrderProducts] = useState([]);
-    const [exchangeRate, setExchangeRate] = useState(null); // State để lưu trữ tỷ giá hối đoái
+    const [exchangeRate, setExchangeRate] = useState(null); // State để lưu trữ tỷ giá hối đoái.
+    console.log('allOrders', allOrders);
 
     const fetchExchangeRate = async () => {
         try {
@@ -26,7 +27,7 @@ const ManageOrder = () => {
 
     const fetchAllOrder = async () => {
         try {
-            const response = await apiGetAllOrder();
+            const response = await apiGetAllOrder({ limt: 30 });
             if (response.success) {
                 const ordersWithConvertedTotal = response.products.map((order) => ({
                     ...order,
@@ -67,6 +68,8 @@ const ManageOrder = () => {
         if (amount === null || amount === undefined) return '-'; // Trả về '-' nếu không có giá trị
         return amount.toFixed().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     };
+
+    console.log('allOrders0', allOrders);
 
     return (
         <div className="container mx-auto p-4">

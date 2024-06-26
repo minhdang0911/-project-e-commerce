@@ -13,7 +13,6 @@ export const userSlice = createSlice({
     },
     reducers: {
         login: (state, action) => {
-            console.log(action);
             state.isLoggedIn = action.payload.isLoggedIn;
             state.token = action.payload.token;
         },
@@ -38,6 +37,12 @@ export const userSlice = createSlice({
             });
             state.currentCart = updatedCart;
         },
+        clearCart: (state) => {
+            state.currentCart = [];
+            if (state.current) {
+                state.current.cart = [];
+            }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(actions.getCurrent.pending, (state) => {
@@ -59,6 +64,6 @@ export const userSlice = createSlice({
     },
 });
 
-export const { login, logout, clearMessage, updateCart } = userSlice.actions;
+export const { login, logout, clearMessage, updateCart, clearCart } = userSlice.actions;
 
 export default userSlice.reducer;

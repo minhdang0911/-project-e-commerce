@@ -30,6 +30,7 @@ const path = {
     MY_CART: 'gio-hang-cua-toi',
     HISTORY: 'lich-su-mua-hang',
     WISHLIST: 'san-pham-yeu-thich',
+    PAYMENT: 'thanh-toan',
 };
 
 export default path;

@@ -1,4 +1,4 @@
-import { Congrat, InputForm, Paypal } from 'components';
+import { Congrat, InputForm, Paypal, Button } from 'components';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatMoney } from 'utils/helper';
@@ -70,6 +70,11 @@ const Checkout = () => {
                                 <span className="font-medium">Địa chỉ</span>
                                 <span className="text-main font-bold">{current?.address}</span>
                             </span>
+                        </div>
+                        <div>
+                            <Button handleOnClick={() => navigate('/thanh-toan')} fw>
+                                Thanh toán khi nhận hàng
+                            </Button>
                         </div>
                         <div className="w-full mx-auto">
                             <Paypal

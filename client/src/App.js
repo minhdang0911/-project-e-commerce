@@ -26,6 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NotFound from 'pages/public/NotFound';
 import { Cart } from './components';
 import { showCart } from 'store/app/appSlice';
+import PaymentOnline from 'pages/public/PaymentOnline';
 
 function App() {
     const dispatch = useDispatch();
@@ -58,6 +59,7 @@ function App() {
                     {/* <Route path={path.ALL_PRODUCT} element={<AllProduct />}></Route> */}
                     <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
                     <Route path={path.CONTACT} element={<Contact />}></Route>
+                    <Route path={path.PAYMENT} element={<PaymentOnline />}></Route>
                     {/* <Route path={path.DETAIL_CART} element={<DetailCart />}></Route> */}
                 </Route>
                 <Route path={path.ADMIN} element={<Adminlayout />}>
