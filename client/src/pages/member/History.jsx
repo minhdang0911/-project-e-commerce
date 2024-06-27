@@ -39,6 +39,10 @@ const History = ({ navigate, location }) => {
             search: createSearchParams({ status: value }).toString(),
         });
     };
+
+    useEffect(() => {
+        document.title = 'Lịch sử mua hàng';
+    }, []);
     return (
         <div className="w-full relative px-4">
             <header className="text-2xl sm:text-3xl font-semibold py-4 border-b border-b-blue-200 px-4">

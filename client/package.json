@@ -13,6 +13,8 @@
     "@tinymce/tinymce-react": "^5.0.1",
     "axios": "^1.7.2",
     "clsx": "^2.1.1",
+    "cors-anywhere": "^0.4.4",
+    "crypto-js": "^4.2.0",
     "deps": "^1.0.0",
     "dompurify": "^3.1.5",
     "file-saver": "^2.0.5",

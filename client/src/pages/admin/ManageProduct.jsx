@@ -29,6 +29,10 @@ const ManageProduct = () => {
     const [customizeVariant, setCustomizeVariant] = useState(null);
     const queryDebounce = useDebounce(watch('q'), 800);
 
+    useEffect(() => {
+        document.title = 'Quản lý sản phẩm';
+    }, []);
+
     const render = useCallback(() => {
         setUpdate(!update);
     }, [update]);
@@ -95,8 +99,6 @@ const ManageProduct = () => {
             'Tổng biến thể': product?.varriants?.length || 0,
             'Ngày cập nhật': moment(product.updatedAt).format('DD/MM/YYYY'),
         }));
-
-        console.log('Exporting data:', data); // Debugging line
 
         // Prepare the workbook and worksheet
         const ws = XLSX.utils.json_to_sheet(data);

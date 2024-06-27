@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaMapMarkerAlt, FaClock, FaEnvelope, FaPhone } from 'react-icons/fa';
 import { Breakcrumb } from 'components';
 import { useParams } from 'react-router-dom';
@@ -18,6 +18,10 @@ const Contact = () => {
             [e.target.name]: e.target.value,
         });
     };
+
+    useEffect(() => {
+        document.title = 'liên hệ';
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault();

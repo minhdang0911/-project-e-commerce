@@ -35,6 +35,10 @@ const ManageUser = () => {
     const [update, setUpdate] = useState(false);
     const params = useSearchParams();
 
+    useEffect(() => {
+        document.title = 'Quản lý người dùng';
+    }, []);
+
     const render = useCallback(() => {
         setUpdate(!update);
     }, [update]);

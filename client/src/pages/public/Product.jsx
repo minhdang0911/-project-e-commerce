@@ -84,6 +84,9 @@ const Products = () => {
         navigate(`/${category}?${existingParams.toString()}`);
     };
 
+    useEffect(() => {
+        document.title = `${category}`;
+    });
     return (
         <div className="w-full">
             <div className="h-[81px] bg-gray-100 flex justify-center items-center">

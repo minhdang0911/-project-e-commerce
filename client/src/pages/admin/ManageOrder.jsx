@@ -10,7 +10,9 @@ const ManageOrder = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedOrderProducts, setSelectedOrderProducts] = useState([]);
     const [exchangeRate, setExchangeRate] = useState(null); // State để lưu trữ tỷ giá hối đoái.
-    console.log('allOrders', allOrders);
+    useEffect(() => {
+        document.title = 'Quản lý đơn hàng';
+    }, []);
 
     const fetchExchangeRate = async () => {
         try {

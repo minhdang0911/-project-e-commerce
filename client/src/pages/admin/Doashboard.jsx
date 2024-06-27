@@ -28,6 +28,10 @@ const Dashboard = () => {
     const { categories } = useSelector((state) => state.app);
     const [dailyRevenue, setDailyRevenue] = useState([]);
 
+    useEffect(() => {
+        document.title = 'Thống kê';
+    }, []);
+
     const fetchUsers = async () => {
         const response = await apiGetUsers();
         if (response.success) setUsersCount(response.user.length);

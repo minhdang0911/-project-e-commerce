@@ -25,6 +25,10 @@ const Personal = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        document.title = 'Thông tin cá nhân';
+    }, []);
+
+    useEffect(() => {
         reset({
             firstname: current?.firstname,
             lastname: current?.lastname,
@@ -55,7 +59,7 @@ const Personal = () => {
             toast.error(response.mes);
         }
 
-        setLoading(false); // Set loading back to false after API call completes
+        setLoading(false);
     };
 
     return (

@@ -73,6 +73,7 @@ const Revenue = () => {
 
     useEffect(() => {
         fetchExchangeRate();
+        document.title = 'Doanh thu';
     }, []);
 
     useEffect(() => {

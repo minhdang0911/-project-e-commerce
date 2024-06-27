@@ -10,6 +10,9 @@ import Swal from 'sweetalert2';
 
 const DetailCart = ({ location, navigate }) => {
     const { currentCart, current } = useSelector((state) => state.user);
+    useEffect(() => {
+        document.title = 'Giỏ hàng';
+    }, []);
 
     const handleSubmit = () => {
         if (!current?.address) {

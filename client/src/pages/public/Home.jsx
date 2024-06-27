@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Banner, Sidebar, BestSeller, FeatureProduct, Product } from '../../components';
 import DealDaily from '../../components/products/DealDaily';
 import Slider from 'react-slick';
@@ -20,6 +20,10 @@ const Home = () => {
     const { newProducts } = useSelector((state) => state.products);
     const { categories } = useSelector((state) => state.app);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = 'Trang chủ';
+    }, []);
 
     return (
         <>

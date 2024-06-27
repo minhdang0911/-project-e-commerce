@@ -36,6 +36,9 @@ const CreateProduct = () => {
         [payload],
     );
 
+    useEffect(() => {
+        document.title = 'Thêm sản phẩm';
+    }, []);
     const handlePreviewThumb = async (file) => {
         if (file) {
             const base64Thumb = await getBase64(file);

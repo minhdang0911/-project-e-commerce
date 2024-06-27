@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Breakcrumb } from 'components';
 import { useParams } from 'react-router-dom';
 
@@ -9,6 +9,10 @@ const FQA = () => {
     const toggleFAQ = (index) => {
         setOpenIndex(openIndex === index ? null : index);
     };
+
+    useEffect(() => {
+        document.title = 'FAQs';
+    });
 
     const faqs = [
         {

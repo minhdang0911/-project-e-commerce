@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Breakcrumb } from 'components';
 import { useParams } from 'react-router-dom';
 
 const Services = () => {
     const params = useParams();
+
+    useEffect(() => {
+        document.title = 'Dịch vụ';
+    });
 
     return (
         <div className="container mx-auto p-4">

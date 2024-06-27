@@ -76,6 +76,7 @@ const Checkout = () => {
                                 Thanh toán khi nhận hàng
                             </Button>
                         </div>
+
                         <div className="w-full mx-auto">
                             <Paypal
                                 payload={{
