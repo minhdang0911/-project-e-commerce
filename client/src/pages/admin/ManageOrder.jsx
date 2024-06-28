@@ -64,6 +64,7 @@ const ManageOrder = () => {
     const formatUSD = (amount) => {
         return `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
     };
+    console.log('selectedOrderProducts', selectedOrderProducts);
 
     // Hàm để định dạng số thành chuỗi tiền tệ VND
     const formatVND = (amount) => {

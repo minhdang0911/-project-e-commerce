@@ -17,6 +17,7 @@ import {
     Cell,
 } from 'recharts'; // Added PieChart, Pie, Cell
 import { FaUser, FaBox, FaList } from 'react-icons/fa';
+import { MdOutlineManageSearch } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import path from 'utils/path';
 
@@ -122,7 +123,7 @@ const Dashboard = () => {
                     </div>
                 </Link>
                 <Link className="bg-gradient-to-r from-yellow-400 to-yellow-600 p-4 shadow-lg rounded-lg flex items-center">
-                    <FaList className="text-white text-4xl mr-4" />
+                    <MdOutlineManageSearch className="text-white text-4xl mr-4" />
                     <div>
                         <h2 className="text-lg font-semibold text-white">Tổng số danh mục sản phẩm</h2>
                         <p className="text-white text-2xl">{categoryCount}</p>
