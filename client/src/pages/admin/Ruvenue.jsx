@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { Pagination } from 'components';
+import { useSearchParams } from 'react-router-dom';
 
 const Revenue = () => {
     const [allOrders, setAllOrders] = useState([]);
@@ -15,6 +16,11 @@ const Revenue = () => {
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedWeek, setSelectedWeek] = useState('');
     const [error, setError] = useState(null);
+    const [count, setCount] = useState(0);
+
+    const [params, setSearchParams] = useSearchParams();
+    const currentPage = +params.get('page') || 1;
+    const pageSize = +process.env.REACT_APP_PRODUCTS_LIMIT || 10;
 
     const fetchExchangeRate = async () => {
         try {
@@ -29,10 +35,11 @@ const Revenue = () => {
         }
     };
 
-    const fetchAllOrder = async (params) => {
+    const fetchAllOrder = async () => {
         try {
-            const response = await apiGetAllOrder({ ...params });
+            const response = await apiGetAllOrder({ page: currentPage, limit: pageSize });
             if (response.success) {
+                setCount(response.counts);
                 const ordersWithConvertedTotal = response.products.map((order) => ({
                     ...order,
                     totalVND: exchangeRate ? order.total * exchangeRate : null,
@@ -101,7 +108,7 @@ const Revenue = () => {
         if (exchangeRate !== null) {
             fetchAllOrder();
         }
-    }, [exchangeRate]);
+    }, [exchangeRate, currentPage]);
 
     useEffect(() => {
         fetchExchangeRate();
@@ -115,7 +122,7 @@ const Revenue = () => {
         } else {
             filterOrdersByMonthAndWeek();
         }
-    }, [startDate, endDate, selectedMonth, selectedWeek]);
+    }, [startDate, endDate, selectedMonth, selectedWeek, currentPage]);
 
     const formatVND = (amount) => {
         if (amount === null || amount === undefined) return '-';
@@ -196,7 +203,9 @@ const Revenue = () => {
                         <tbody>
                             {filteredOrders.map((order, index) => (
                                 <tr key={order._id} className="hover:bg-gray-100">
-                                    <td className="px-4 py-2 border-b text-center">{index + 1}</td>
+                                    <td className="px-4 py-2 border-b text-center">
+                                        {index + 1 + (currentPage - 1) * pageSize}
+                                    </td>
                                     <td className="px-4 py-2 border-b text-center">
                                         {new Date(order.createdAt).toLocaleDateString()}
                                     </td>
@@ -212,7 +221,7 @@ const Revenue = () => {
             </div>
             {!error && (
                 <div className="flex justify-end mt-4">
-                    <Pagination totalCount={allOrders?.length} />
+                    <Pagination totalCount={count} />
                 </div>
             )}
             <div className="mt-4 text-right">

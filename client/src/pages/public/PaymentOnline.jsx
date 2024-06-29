@@ -13,6 +13,7 @@ const PaymentOnline = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+
     if (!current || !currentCart) {
         return null;
     }
@@ -25,6 +26,7 @@ const PaymentOnline = () => {
             quantity: item.quantity,
             price: item.price,
             thumbnail: item.thumbnail,
+            color: item?.color,
         }));
 
         const orderData = {

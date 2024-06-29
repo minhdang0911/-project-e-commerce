@@ -2,6 +2,8 @@ import { apiGetAllOrder } from 'apis'; // Thay thế bằng hàm API thực tế
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios'; // Sử dụng axios để gửi yêu cầu API
+import { Pagination } from 'components'; // Đảm bảo bạn đã thêm thành phần Pagination vào đúng vị trí
+import { useSearchParams } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
@@ -10,6 +12,12 @@ const ManageOrder = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedOrderProducts, setSelectedOrderProducts] = useState([]);
     const [exchangeRate, setExchangeRate] = useState(null); // State để lưu trữ tỷ giá hối đoái.
+    const [count, setCount] = useState(0);
+
+    const [params, setSearchParams] = useSearchParams();
+    const currentPage = +params.get('page') || 1;
+    const pageSize = +process.env.REACT_APP_PRODUCTS_LIMIT || 10;
+
     useEffect(() => {
         document.title = 'Quản lý đơn hàng';
     }, []);
@@ -29,8 +37,9 @@ const ManageOrder = () => {
 
     const fetchAllOrder = async () => {
         try {
-            const response = await apiGetAllOrder({ limt: 30 });
+            const response = await apiGetAllOrder({ page: currentPage, limit: pageSize });
             if (response.success) {
+                setCount(response.counts);
                 const ordersWithConvertedTotal = response.products.map((order) => ({
                     ...order,
                     totalVND: exchangeRate ? order.total * exchangeRate : null,
@@ -53,8 +62,10 @@ const ManageOrder = () => {
     };
 
     useEffect(() => {
-        fetchAllOrder();
-    }, [exchangeRate]);
+        if (exchangeRate !== null) {
+            fetchAllOrder();
+        }
+    }, [exchangeRate, currentPage]);
 
     useEffect(() => {
         fetchExchangeRate();
@@ -90,9 +101,11 @@ const ManageOrder = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {allOrders.map((order) => (
+                        {allOrders.map((order, index) => (
                             <tr key={order._id} className="hover:bg-gray-100">
-                                <td className="px-4 py-2 border-b text-center">{order.originalSerialNumber}</td>
+                                <td className="px-4 py-2 border-b text-center">
+                                    {index + 1 + (currentPage - 1) * pageSize}
+                                </td>
                                 <td className="px-4 py-2 border-b text-center">
                                     {new Date(order.createdAt).toLocaleString()}
                                 </td>
@@ -145,7 +158,7 @@ const ManageOrder = () => {
                                         <td className="px-4 py-2 border-b text-center">{product.title}</td>
                                         <td className="px-4 py-2 border-b text-center">{product.quantity}</td>
                                         <td className="px-4 py-2 border-b text-center">{product.color}</td>
-                                        <td className="px-4 py-2 border-b text-center">{product.price}</td>
+                                        <td className="px-4 py-2 border-b text-center">{formatUSD(product.price)}</td>
                                         <td className="px-4 py-2 border-b text-center">
                                             <img
                                                 src={product.thumbnail}
@@ -160,6 +173,9 @@ const ManageOrder = () => {
                     </div>
                 </div>
             </Modal>
+            <div className="flex justify-end mt-4">
+                <Pagination totalCount={count} />
+            </div>
         </div>
     );
 };

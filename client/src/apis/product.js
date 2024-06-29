@@ -74,9 +74,10 @@ export const apiGetUserOrder = (params) => {
     });
 };
 
-export const apiGetAllOrder = () => {
+export const apiGetAllOrder = (params) => {
     return axios({
         url: '/order/admin',
         method: 'get',
+        params,
     });
 };

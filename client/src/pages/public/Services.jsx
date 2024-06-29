@@ -116,9 +116,9 @@ const Services = () => {
                     <p className="text-center text-gray-700">
                         Bằng cách xem, sử dụng / hoặc đặt hàng bất kỳ sản phẩm / dịch vụ nào từ website , quan hệ đối
                         tác pháp lý chính thức sẽ không được hình thành giữa chúng tôi và khách hàng. Một hợp đồng giao
-                        hàng được thực hiện và được kết thúc sau khi đơn hàng được hoàn tất. 5THEWAY® có quyền thực hiện
+                        hàng được thực hiện và được kết thúc sau khi đơn hàng được hoàn tất.Chúng tôi có quyền thực hiện
                         hành động pháp lý đối với cá nhân tuyên bố đã hợp tác với dựa trên các dịch vụ được cung cấp bởi
-                        5THEWAY® mà chưa có sự xác nhận chính thức từ chúng tôi.
+                        mà chưa có sự xác nhận chính thức từ chúng tôi.
                     </p>
                 </div>
             </div>
