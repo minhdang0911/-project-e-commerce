@@ -70,35 +70,33 @@ const DealDaily = () => {
     }, [fetchDealDaily]);
 
     return (
-        <div className="border w-full flex-auto">
-            <div className="flex items-center justify-between p-4 w-full">
-                <span className="flex-1 pl-4">
-                    <FaStar size={20} color="#DD1111" />
-                </span>
-                <span className="flex-8 font-semibold text-[20px] flex text-center text-gray-600">Deal Daily</span>
-                <span className="flex-1"></span>
+        <div className="border w-full md:max-w-sm mx-auto flex flex-col shadow-lg">
+            <div className="flex items-center justify-between p-4 bg-gray-100 rounded-t-lg">
+                <FaStar size={20} color="#DD1111" />
+                <span className="font-semibold text-lg text-gray-600">Deal Daily</span>
+                <div className="flex-1"></div>
             </div>
-            <div className="w-full flex flex-col items-center px-4 gap-2">
-                <img src={dealDaily?.thumb} alt="" className="w-full object-contain" />
-                <span className="flex h-4">
+            <div className="p-4 flex flex-col items-center gap-2">
+                <img src={dealDaily?.thumb} alt="" className="w-full h-40 object-contain rounded-lg" />
+                <div className="flex">
                     {reanderStartFromNumber(dealDaily?.totalRatings, 20)?.map((el, index) => (
                         <span key={index}>{el}</span>
                     ))}
-                </span>
-                <span className="line-clamp-1 text-center">{dealDaily?.title}</span>
-                <span>{formatMoney(dealDaily?.price)}</span>
+                </div>
+                <h2 className="text-center text-lg font-semibold line-clamp-2">{dealDaily?.title}</h2>
+                <span className="text-xl font-semibold">{formatMoney(dealDaily?.price)}</span>
             </div>
-            <div className="px-4 mt-8">
-                <div className="flex justify-center gap-2 items-center mb-4">
+            <div className="p-4">
+                <div className="flex justify-center gap-4 items-center mb-4">
                     <Countdown unit={'Hours'} number={timeLeft.hours} />
                     <Countdown unit={'Minutes'} number={timeLeft.minutes} />
                     <Countdown unit={'Seconds'} number={timeLeft.seconds} />
                 </div>
                 <button
                     type="button"
-                    className="flex gap-2 items-center justify-center w-full bg-main hover:bg-gray-800 text-white font-medium py-2"
+                    className="flex items-center justify-center w-full bg-main hover:bg-blue-700 text-white font-medium py-2 rounded-lg"
                 >
-                    <IoMdMenu />
+                    <IoMdMenu className="text-xl" />
                     <span>Options</span>
                 </button>
             </div>
